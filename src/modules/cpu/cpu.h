@@ -7,4 +7,10 @@
 int		__attribute__((visibility("default"))) GetNumberOfProcesses();
 double	__attribute__((visibility("default"))) GetCPULoad();
 
+
+extern "C" {
+	double __attribute__((visibility("default"))) cpu();
+	int    __attribute__((visibility("default"))) processes();
+}
+
 #endif

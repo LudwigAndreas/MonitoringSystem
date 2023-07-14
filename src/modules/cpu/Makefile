@@ -1,7 +1,7 @@
 # Compiler settings
 CXX = g++
 # CXXFLAGS = -std=c++17 -Wall -Wextra -Werror -Ofast -march=native -pedantic -fPIC
-CXXFLAGS = -std=c++17 -fPIC -fvisibility=hidden
+CXXFLAGS = -std=c++17 -fPIC -fvisibility=hidden -g -O0
 
 # Source files
 SRCS_FILES = cpu.cc

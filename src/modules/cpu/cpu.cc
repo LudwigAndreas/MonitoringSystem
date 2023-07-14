@@ -44,3 +44,13 @@ std::vector<std::function<int ()>>		GetIntegerFunctions() {
 std::vector<std::function<double ()>>	GetDoubleFunctions() {
 	return {GetCPULoad};
 }
+
+extern "C" {
+	double cpu() {
+		return GetCPULoad();
+	}
+
+	int processes() {
+		return GetNumberOfProcesses();
+	}
+}
