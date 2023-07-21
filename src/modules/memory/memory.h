@@ -17,5 +17,7 @@ extern "C" {
     double __attribute__((visibility("default"))) ram ();
 
     double __attribute__((visibility("default"))) hard_volume ();
+
+    int __attribute__((visibility("default"))) hard_ops ();
 }
 #endif
