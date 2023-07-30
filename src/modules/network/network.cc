@@ -3,28 +3,32 @@
 int streams = 0;
 
 int GetURLAvailability(std::string url) {
-	int nop;
-    std::stringstream ss;
-    ss << "ping " << url << " -W 0.3 -qc 1";
-    LOG_DEBUG(ss.str());
-	redi::ipstream in(ss.str());
-    LOG_DEBUG(in.rdbuf()->status() << " " << in.rdbuf()->error());
-    return (int)(in.rdbuf()->error() == 0);
+  std::stringstream ss;
+  ss << "ping " << url << " -W 0.3 -qc 1";
+//    LOG_DEBUG(ss.str());
+  redi::ipstream in(ss.str());
+//    LOG_DEBUG(in.rdbuf()->status() << " " << in.rdbuf()->error());
+  return (int) (in.rdbuf()->error() == 0);
 }
-
+#if __linux__
 uint64_t ReadThroughputLine(std::istream &is) {
-    std::string interface_name;
-    uint64_t ibytes, ipackets, ierr, idrop, ififo, iframe, icompressed, imulticast,
-             obytes, opackets, oerr, odrop, ofifo, oframe, ocompressed, omulticast;
+  std::string interface_name;
+  uint64_t ibytes, ipackets, ierr, idrop, ififo, iframe, icompressed,
+      imulticast,
+      obytes, opackets, oerr, odrop, ofifo, oframe, ocompressed, omulticast;
 
-    is >> interface_name >> ibytes >> ipackets >> ierr >> idrop >> ififo >> iframe >> icompressed >> imulticast >>
-                              obytes >> opackets >> oerr >> odrop >> ofifo >> oframe >> ocompressed >> omulticast;
-    if (!is)
-        return (std::numeric_limits<uint64_t>::max());
-    return ibytes + obytes;
+  is >> interface_name >> ibytes >> ipackets >> ierr >> idrop >> ififo >> iframe
+     >> icompressed >> imulticast >>
+     obytes >> opackets >> oerr >> odrop >> ofifo >> oframe >> ocompressed
+     >> omulticast;
+  if (!is)
+    return (std::numeric_limits<uint64_t>::max());
+  return ibytes + obytes;
 }
+
 
 double GetNetworkThroughput() {
+
     std::ifstream file("/proc/net/dev");
     static uint64_t io = 0;
     uint64_t old_io = io;
@@ -44,29 +48,90 @@ double GetNetworkThroughput() {
     }
     file.close();
     // io += reads_completed + writes_completed;
-    if (old_io)
-        return (double)(io - old_io);
-    else
-        return 0;
-    // return (1 - (double)si.free / si.capacity) * 100;
+  if (old_io)
+    return (double)(io - old_io);
+  else
+    return 0;
+}
+#elif __APPLE__
+bool getNetworkTraffic(const char* interfaceName, unsigned long long& bytesIn, unsigned long long& bytesOut) {
+  struct ifaddrs* ifaddr;
+  if (getifaddrs(&ifaddr) == -1) {
+    std::cerr << "Error getting network interface information." << std::endl;
+    return false;
+  }
+
+  for (struct ifaddrs* ifa = ifaddr; ifa != nullptr; ifa = ifa->ifa_next) {
+    if (ifa->ifa_addr == nullptr || ifa->ifa_data == nullptr)
+      continue;
+
+    if (ifa->ifa_addr->sa_family == AF_LINK && strcmp(ifa->ifa_name, interfaceName) == 0) {
+      struct if_data* if_data = static_cast<struct if_data*>(ifa->ifa_data);
+      bytesIn = if_data->ifi_ibytes;
+      bytesOut = if_data->ifi_obytes;
+      freeifaddrs(ifaddr);
+      return true;
+    }
+  }
+
+  freeifaddrs(ifaddr);
+  return false;
 }
 
-extern "C" {
-    int url(std::string url) {
-        if (!streams) {
-            auto fs = std::fstream("log.log", std::fstream::trunc | std::fstream::out);
-            logger.AddOutputStream(fs, true, s21::diagnostic::LogLevel::Trace);
-            ++streams;
-        }
-        return GetURLAvailability(url);
-    }
+double GetNetworkThroughput() {
+  static uint64_t io = 0;
+  uint64_t old_io = io;
+  struct ifaddrs* ifaddr;
+  if (getifaddrs(&ifaddr) == -1) {
+    std::cerr << "Error getting network interface information." << std::endl;
+    return 1;
+  }
 
-    double inet_throughput() {
-        if (!streams) {
-            auto fs = std::fstream("log.log", std::fstream::trunc | std::fstream::out);
-            logger.AddOutputStream(fs, true, s21::diagnostic::LogLevel::Trace);
-            ++streams;
-        }
-        return GetNetworkThroughput();
+  for (struct ifaddrs* ifa = ifaddr; ifa != nullptr; ifa = ifa->ifa_next) {
+    if (ifa->ifa_addr == nullptr || ifa->ifa_data == nullptr)
+      continue;
+
+    if (ifa->ifa_addr->sa_family == AF_LINK) {
+      unsigned long long bytesIn = 0;
+      unsigned long long bytesOut = 0;
+
+      if (getNetworkTraffic(ifa->ifa_name, bytesIn, bytesOut)) {
+        // std::cout << "Interface: " << ifa->ifa_name << std::endl;
+        // std::cout << "Traffic Bytes In: " << bytesIn << " bytes" << std::endl;
+        // std::cout << "Traffic Bytes Out: " << bytesOut << " bytes" << std::endl;
+        io += bytesIn;
+        io += bytesOut;
+      } else {
+        std::cerr << "Unable to get network traffic data for interface " << ifa->ifa_name << std::endl;
+      }
     }
+  }
+
+  freeifaddrs(ifaddr);
+  if (old_io)
+    return (double)(io - old_io);
+  else
+    return 0;
+}
+
+#endif
+
+extern "C" {
+int url(std::string url) {
+//        if (!streams) {
+//  auto fs = std::fstream("log.log", std::fstream::trunc | std::fstream::out);
+//            logger.AddOutputStream(fs, true, s21::diagnostic::LogLevel::Trace);
+//            ++streams;
+//        }
+  return GetURLAvailability(url);
+}
+
+double inet_throughput() {
+//        if (!streams) {
+//            auto fs = std::fstream("log.log", std::fstream::trunc | std::fstream::out);
+//            logger.AddOutputStream(fs, true, s21::diagnostic::LogLevel::Trace);
+//            ++streams;
+//        }
+  return GetNetworkThroughput();
+}
 }

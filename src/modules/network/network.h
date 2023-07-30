@@ -7,12 +7,22 @@
 #include <filesystem>
 #include <limits>
 #include <sstream>
+#if __APPLE__
+#include <iostream>
+#include <ifaddrs.h>
+#include <netinet/in.h>
+#include <arpa/inet.h>
+#include <sys/socket.h>
+#include <sys/param.h>
+#include <sys/time.h>
+#include <sys/socket.h>
+#include <net/if.h>
+#include <net/if_var.h>
+#include <net/if_types.h>
+#endif
 
 #include "../pstream.h"
 #include "../module_header.h"
-
-#include "../../../libs21/include/s21.h"
-#include "../../../libs21/test/utils/logger.inc"
 
 double GetTotalRAM();
 double GetUsedRAM();

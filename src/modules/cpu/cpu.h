@@ -3,6 +3,10 @@
 
 #include "../module_header.h"
 #include "../pstream.h"
+#if __APPLE__
+#include <mach/mach.h>
+#include <iostream>
+#endif
 
 int		__attribute__((visibility("default"))) GetNumberOfProcesses();
 double	__attribute__((visibility("default"))) GetCPULoad();

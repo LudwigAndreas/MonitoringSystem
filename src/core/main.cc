@@ -1,5 +1,3 @@
-#include "module_header.h"
-#include "../../libs21/test/utils/logger.inc"
 
 #include <iostream>
 #include <functional>
@@ -8,6 +6,8 @@
 #include <dlfcn.h>
 #include <cstdlib>
 #include <fstream>
+
+#include "../modules/module_header.h"
 
 typedef std::vector<std::function<double ()>> dvec;
 typedef std::vector<std::function<int ()>>	  ivec;
@@ -29,9 +29,9 @@ struct Library {
 int main() {
 	int sleep_time = 5;
 
-	void *cpuhandle = dlopen("/home/andref/Documents/s21/MonitoringSystem/MonitoringSystem/src/modules/libmscpu.so", RTLD_LAZY);
-	void *memhandle = dlopen("/home/andref/Documents/s21/MonitoringSystem/MonitoringSystem/src/modules/libmsmem.so", RTLD_LAZY);
-	void *nethandle = dlopen("/home/andref/Documents/s21/MonitoringSystem/MonitoringSystem/src/modules/libmsnet.so", RTLD_LAZY);
+	void *cpuhandle = dlopen("/Users/landreas-pc/42Course/MonitoringSystem/src/modules/libmscpu.so", RTLD_LAZY);
+	void *memhandle = dlopen("/Users/landreas-pc/42Course/MonitoringSystem/src/modules/libmsmem.so", RTLD_LAZY);
+	void *nethandle = dlopen("/Users/landreas-pc/42Course/MonitoringSystem/src/modules/libmsnet.so", RTLD_LAZY);
 	if (!cpuhandle || !memhandle || !nethandle) {
 		std::cerr << dlerror() << std::endl;
 		return 1;
@@ -44,7 +44,7 @@ int main() {
 	auto hard_ops_addr = dlsym(memhandle, "hard_ops");
 	auto url_addr = dlsym(nethandle, "url");
 	auto inet_throughput_addr = dlsym(nethandle, "inet_throughput");
-	// std::cerr << (cpu_addr) << " " << processes_addr << std::endl;
+//	 std::cerr << (cpu_addr) << " " << processes_addr << std::endl;
 	auto cpu = reinterpret_cast<dfunc>(cpu_addr);
 	auto processes = reinterpret_cast<ifunc>(processes_addr);
 	auto ram_total = reinterpret_cast<dfunc>(ram_total_addr);

@@ -49,3 +49,12 @@ modules.order
 Module.symvers
 Mkfile.old
 dkms.conf
+
+# Project ignore
+
+build
+thrd_party
+docs
+config
+.idea
+bin

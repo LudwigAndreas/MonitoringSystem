@@ -1,0 +1,12 @@
+//
+// Created by Ludwig Andreas on 28.07.2023.
+//
+
+#ifndef MONITORINGSYSTEM_SRC_CORE_CONFIGREADER_H_
+#define MONITORINGSYSTEM_SRC_CORE_CONFIGREADER_H_
+
+class ConfigReader {
+
+};
+
+#endif //MONITORINGSYSTEM_SRC_CORE_CONFIGREADER_H_
