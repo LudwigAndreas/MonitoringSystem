@@ -25,6 +25,7 @@ double GetCPULoad() {
 		working = new_working;
 		total = new_total;
 	}
+	stat.close();
 	return load;
 }
 
@@ -32,7 +33,7 @@ double GetCPULoad() {
 // I'm not sure if using ps aux is the correct way to get all working processes.
 int GetNumberOfProcesses() {
 	int nop;
-	redi::ipstream in("ps aux | wc -l");
+	redi::ipstream in("ps -e --format=\"pid cmd stat\" | wc -l");
 	in >> nop;
 	return nop - 1;
 }
