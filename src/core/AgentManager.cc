@@ -8,6 +8,7 @@
 #include <chrono>
 #include <filesystem>
 #include <utility>
+#include <set>
 
 #if __linux__ || __APPLE__
 #include <dlfcn.h>
@@ -16,9 +17,6 @@
 #endif
 
 namespace s21 {
-
-
-
 
 AgentManager::AgentManager(std::string agents_directory)
     : agents_directory_(std::move(agents_directory)), is_monitoring_(false) {
@@ -42,7 +40,9 @@ void AgentManager::StopMonitoring() {
   }
 }
 
-s21::Agent *AgentManager::Instantiate(const DynamicLib lib) {
+std::shared_ptr<Agent> AgentManager::Instantiate(DynamicLib lib) {
+  if (!lib)
+    return nullptr;
   void *maker = dlsym(lib, lib_entry_point_.c_str());
 
   if (maker == nullptr)
@@ -51,45 +51,65 @@ s21::Agent *AgentManager::Instantiate(const DynamicLib lib) {
   typedef s21::Agent *(*fptr)();
   fptr func = reinterpret_cast<fptr>(reinterpret_cast<void *>(maker));
 
-  return func();
+  return std::shared_ptr<Agent>(func(), [](Agent *agent) {
+    delete agent;
+  });
 }
 
 void AgentManager::MonitorAgentsDirectory() {
-  while (is_monitoring_) {
-    LOG_TRACE(app_logger_, "Monitoring is running.");
-    try {
-      for (const auto &entry: std::filesystem::directory_iterator(
-          agents_directory_)) {
-        if (entry.is_regular_file() && entry.path().extension()
-            == lib_extension_) {
-          std::string library_path = entry.path().string();
-          LOG_INFO(app_logger_, "Found dynamic library: " << library_path);
-          std::string absolute_path = std::filesystem::absolute(library_path).string();
+  std::set<std::string> current_files;
 
-          void *lib_handle = dlopen(absolute_path.c_str(), RTLD_LAZY);
+  LOG_TRACE(app_logger_, "Monitoring is running.");
+  while (is_monitoring_) {
+    try {
+      std::set<std::string> new_files;
+      for (const auto &entry: std::filesystem::directory_iterator(agents_directory_)) {
+        if (entry.is_regular_file() && entry.path().extension() == lib_extension_) {
+          std::string library_path = entry.path().string();
+          new_files.insert(library_path);
+        }
+      }
+
+      // Check for new files
+      for (const auto &file : new_files) {
+        if (current_files.find(file) == current_files.end()) {
+          LOG_INFO(app_logger_, "New dynamic library added: " << file);
+          std::string absolute_path = std::filesystem::absolute(file).string();
+          DynamicLib lib_handle = dlopen(absolute_path.c_str(), RTLD_LAZY);
           if (lib_handle) {
-            s21::Agent *agent = Instantiate(lib_handle);
+            AgentPtr agent = Instantiate(lib_handle);
             if (agent) {
-              agent_list_.push_back(agent);
-              LOG_INFO(app_logger_,
-                       "Agent successfully loaded: " << agent->GetAgentName()
-                                                     << " "
-                                                     << agent->GetAgentType());
+              agent_list_.insert({file, agent});
+              LOG_INFO(app_logger_, "Agent was successfully loaded: " <<
+                                                                      "Agent name: \"" <<
+                                                                      agent->GetAgentName() << "\" |Agent type \"" <<
+                                                                      agent->GetAgentType() << "\"");
             } else {
               LOG_ERROR(app_logger_, "Agent loading error: " << dlerror());
             }
-            dlclose(lib_handle);
           } else {
-            LOG_ERROR(app_logger_,
-                      "Failed to load the dynamic library: " << dlerror());
+            LOG_ERROR(app_logger_, "Failed to load the dynamic library: " << dlerror());
           }
         }
       }
+
+      // Check for removed files
+      for (const auto &file : current_files) {
+        if (new_files.find(file) == new_files.end()) {
+          LOG_INFO(app_logger_, "Dynamic library removed: " << file);
+          // You might want to remove the agent from the agent_list_ as well
+          agent_list_.erase(file);
+        }
+      }
+
+      current_files = std::move(new_files); // Update the current set with the new set
     } catch (const std::filesystem::filesystem_error &ex) {
       LOG_ERROR(app_logger_, "Unable to open " << agents_directory_ << ". Directory does not exist.");
     }
-    std::this_thread::sleep_for(std::chrono::seconds(sleep_duration_)); // Adjust the sleep time as needed
+    std::this_thread::sleep_for(std::chrono::seconds(sleep_duration_));
   }
 }
+
+
 
 }

@@ -1,8 +1,8 @@
 #ifndef CPU_H
 #define CPU_H
 
-#include "../module_header.h"
-#include "../pstream.h"
+#include "modules/include/module_header.h"
+#include "modules/include/pstream.h"
 #if __APPLE__
 #include <mach/mach.h>
 #include <iostream>

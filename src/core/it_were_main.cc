@@ -7,7 +7,7 @@
 #include <cstdlib>
 #include <fstream>
 
-#include "../modules/module_header.h"
+#include "modules/include/module_header.h"
 
 typedef std::vector<std::function<double ()>> dvec;
 typedef std::vector<std::function<int ()>>	  ivec;

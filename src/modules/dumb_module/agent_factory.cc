@@ -10,7 +10,7 @@
 
 extern "C" {
 s21::Agent* get_agent(void) {
-    return static_cast<s21::Agent*>(new s21::DumbAgent());
+    return new s21::DumbAgent();
   }
 };
 

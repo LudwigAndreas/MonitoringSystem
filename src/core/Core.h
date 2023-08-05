@@ -17,17 +17,24 @@ class Core {
 
  public:
 
-  Core(std::string agents_dir = "./agents/");
+  Core(std::string agents_dir = "./agents/", std::string metric_output_dir = "./logs/");
 
   ~Core();
 
   Core* Instance();
 
+  void EnableMonitoring();
+  void DisableMonitoring();
+
  private:
+
+  void ConfigureMetricLogger();
+
   static Core* s_instance_;
-  std::vector<Agent*> agent_repo_;
+  std::vector<AgentPtr> agent_repo_;
   diagnostic::LoggerPtr metric_logger_;
   diagnostic::LoggerPtr app_logger_;
+  std::string log_dir_;
   AgentManager agent_manager_;
 };
 

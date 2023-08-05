@@ -185,6 +185,7 @@ App* App::Instance() {
 }
 
 void App::InitGui() {
+  monitor::Core core("../agents/");
   LOG_FATAL(s_logger_, "Gui has not been implemented yet.");
 }
 
@@ -193,7 +194,7 @@ void App::InteractiveMain() {
 }
 
 void App::ConsoleMain() {
-  monitor::Core("./agents/");
+  monitor::Core core("../agents/");
   while (true) {
     std::this_thread::sleep_for(std::chrono::seconds(10));
   }

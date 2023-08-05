@@ -14,7 +14,7 @@ DumbAgent::~DumbAgent() {}
 
 std::vector<Metric> DumbAgent::GetMetrics() {
   std::vector<Metric> metrics;
-  metrics.push_back(Metric("dumb thing", my_dumb_func));
+  metrics.emplace_back("dumb thing", my_dumb_func);
   return metrics;
 }
 

@@ -1,7 +1,7 @@
 #ifndef NETWORK_H
 #define NETWORK_H
 
-#include "../pstream.h"
+#include "modules/include/pstream.h"
 #include <cstdlib>
 #include <fstream>
 #include <filesystem>
@@ -21,8 +21,8 @@
 #include <net/if_types.h>
 #endif
 
-#include "../pstream.h"
-#include "../module_header.h"
+#include "modules/include/pstream.h"
+#include "modules/include/module_header.h"
 
 double GetTotalRAM();
 double GetUsedRAM();

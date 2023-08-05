@@ -8,16 +8,16 @@ namespace s21 {
 
 s21::Metric::Metric(std::string name,
                     std::function<std::string()> metric_func) {
-  _name = name;
-  _metric_func = metric_func;
+  name_ = name;
+  metric_func_ = metric_func;
 }
 
 std::string Metric::GetName() const {
-  return _name;
+  return name_;
 }
 
-std::string Metric::run() const {
-  return _metric_func();
+std::string Metric::Run() const {
+  return metric_func_();
 }
 
 }

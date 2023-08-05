@@ -13,6 +13,9 @@ class DumbAgent : public Agent {
 
  public:
 
+  DumbAgent();
+  ~DumbAgent();
+
   std::vector<Metric> GetMetrics() override;
   std::string GetAgentName() override;
   std::string GetAgentType() override;

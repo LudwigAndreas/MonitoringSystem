@@ -12,18 +12,48 @@
 
 namespace s21 {
 
-// @update_time_s - store update time in seconds
-// @critical_value and @critical_operator - store critical value
+/**
+ * The metric provides an object and some function of the metric.
+ * Each Agent contains a list of metrics and executes the run()
+ * method for each one.
+ *
+ * @note Each metric should be independent of the other. Metrics should not
+ * depend on Core components.
+ *
+ * @see Run()
+ **/
 class Metric {
  protected:
-  std::string _name;
-  std::function<std::string()> _metric_func;
+  /**
+   * The metric must have a unique name
+   **/
+  std::string name_;
+  std::function<std::string()> metric_func_;
 
  public:
+  /**
+   * Main metric constructor. To create a metric, you must use this constructor
+   *
+   * @param name unique metrics name
+   * @param metric_func function or method that will be executed when Run()
+   * is called. The function cannot take any arguments,
+   * and returns an not formatted string with the result of execution.
+   **/
   Metric(std::string name, std::function<std::string()> metric_func);
 
+  /**
+   * Name getter
+   **/
   std::string GetName() const;
-  std::string run() const;
+
+  /**
+   * This method is run for each metric. Represents a wrapper method
+   * for metric_func. Calls to this method for each metric are not
+   * sequential The order in which the metrics are contained in the
+   * agent does not determine the order in which they are executed
+   **/
+  std::string Run() const;
+  Metric() = default;
 };
 
 }

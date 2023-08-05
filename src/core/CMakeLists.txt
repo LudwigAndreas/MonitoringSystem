@@ -3,7 +3,9 @@ INCLUDE_DIRECTORIES(${MAINFOLDER}/include
     ${MAINFOLDER}/third_party/LogLite/include
     ${MAINFOLDER}/third_party/libs21/include)
 
-SET (project_MOC_HEADERS ${MAINFOLDER}/include)
+SET (project_MOC_HEADERS ${MAINFOLDER}/include
+    ${MAINFOLDER}/third_party/LogLite/include)
+
 
 ADD_LIBRARY(LogLite STATIC IMPORTED)
 
@@ -15,19 +17,26 @@ SET (project_BIN ${PROJECT_NAME})
 
 ADD_LINK_OPTIONS(-L${MAINFOLDER}/third_party/LogLite/lib -lLogLite)
 
+ADD_LIBRARY(${project_BIN}-lib
+    config/PropertiesReader.cc
+    config/PropertiesReader.h)
+
 ADD_EXECUTABLE(${project_BIN}
     main.cc
     App.h
     App.cc
     Core.h
     Core.cc
-    ConfigReader.cc
-    ConfigReader.h
     AgentManager.cc
     AgentManager.h
     ../modules/include/Metric.cc
     ../modules/include/Metric.h
-    ../modules/include/Agent.h)
+    ../modules/include/Agent.h
+    config/PropertiesReader.cc
+    config/PropertiesReader.h
+    MetricScheduler.cc
+    MetricScheduler.h
+    )
 
 TARGET_LINK_OPTIONS(${project_BIN} PRIVATE -rdynamic)
 

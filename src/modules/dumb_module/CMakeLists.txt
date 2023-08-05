@@ -14,8 +14,7 @@ ADD_LIBRARY(${project_BIN} SHARED
     agent_factory.cc
     dumb_funcs.cc
     dumb_funcs.h
-    ../include/Metric.cc
-    )
+    ../include/Metric.cc)
 
 TARGET_LINK_OPTIONS(${project_BIN} PRIVATE
     --std=c++17 -fPIC -rdynamic -shared)

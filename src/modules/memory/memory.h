@@ -1,7 +1,7 @@
 #ifndef MEMORY_H
 #define MEMORY_H
 
-#include "../pstream.h"
+#include "modules/include/pstream.h"
 #include <cstdlib>
 #include <fstream>
 #include <filesystem>
@@ -14,7 +14,7 @@
 #include <IOKit/storage/IOMedia.h>
 #endif
 
-#include "../module_header.h"
+#include "modules/include/module_header.h"
 
 double GetTotalRAM();
 double GetUsedRAM();
