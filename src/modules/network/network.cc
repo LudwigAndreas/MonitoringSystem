@@ -3,12 +3,12 @@
 int streams = 0;
 
 int GetURLAvailability(std::string url) {
-  std::stringstream ss;
-  ss << "ping " << url << " -W 0.3 -qc 1";
-//    LOG_DEBUG(ss.str());
-  redi::ipstream in(ss.str());
-//    LOG_DEBUG(in.rdbuf()->status() << " " << in.rdbuf()->error());
-  return (int) (in.rdbuf()->error() == 0);
+	int exit_status;
+    std::stringstream ss;
+    ss << "ping " << url << " -W 0.3 -qc 1 >/dev/null 2>&1; echo $?";
+	redi::ipstream in(ss.str());
+    in >> exit_status;
+    return (exit_status == 0);
 }
 #if __linux__
 uint64_t ReadThroughputLine(std::istream &is) {
@@ -16,14 +16,12 @@ uint64_t ReadThroughputLine(std::istream &is) {
   uint64_t ibytes, ipackets, ierr, idrop, ififo, iframe, icompressed,
       imulticast,
       obytes, opackets, oerr, odrop, ofifo, oframe, ocompressed, omulticast;
-
-  is >> interface_name >> ibytes >> ipackets >> ierr >> idrop >> ififo >> iframe
-     >> icompressed >> imulticast >>
-     obytes >> opackets >> oerr >> odrop >> ofifo >> oframe >> ocompressed
-     >> omulticast;
-  if (!is)
-    return (std::numeric_limits<uint64_t>::max());
-  return ibytes + obytes;
+    is >> interface_name >> ibytes >> ipackets >> ierr >> idrop >> ififo >> iframe >> icompressed >> imulticast >>
+                              obytes >> opackets >> oerr >> odrop >> ofifo >> oframe >> ocompressed >> omulticast;
+//    LOG_DEBUG(interface_name << " IN - " << ibytes << "B : OUT - " << obytes << "B");
+    if (!is)
+        return (std::numeric_limits<uint64_t>::max());
+    return ibytes + obytes;
 }
 
 
@@ -32,19 +30,20 @@ double GetNetworkThroughput() {
     std::ifstream file("/proc/net/dev");
     static uint64_t io = 0;
     uint64_t old_io = io;
-    uint64_t new_io = 0;
+    // uint64_t new_io = 0;
     uint64_t protocol_io;
     uint64_t ibytes, ipackets, ierr, idrop, ififo, iframe, icompressed, imulticast,
              obytes, opackets, oerr, odrop, ofifo, oframe, ocompressed, omulticast;
     std::string tmp;
 
+    io = 0;
     std::getline(file, tmp); // Header line
     std::getline(file, tmp); // Header line
     while (true) {
         protocol_io = ReadThroughputLine(file);
         if (protocol_io == std::numeric_limits<uint64_t>::max())
             break;
-        new_io += protocol_io;
+        io += protocol_io;
     }
     file.close();
     // io += reads_completed + writes_completed;

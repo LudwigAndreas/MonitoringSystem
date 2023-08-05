@@ -24,8 +24,8 @@
 #include "modules/include/pstream.h"
 #include "modules/include/module_header.h"
 
-double GetTotalRAM();
-double GetUsedRAM();
+#include "../pstream.h"
+#include "../module_header.h"
 
 extern "C" {
     int __attribute__((visibility("default"))) url(std::string url);
