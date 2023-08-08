@@ -1,7 +1,6 @@
 #ifndef NETWORK_H
 #define NETWORK_H
 
-#include "modules/include/pstream.h"
 #include <cstdlib>
 #include <fstream>
 #include <filesystem>
@@ -21,15 +20,13 @@
 #include <net/if_types.h>
 #endif
 
-#include "modules/include/pstream.h"
-#include "modules/include/module_header.h"
+// #include "modules/include/pstream.h"
+// #include "modules/include/module_header.h"
 
-#include "../pstream.h"
-#include "../module_header.h"
+#include "../include/pstream.h"
 
 extern "C" {
     int __attribute__((visibility("default"))) url(std::string url);
-
     double __attribute__((visibility("default"))) inet_throughput();
 }
 #endif

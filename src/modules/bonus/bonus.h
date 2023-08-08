@@ -1,15 +1,12 @@
 #ifndef BONUS_H
 #define BONUS_H
 
-#include "../pstream.h"
+#include "../include/pstream.h"
 #include <cstdlib>
 #include <fstream>
 #include <filesystem>
 #include <limits>
 #include <sstream>
-
-#include "../pstream.h"
-#include "../module_header.h"
 
 #include "../../../lib/libs21/include/s21.h"
 // #include "../../../libs21/test/utils/logger.inc"

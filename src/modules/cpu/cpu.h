@@ -1,15 +1,14 @@
 #ifndef CPU_H
 #define CPU_H
 
-#include "modules/include/module_header.h"
-#include "modules/include/pstream.h"
+#include "../include/pstream.h"
 #if __APPLE__
 #include <mach/mach.h>
 #include <iostream>
 #endif
 
-int		__attribute__((visibility("default"))) GetNumberOfProcesses();
-double	__attribute__((visibility("default"))) GetCPULoad();
+int		__attribute__((visibility("hidden"))) GetNumberOfProcesses();
+double	__attribute__((visibility("hidden"))) GetCPULoad();
 
 
 extern "C" {
