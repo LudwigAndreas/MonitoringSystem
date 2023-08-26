@@ -1,5 +1,5 @@
 
-INCLUDE_DIRECTORIES(${MAINFOLDER}/include
+INCLUDE_DIRECTORIES(${MAINFOLDER}/src/core
     ${MAINFOLDER}/third_party/LogLite/include
     ${MAINFOLDER}/third_party/libs21/include)
 
@@ -17,26 +17,33 @@ SET (project_BIN ${PROJECT_NAME})
 
 ADD_LINK_OPTIONS(-L${MAINFOLDER}/third_party/LogLite/lib -lLogLite)
 
-ADD_LIBRARY(${project_BIN}-lib
-    config/PropertiesReader.cc
-    config/PropertiesReader.h)
+#ADD_LIBRARY(${project_BIN}-lib
+#    )
 
 ADD_EXECUTABLE(${project_BIN}
     main.cc
-    App.h
-    App.cc
+    app/App.h
+    app/App.cc
     Core.h
     Core.cc
-    AgentManager.cc
-    AgentManager.h
+    agent/AgentManager.cc
+    agent/AgentManager.h
     ../modules/include/Metric.cc
     ../modules/include/Metric.h
     ../modules/include/Agent.h
-    config/PropertiesReader.cc
-    config/PropertiesReader.h
+    config/Properties.cc
+    config/Properties.h
     MetricScheduler.cc
     MetricScheduler.h
-    )
+    agent/agent_bundle.cc
+    agent/agent_bundle.h
+    agent/AgentBundleLoader.cc
+    agent/AgentBundleLoader.h
+    MetricLogger.cc
+    MetricLogger.h
+    metric/ConfiguredMetric.cc
+    metric/ConfiguredMetric.h
+    metric/MetricCriticalValue.cc metric/MetricCriticalValue.h executor/ExecutorService.cc executor/ExecutorService.h IAgentSubscriber.h metric/MetricEvent.cc metric/MetricEvent.h)
 
 TARGET_LINK_OPTIONS(${project_BIN} PRIVATE -rdynamic)
 

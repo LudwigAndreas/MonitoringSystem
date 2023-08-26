@@ -2,7 +2,7 @@
 // Created by Ludwig Andreas on 31.07.2023.
 //
 
-#include "App.h"
+#include "app/App.h"
 
 
 int main(int argc, char **argv) {

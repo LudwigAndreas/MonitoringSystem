@@ -10,14 +10,20 @@ s21::Metric::Metric(std::string name,
                     std::function<std::string()> metric_func) {
   name_ = name;
   metric_func_ = metric_func;
+  metric_func_args_ = nullptr;
 }
 
-std::string Metric::GetName() const {
-  return name_;
+Metric::Metric(std::string name,
+               std::function<std::string(std::vector<std::string>)> metric_func_args) {
+    name_ = name;
+    metric_func_args_ = metric_func_args;
+    metric_func_ = nullptr;
 }
 
-std::string Metric::Run() const {
-  return metric_func_();
+Metric::Metric(const Metric &metric) {
+  name_ = metric.name_;
+  metric_func_ = metric.metric_func_;
+  metric_func_args_ = metric.metric_func_args_;
 }
 
 }

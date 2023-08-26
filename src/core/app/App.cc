@@ -8,7 +8,7 @@
 #include <string>
 
 #include "appinfo.h"
-#include "Core.h"
+#include "../Core.h"
 
 namespace s21 {
 
@@ -195,6 +195,7 @@ void App::InteractiveMain() {
 
 void App::ConsoleMain() {
   monitor::Core core("../agents/");
+  core.EnableMonitoring();
   while (true) {
     std::this_thread::sleep_for(std::chrono::seconds(10));
   }

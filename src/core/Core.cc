@@ -17,8 +17,12 @@ Core::Core(std::string agents_dir, std::string metric_output_dir) : log_dir_(std
   }
   ConfigureMetricLogger();
   s_instance_ = this;
-  agent_manager_.StartMonitoring();
   LOG_INFO(app_logger_, "Agents monitoring started.");
+  auto executor_service = std::make_shared<ExecutorService>(5);
+  metric_scheduler_ = std::make_shared<MetricScheduler>(executor_service);
+  metric_scheduler_thread_ = std::thread(&MetricScheduler::Run, metric_scheduler_);
+  agent_manager_.Subscribe(this);
+  agent_manager_.StartMonitoring();
 }
 
 Core::~Core() {
@@ -27,6 +31,10 @@ Core::~Core() {
 }
 
 Core *Core::Instance() {
+    if (!s_instance_) {
+        LOG_FATAL(Core::s_instance_->app_logger_, "Core not initialized.");
+        std::exit(0);
+    }
   return s_instance_;
 }
 
@@ -44,5 +52,21 @@ void Core::DisableMonitoring() {
 }
 
 Core* Core::s_instance_ = nullptr;
+
+void Core::OnAgentAdded(std::shared_ptr<AgentBundle> agent) {
+  metric_scheduler_->RegisterAgentBundle(agent);
+}
+
+void Core::OnAgentRemoved(std::shared_ptr<AgentBundle> agent) {
+  (void) agent;
+//  metric_scheduler_.UnregisterAgentBundle(agent);
+//  LOG_TRACE(app_logger_, "Agent removed from scheduler: " + agent->GetAgentName());
+}
+
+void Core::OnAgentUpdated(std::shared_ptr<AgentBundle> agent) {
+  (void) agent;
+//  metric_scheduler_.UpdateAgentBundle(agent);
+//  LOG_TRACE(app_logger_, "Agent updated in scheduler: " + agent->GetAgentName());
+}
 
 }

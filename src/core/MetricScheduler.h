@@ -8,37 +8,63 @@
 #include <map>
 #include <string>
 #include <chrono>
+#include <agent/agent_bundle.h>
+#include <executor/ExecutorService.h>
 
 #include "../modules/include/Agent.h"
 
 namespace s21 {
 
-typedef std::shared_ptr<Metric> MetricPtr;
+
+typedef std::shared_ptr<ExecutorService> ExecutorServicePtr;
+typedef std::shared_ptr<AgentBundle> AgentBundlePtr;
 
 /**
- * MetricScheduler реализует паттер Scheduler и Publisher. Собирает все метрики,
- * и начинает их исполнять в запланированное время.
+ * MetricScheduler implements the Scheduler patter. Collects all metrics,
+ * and starts executing them at the scheduled time.
  *
  **/
 class MetricScheduler {
 
  public:
 
-  void RegisterMetric(Metric metric, size_t interval_s);
+  MetricScheduler(ExecutorServicePtr executor);
 
+  ~MetricScheduler();
+
+  /**
+   * Registers all metrics from agent.
+   **/
+  void RegisterAgentBundle(const AgentBundlePtr& agent);
+
+  /**
+   * Starts the scheduler.
+   **/
   void Run();
 
+  /**
+   * Sets the sleep time between each iteration of the scheduler.
+   **/
+  void SetSleepTime(size_t sleep_time);
+
  private:
+  /**
+   * MetricData is a struct that holds the metric and the interval
+   * at which it should be executed.
+   * */
   struct MetricData {
-    Metric metric;
-    size_t interval;
+    ConfiguredMetricPtr metric;
     mutable std::chrono::system_clock::time_point next_execution_time = std::chrono::system_clock::now();
   };
 
-//  std::map<std::string, AgentData>
+  struct AgentData {
+    AgentBundlePtr agent;
+    std::vector<MetricData> metrics;
+  };
 
-  std::map<std::string, MetricData> schedule;
-  const size_t sleep_time_ms_ = 500;
+  std::map<std::string, AgentData> schedule_;
+  size_t sleep_time_ms_ = 500;
+  ExecutorServicePtr executor_;
 };
 }
 
