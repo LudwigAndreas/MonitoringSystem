@@ -9,7 +9,7 @@
 #include <sstream>
 
 #include "../../../lib/libs21/include/s21.h"
-// #include "../../../libs21/test/utils/logger.inc"
+// #include "../../../libs21/test/utils/analyzer.inc"
 
 extern "C" {
                                                                             // /proc/stat

@@ -7,4 +7,8 @@
 
 std::string my_dumb_func();
 
+std::string second_dumb_func();
+
+std::string third_dumb_func();
+
 #endif //MONITORINGSYSTEM_SRC_MODULES_DUMB_MODULE_DUMB_FUNCS_H_

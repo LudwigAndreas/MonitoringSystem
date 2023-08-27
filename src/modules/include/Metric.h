@@ -24,11 +24,12 @@ namespace s21 {
  **/
 class Metric {
  protected:
-  /**
+/**
    * The metric must have a unique name
    **/
   std::string name_;
   std::function<std::string()> metric_func_;
+  std::function<std::string(std::vector<std::string>)> metric_func_args_;
 
  public:
   /**
@@ -41,19 +42,14 @@ class Metric {
    **/
   Metric(std::string name, std::function<std::string()> metric_func);
 
-  /**
-   * Name getter
-   **/
-  std::string GetName() const;
+  Metric(std::string name, std::function<std::string(std::vector<std::string>)> metric_func_args);
 
-  /**
-   * This method is run for each metric. Represents a wrapper method
-   * for metric_func. Calls to this method for each metric are not
-   * sequential The order in which the metrics are contained in the
-   * agent does not determine the order in which they are executed
-   **/
-  std::string Run() const;
+  Metric(const Metric &metric);
+
+  Metric(Metric &&metric) = default;
+
   Metric() = default;
+  virtual ~Metric() = default;
 };
 
 }
