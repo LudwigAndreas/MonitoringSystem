@@ -13,6 +13,7 @@
 
 #include "agent/agent_bundle.h"
 #include "metric/MetricEvent.h"
+#include "notifier/IMetricNotifier.h"
 
 namespace s21 {
 
@@ -45,19 +46,25 @@ class MetricAnalyzer {
 
   void Log(MetricEvent event);
 
+  void Subscribe(IMetricNotifier* notifier);
+
+  void Unsubscribe(IMetricNotifier* notifier);
+
  protected:
   std::string log_dir_;
   std::ofstream log_file_;
   std::string current_log_file_;
   diagnostic::LoggerPtr logger_;
   int last_log_day_;
-
+  std::vector<IMetricNotifier*> notifiers_;
 
  private:
   MetricAnalyzer();
 
   void OpenLogFile(time_t timestamp);
   void CheckForNewDay(time_t timestamp);
+
+  void NotifyCriticalValueReached(MetricEvent event);
 };
 
 }

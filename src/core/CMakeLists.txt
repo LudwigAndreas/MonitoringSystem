@@ -41,14 +41,17 @@ ADD_EXECUTABLE(${project_BIN}
     metric/MetricCriticalValue.h
     metric/MetricEvent.cc
     metric/MetricEvent.h
-    Core.h
-    Core.cc
+    app/Core.h
+    app/Core.cc
     executor/AgentScheduler.cc
     executor/AgentScheduler.h
     analyzer/MetricAnalyzer.cc
     analyzer/MetricAnalyzer.h
     agent/IAgentSubscriber.h
-    executor/AgentExecutor.cc executor/AgentExecutor.h)
+    executor/AgentExecutor.cc
+    executor/AgentExecutor.h
+    notifier/IMetricNotifier.h
+    )
 
 TARGET_LINK_OPTIONS(${project_BIN} PRIVATE -rdynamic)
 

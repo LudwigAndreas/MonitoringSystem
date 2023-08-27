@@ -8,7 +8,7 @@
 #include <string>
 
 #include "appinfo.h"
-#include "../Core.h"
+#include "Core.h"
 
 namespace s21 {
 

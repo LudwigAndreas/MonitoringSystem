@@ -57,6 +57,19 @@ bool MetricCriticalValue::IsCritical(double value) const {
   return false;
 }
 
+bool MetricCriticalValue::IsCritical(std::string value) const {
+  if (std::isdigit(value[0])) {
+    try {
+      return IsCritical(std::stod(value));
+    } catch (std::exception &e) {
+      LOG_ERROR(diagnostic::Logger::getRootLogger(),
+                "Critical value is not a number: " + value);
+      return false;
+    }
+  }
+  return false;
+}
+
 std::string MetricCriticalValue::GetConditionOperator() const {
   return condition_operator_;
 }

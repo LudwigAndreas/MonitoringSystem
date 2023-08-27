@@ -18,6 +18,8 @@ class MetricCriticalValue {
   MetricCriticalValue(std::string critical_value);
   bool IsCritical(double value) const;
 
+  bool IsCritical(std::string value) const;
+
   std::string GetConditionOperator() const;
 
   void SetConditionOperator(const std::string &condition_operator);
