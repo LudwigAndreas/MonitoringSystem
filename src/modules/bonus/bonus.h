@@ -8,32 +8,32 @@
 #include <limits>
 #include <sstream>
 
-#include "../../../lib/libs21/include/s21.h"
+#include "../../../third_party/libs21/include/s21.h"
 // #include "../../../libs21/test/utils/analyzer.inc"
 
 extern "C" {
-                                                                            // /proc/stat
-    double __attribute__((visibility("default"))) cpu_idle_usage();
-    double __attribute__((visibility("default"))) cpu_user_usage();
-    double __attribute__((visibility("default"))) cpu_privileged_usage();
-    double __attribute__((visibility("default"))) cpu_dpc_usage();
-    double __attribute__((visibility("default"))) cpu_interrupt_usage();
+                                                                          // /proc/stat
+  std::string __attribute__((visibility("default"))) cpu_idle_usage();
+  std::string __attribute__((visibility("default"))) cpu_user_usage();
+  std::string __attribute__((visibility("default"))) cpu_privileged_usage();
+  std::string __attribute__((visibility("default"))) cpu_dpc_usage();
+  std::string __attribute__((visibility("default"))) cpu_interrupt_usage();
 
-    double __attribute__((visibility("default"))) total_swap();
-    double __attribute__((visibility("default"))) used_swap();
+  std::string __attribute__((visibility("default"))) total_swap();
+  std::string __attribute__((visibility("default"))) used_swap();
 
-    int __attribute__((visibility("default"))) proc_queue_length();
-        
-    double __attribute__((visibility("default"))) virtual_mem_volume();
-    double __attribute__((visibility("default"))) virtual_mem_free();
+  std::string __attribute__((visibility("default"))) proc_queue_length();
+      
+  std::string __attribute__((visibility("default"))) virtual_mem_volume();
+  std::string __attribute__((visibility("default"))) virtual_mem_free();
 
-    int __attribute__((visibility("default"))) inodes();
+  std::string __attribute__((visibility("default"))) inodes();
 
-    double __attribute__((visibility("default"))) hard_read_time(); // not implemented
+  std::string __attribute__((visibility("default"))) hard_read_time(); // not implemented
 
-    int __attribute__((visibility("default"))) system_errors();
+  std::string __attribute__((visibility("default"))) system_errors();
 
-    int __attribute__((visibility("default"))) user_auths();
+  std::string __attribute__((visibility("default"))) user_auths();
 
   // `[double]` загрузка процессора по уровням привилегий: `idle`, `user`, `priveleged`, `dpc`, `interrupt` (для каждого уровня выделить процент) (`cpu_idle_usage`, `cpu_user_usage`, ...)
   // `[double]` общий объем свопа/swap'а (`total_swap`)

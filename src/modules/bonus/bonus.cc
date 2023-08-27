@@ -110,77 +110,106 @@ namespace s21 {
 
 extern "C" {
 
-    double cpu_idle_usage() {
+    std::string cpu_idle_usage() {
         s21::cpu::update_values();
-        return s21::cpu::cpu_idle_usage();
+        std::stringstream ss;
+        ss << s21::cpu::cpu_idle_usage();
+        return ss.str();
     }         // 4
 
-    double cpu_user_usage(){
-        return s21::cpu::cpu_user_usage();    
+    std::string cpu_user_usage(){
+        std::stringstream ss;
+        ss << s21::cpu::cpu_user_usage();
+        return ss.str();
     }         // 1
 
-    double cpu_privileged_usage(){
-        return s21::cpu::cpu_privileged_usage();    
+    std::string cpu_privileged_usage(){
+        std::stringstream ss;
+        ss << s21::cpu::cpu_privileged_usage();
+        return ss.str();
     }   // 3
     
-    double cpu_dpc_usage(){
-        return s21::cpu::cpu_dpc_usage();
+    std::string cpu_dpc_usage(){
+        std::stringstream ss;
+        ss << s21::cpu::cpu_dpc_usage();
+        return ss.str();
     }          // ??
     
-    double cpu_interrupt_usage(){
-        return s21::cpu::cpu_interrupt_usage();
+    std::string cpu_interrupt_usage(){
+        std::stringstream ss;
+        ss << s21::cpu::cpu_interrupt_usage();
+        return ss.str();
     }    // 6
 
-    double total_swap() {
-        return s21::memory::total_swap();
+    std::string total_swap() {
+        std::stringstream ss;
+        ss << s21::memory::total_swap();
+        return ss.str();
     }
 
-    double free_swap() {
-        return s21::memory::free_swap();
+    std::string free_swap() {
+        std::stringstream ss;
+        ss << s21::memory::free_swap();
+        return ss.str();
     }
 
-    double virtual_mem_volume(){
-        return s21::memory::virtual_mem_volume();
+    std::string virtual_mem_volume(){
+        std::stringstream ss;
+        ss << s21::memory::virtual_mem_volume();
+        return ss.str();
     }
 
-    double virtual_mem_free(){
-        return s21::memory::virtual_mem_free();
+    std::string virtual_mem_free(){
+        std::stringstream ss;
+        ss << s21::memory::virtual_mem_free();
+        return ss.str();
     }
 
-    int proc_queue_length() {
+    std::string proc_queue_length() {
         int             answer;
         redi::ipstream  command("ps -e --format=\"stat\" | grep \"R\" | wc -l");
+        std::stringstream ss;
+
         command >> answer;
-        return answer - 1; // Subtracting 1 because ps call also counts as runnable
+        ss << answer - 1; // Subtracting 1 because ps call also counts as runnable
+        return ss.str(); 
     }
 
-    int inodes(){ // df -i /
+    std::string inodes(){ // df -i /
         int             all_inodes, used_inodes;
         std::string     line, partition;
+        std::stringstream ss;
         redi::ipstream  command("df -i /");
         
         std::getline(command, line);
         command >> partition >> all_inodes >> used_inodes;
-        return used_inodes;
+        ss << used_inodes;
+        return ss.str();
     }
 
-    double hard_read_time(){
-        return -1;
+    std::string hard_read_time(){
+        return "Sudondese";
     }
 
-    int system_errors() { // journalctl -p 3 -b | wc -l
+    std::string system_errors() { // journalctl -p 3 -b | wc -l
         int             error_count;
+        std::stringstream ss;
         redi::ipstream  command("journalctl -p 3 -b | wc -l");
+        
         command >> error_count;
-        return error_count;
+        ss << error_count;
+        return ss.str();
     }
 
     // Not entirely correct since it counts every opened tty and pts
-    int user_auths(){ // last -p now | ws -l 
+    std::string user_auths(){ // last -p now | ws -l 
         int             user_auths;
+        std::stringstream ss;
         redi::ipstream  command("last -p now | ws -l");
+
         command >> user_auths;
-        return user_auths - 3;
+        ss << user_auths - 3;
+        return ss.str();
     }
 
 }

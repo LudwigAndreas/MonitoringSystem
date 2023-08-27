@@ -30,8 +30,6 @@ double GetNetworkThroughput() {
   uint64_t old_io = io;
   // uint64_t new_io = 0;
   uint64_t protocol_io;
-  uint64_t ibytes, ipackets, ierr, idrop, ififo, iframe, icompressed, imulticast,
-      obytes, opackets, oerr, odrop, ofifo, oframe, ocompressed, omulticast;
   std::string tmp;
 
   io = 0;
@@ -116,21 +114,15 @@ double GetNetworkThroughput() {
 #endif
 
 extern "C" {
-int url(std::string url) {
-//        if (!streams) {
-//  auto fs = std::fstream("log.log", std::fstream::trunc | std::fstream::out);
-//            analyzer.AddOutputStream(fs, true, s21::diagnostic::LogLevel::Trace);
-//            ++streams;
-//        }
-  return GetURLAvailability(url);
+std::string url(std::vector<std::string> url) {
+  std::stringstream ss;
+  ss << GetURLAvailability(url.at(0));
+  return ss.str();
 }
 
-double inet_throughput() {
-//        if (!streams) {
-//            auto fs = std::fstream("log.log", std::fstream::trunc | std::fstream::out);
-//            analyzer.AddOutputStream(fs, true, s21::diagnostic::LogLevel::Trace);
-//            ++streams;
-//        }
-  return GetNetworkThroughput();
+std::string inet_throughput() {
+  std::stringstream ss;
+  ss << GetNetworkThroughput();
+  return ss.str();
 }
 }
