@@ -9,7 +9,7 @@
 
 namespace s21::monitor {
 
-Core::Core(std::string agents_dir, std::string metric_output_dir) : log_dir_(metric_output_dir){
+Core::Core(const std::string& agents_dir, const std::string& metric_output_dir) : log_dir_(metric_output_dir){
   app_logger_ = diagnostic::Logger::getRootLogger();
   if (s_instance_) {
     LOG_FATAL(app_logger_, "Only one instance of Core allowed.");

@@ -44,7 +44,7 @@ class MetricAnalyzer {
 
   ~MetricAnalyzer();
 
-  void Log(MetricEvent event);
+  void Log(const MetricEvent& event);
 
   void Subscribe(IMetricNotifier* notifier);
 
@@ -64,7 +64,7 @@ class MetricAnalyzer {
   void OpenLogFile(time_t timestamp);
   void CheckForNewDay(time_t timestamp);
 
-  void NotifyCriticalValueReached(MetricEvent event);
+  void NotifyCriticalValueReached(const MetricEvent& event);
 };
 
 }

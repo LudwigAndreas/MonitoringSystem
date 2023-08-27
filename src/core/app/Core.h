@@ -32,7 +32,7 @@ class Core {
    * @param metric_output_dir Directory where the metric logs are stored.
    *
    * */
-  Core(std::string agents_dir = "./agents/", std::string metric_output_dir = "./logs/");
+  Core(const std::string& agents_dir = "./agents/", const std::string& metric_output_dir = "./logs/");
 
   /**
    * Destructor.

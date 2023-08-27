@@ -8,7 +8,7 @@
 
 namespace s21 {
 
-ConfiguredMetric::ConfiguredMetric(const Metric &metric) : Metric(metric) {}
+ConfiguredMetric::ConfiguredMetric(const Metric &metric) : Metric(metric), update_time_(60) {}
 
 std::string ConfiguredMetric::Run() {
   if (metric_func_) {

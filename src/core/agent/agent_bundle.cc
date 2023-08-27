@@ -8,9 +8,7 @@
 
 namespace s21 {
 
-AgentBundle::AgentBundle() {
-
-}
+AgentBundle::AgentBundle() = default;
 
 AgentBundle::AgentBundle(const AgentPtr& agent, const PropertiesPtr& properties) {
   name_ = agent->GetAgentName();
