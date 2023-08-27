@@ -24,26 +24,31 @@ ADD_EXECUTABLE(${project_BIN}
     main.cc
     app/App.h
     app/App.cc
-    Core.h
-    Core.cc
-    agent/AgentManager.cc
-    agent/AgentManager.h
     ../modules/include/Metric.cc
     ../modules/include/Metric.h
     ../modules/include/Agent.h
     config/Properties.cc
     config/Properties.h
-    MetricScheduler.cc
-    MetricScheduler.h
+    agent/AgentManager.cc
+    agent/AgentManager.h
     agent/agent_bundle.cc
     agent/agent_bundle.h
     agent/AgentBundleLoader.cc
     agent/AgentBundleLoader.h
-    MetricLogger.cc
-    MetricLogger.h
     metric/ConfiguredMetric.cc
     metric/ConfiguredMetric.h
-    metric/MetricCriticalValue.cc metric/MetricCriticalValue.h executor/ExecutorService.cc executor/ExecutorService.h IAgentSubscriber.h metric/MetricEvent.cc metric/MetricEvent.h)
+    metric/MetricCriticalValue.cc
+    metric/MetricCriticalValue.h
+    metric/MetricEvent.cc
+    metric/MetricEvent.h
+    Core.h
+    Core.cc
+    executor/AgentScheduler.cc
+    executor/AgentScheduler.h
+    analyzer/MetricAnalyzer.cc
+    analyzer/MetricAnalyzer.h
+    agent/IAgentSubscriber.h
+    executor/AgentExecutor.cc executor/AgentExecutor.h)
 
 TARGET_LINK_OPTIONS(${project_BIN} PRIVATE -rdynamic)
 

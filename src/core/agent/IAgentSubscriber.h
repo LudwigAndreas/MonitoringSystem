@@ -13,9 +13,9 @@ class IAgentSubscriber {
 
   public:
 
-  virtual void OnAgentAdded(std::shared_ptr<AgentBundle> agent) = 0;
-  virtual void OnAgentRemoved(std::shared_ptr<AgentBundle> agent) = 0;
-  virtual void OnAgentUpdated(std::shared_ptr<AgentBundle> agent) = 0;
+  virtual void OnAgentAdded(std::shared_ptr<AgentBundle> &agent) = 0;
+  virtual void OnAgentRemoved(std::shared_ptr<AgentBundle> &agent) = 0;
+  virtual void OnAgentUpdated(std::shared_ptr<AgentBundle> &agent) = 0;
 
   virtual ~IAgentSubscriber() = default;
 

@@ -13,7 +13,7 @@
 
 #include "../../modules/include/Agent.h"
 #include "agent_bundle.h"
-#include "MetricScheduler.h"
+#include "executor/AgentScheduler.h"
 #include "IAgentSubscriber.h"
 
 namespace s21 {

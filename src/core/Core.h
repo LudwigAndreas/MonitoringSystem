@@ -10,11 +10,17 @@
 #include "Logger.h"
 #include "../modules/include/Agent.h"
 #include "agent/AgentManager.h"
-#include "MetricScheduler.h"
+#include "executor/AgentScheduler.h"
+#include "executor/AgentExecutor.h"
+#include "analyzer/MetricAnalyzer.h"
 
 namespace s21::monitor {
 
-class Core : public IAgentSubscriber {
+typedef std::shared_ptr<AgentManager> AgentManagerPtr;
+typedef std::shared_ptr<AgentExecutor> AgentExecutorPtr;
+typedef std::shared_ptr<MetricAnalyzer> MetricAnalyzerPtr;
+
+class Core {
 
  public:
 
@@ -48,17 +54,13 @@ class Core : public IAgentSubscriber {
    * */
   void DisableMonitoring();
 
-  void OnAgentAdded(std::shared_ptr<AgentBundle> agent) override;
-  void OnAgentRemoved(std::shared_ptr<AgentBundle> agent) override;
-  void OnAgentUpdated(std::shared_ptr<AgentBundle> agent) override;
-
  private:
 
   /**
-   * Configures the metric logger.
+   * Configures the metric analyzer.
    *
-   * logger will be configured in the following way:
-   * 1. Get the "MonitoringSystem" logger.
+   * analyzer will be configured in the following way:
+   * 1. Get the "MonitoringSystem" analyzer.
    * 2. Set the pattern layout to "[%d{%Y-%m-%d %X}] | %m%n".
    * This will print the date and time in the following format: "2023-07-30 12:00:00".
    *
@@ -66,13 +68,12 @@ class Core : public IAgentSubscriber {
   void ConfigureMetricLogger();
 
   static Core* s_instance_;
-  std::vector<AgentPtr> agent_repo_;
+  std::string log_dir_;
+  AgentManagerPtr agent_manager_;
+  MetricAnalyzerPtr metric_analyzer_;
+  AgentExecutorPtr agent_executor_;
   diagnostic::LoggerPtr metric_logger_;
   diagnostic::LoggerPtr app_logger_;
-  std::string log_dir_;
-  AgentManager agent_manager_;
-  std::shared_ptr<MetricScheduler> metric_scheduler_;
-  std::thread metric_scheduler_thread_;
 };
 
 }

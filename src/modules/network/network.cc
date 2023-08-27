@@ -119,7 +119,7 @@ extern "C" {
 int url(std::string url) {
 //        if (!streams) {
 //  auto fs = std::fstream("log.log", std::fstream::trunc | std::fstream::out);
-//            logger.AddOutputStream(fs, true, s21::diagnostic::LogLevel::Trace);
+//            analyzer.AddOutputStream(fs, true, s21::diagnostic::LogLevel::Trace);
 //            ++streams;
 //        }
   return GetURLAvailability(url);
@@ -128,7 +128,7 @@ int url(std::string url) {
 double inet_throughput() {
 //        if (!streams) {
 //            auto fs = std::fstream("log.log", std::fstream::trunc | std::fstream::out);
-//            logger.AddOutputStream(fs, true, s21::diagnostic::LogLevel::Trace);
+//            analyzer.AddOutputStream(fs, true, s21::diagnostic::LogLevel::Trace);
 //            ++streams;
 //        }
   return GetNetworkThroughput();

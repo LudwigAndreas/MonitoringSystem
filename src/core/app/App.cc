@@ -194,7 +194,7 @@ void App::InteractiveMain() {
 }
 
 void App::ConsoleMain() {
-  monitor::Core core("../agents/");
+  monitor::Core core("../agents/", "../logs/");
   core.EnableMonitoring();
   while (true) {
     std::this_thread::sleep_for(std::chrono::seconds(10));
@@ -215,7 +215,7 @@ App::printHelpMessage()
   std::cout << "    --prefget <key>              Prints the given preference." << std::endl;
   std::cout << "    --preflist                   Lists all preferences that are set." << std::endl;
   std::cout << "    --loglevel <level>           Sets the current logging level." << std::endl;
-  std::cout << "    --loglevel <logger>=<level>  Sets the logging level for the given logger." << std::endl;
+  std::cout << "    --loglevel <analyzer>=<level>  Sets the logging level for the given analyzer." << std::endl;
   std::cout << "    --gui                        Run in graphical user interface mode." << std::endl;
   std::cout << "    --interactive                Run in interactive commandline mode." << std::endl;
   std::cout << "Log Levels:" << std::endl;
