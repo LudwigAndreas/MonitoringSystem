@@ -8,9 +8,7 @@
 
 namespace s21 {
 
-AgentBundle::AgentBundle() {
-
-}
+AgentBundle::AgentBundle() = default;
 
 AgentBundle::AgentBundle(const AgentPtr& agent, const PropertiesPtr& properties) {
   name_ = agent->GetAgentName();
@@ -66,6 +64,12 @@ void AgentBundle::ConfigureMetric(const PropertiesPtr& properties,
     metric->SetUpdateTime(default_update_interval_);
     LOG_WARN(diagnostic::Logger::getRootLogger(), "Update interval for metric "
         + metric_name + " is not set");
+  }
+    std::string metric_args = properties->GetProperty(
+        "metric." + metric_name + ".args",
+        "");
+  if (!metric_args.empty()) {
+    metric->SetArgs(metric_args);
   }
 }
 

@@ -4,20 +4,22 @@
 
 #include "MetricAnalyzer.h"
 
+#include <utility>
+
 namespace s21 {
 
-MetricAnalyzer::MetricAnalyzer() {
+MetricAnalyzer::MetricAnalyzer() : last_log_day_(-1) {
 
 }
 
 MetricAnalyzer::MetricAnalyzer(diagnostic::LoggerPtr logger) : MetricAnalyzer(
     "./logs/",
-    logger) {}
+    std::move(logger)) {}
 
 MetricAnalyzer::MetricAnalyzer(std::string metric_output_dir,
                                diagnostic::LoggerPtr logger) {
-  log_dir_ = metric_output_dir;
-  logger_ = logger;
+  log_dir_ = std::move(metric_output_dir);
+  logger_ = std::move(logger);
   logger_->SetLevel(diagnostic::LogLevel::Trace);
   auto now = std::chrono::system_clock::now();
   auto now_time_t = std::chrono::system_clock::to_time_t(now);
@@ -29,7 +31,7 @@ MetricAnalyzer::~MetricAnalyzer() {
 
 }
 
-void MetricAnalyzer::Log(MetricEvent event) {
+void MetricAnalyzer::Log(const MetricEvent& event) {
   CheckForNewDay(event.GetTimestamp());
   if (!log_file_.is_open()) {
     OpenLogFile(event.GetTimestamp());
@@ -77,7 +79,7 @@ void MetricAnalyzer::Unsubscribe(IMetricNotifier *notifier) {
                                notifier), notifiers_.end());
 }
 
-void MetricAnalyzer::NotifyCriticalValueReached(MetricEvent event) {
+void MetricAnalyzer::NotifyCriticalValueReached(const MetricEvent& event) {
   for (auto notifier: notifiers_) {
     notifier->OnCriticalValueReached(event);
   }
