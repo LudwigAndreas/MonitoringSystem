@@ -14,7 +14,7 @@ s21::Metric::Metric(std::string name,
 }
 
 Metric::Metric(std::string name,
-               std::function<std::string(std::vector<std::string>)> metric_func_args) {
+               std::function<std::string(std::string)> metric_func_args) {
     name_ = name;
     metric_func_args_ = metric_func_args;
     metric_func_ = nullptr;

@@ -29,7 +29,7 @@ class Metric {
    **/
   std::string name_;
   std::function<std::string()> metric_func_;
-  std::function<std::string(std::vector<std::string>)> metric_func_args_;
+  std::function<std::string(std::string)> metric_func_args_;
 
  public:
   /**
@@ -42,7 +42,7 @@ class Metric {
    **/
   Metric(std::string name, std::function<std::string()> metric_func);
 
-  Metric(std::string name, std::function<std::string(std::vector<std::string>)> metric_func_args);
+  Metric(std::string name, std::function<std::string(std::string)> metric_func_args);
 
   Metric(const Metric &metric);
 

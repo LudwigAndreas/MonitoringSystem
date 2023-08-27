@@ -35,9 +35,9 @@ class ConfiguredMetric : public Metric {
 
   void SetName(const std::string& name);
 
-  const std::vector<std::string> &GetArgs() const;
+  const std::string &GetArgs() const;
 
-  void SetArgs(const std::vector<std::string> &args);
+  void SetArgs(const std::string &args);
 
   const MetricCriticalValue &GetCriticalValue() const;
 
@@ -50,7 +50,7 @@ class ConfiguredMetric : public Metric {
   std::string Run(); //TODO rename to Execute
 
  private:
-  std::vector<std::string> args_;
+  std::string args_;
   MetricCriticalValue critical_value_;
   size_t update_time_;
 };

@@ -29,11 +29,11 @@ void ConfiguredMetric::SetName(const std::string &name) {
  name_ = name;
 }
 
-const std::vector<std::string> &ConfiguredMetric::GetArgs() const {
+const std::string &ConfiguredMetric::GetArgs() const {
   return args_;
 }
 
-void ConfiguredMetric::SetArgs(const std::vector<std::string> &args) {
+void ConfiguredMetric::SetArgs(const std::string &args) {
   args_ = args;
 }
 
