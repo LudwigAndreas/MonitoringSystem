@@ -47,10 +47,11 @@ class App {
   std::string getKeyName(const std::string& key)const;
   std::string getKeyRepr(const std::string& key)const;
   std::string convert(const std::string& str)const;
+  static diagnostic::LoggerPtr getLogger();
 
 
   static App* s_instance_;
-  static diagnostic::LoggerPtr s_logger_;
+  // static diagnostic::LoggerPtr s_logger_;
   std::string invocation_;
   bool gui_;
   bool interactive_;

@@ -40,7 +40,7 @@ App::App(int &argc, char **argv) : invocation_(argv[0]), gui_(false), interactiv
   s_instance_ = this;
 
 //  setApplication
-
+  getLogger();
   diagnostic::LoggerPtr rootlogger = diagnostic::Logger::getRootLogger();
   rootlogger->SetPatternLayout(diagnostic::PatternLayout("%d{%Y-%m-%d %X} %Y%5.5p%y \x1B[35m%-5P%y --- [%M] \x1B[36m%-25.40F%y : %m%n"));
   rootlogger->AddOutputStream(std::cout, false);
@@ -61,7 +61,7 @@ App::App(int &argc, char **argv) : invocation_(argv[0]), gui_(false), interactiv
       std::exit(0);
     } else if (matches_option(arg, "prefset")) {
       if ( (idx + 1) >= argc ) {
-        LOG_FATAL(s_logger_, "Option \"" << arg << "\" requires a parameter");
+        LOG_FATAL(App::getLogger(), "Option \"" << arg << "\" requires a parameter");
         std::exit(1);
       }
 
@@ -86,7 +86,7 @@ App::App(int &argc, char **argv) : invocation_(argv[0]), gui_(false), interactiv
     } else if (matches_option(arg, "prefdel")) {
       // Verify that there another argument
       if ( (idx + 1) >= argc ) {
-        LOG_FATAL(s_logger_, "Option \"" << arg << "\" requires a parameter");
+        LOG_FATAL(App::getLogger(), "Option \"" << arg << "\" requires a parameter");
         std::exit(1);
       }
 
@@ -103,7 +103,7 @@ App::App(int &argc, char **argv) : invocation_(argv[0]), gui_(false), interactiv
     } else if (matches_option(arg, "prefget")) {
       // Verify that there another argument
       if ( (idx + 1) >= argc ) {
-        LOG_FATAL(s_logger_, "Option \"" << arg << "\" requires a parameter");
+        LOG_FATAL(App::getLogger(), "Option \"" << arg << "\" requires a parameter");
         std::exit(1);
       }
 
@@ -117,7 +117,7 @@ App::App(int &argc, char **argv) : invocation_(argv[0]), gui_(false), interactiv
     } else if (matches_option(arg, "loglevel")) {
       // Verify that there another argument
       if ( (idx + 1) >= argc ) {
-        LOG_FATAL(s_logger_, "Option \"" << arg << "\" requires a parameter");
+        LOG_FATAL(App::getLogger(), "Option \"" << arg << "\" requires a parameter");
         std::exit(1);
       }
 
@@ -140,24 +140,24 @@ App::App(int &argc, char **argv) : invocation_(argv[0]), gui_(false), interactiv
       std::exit(0);
     } else if (matches_option(arg, "gui")) {
       if (interactive_) {
-        LOG_FATAL(s_logger_, "Cannot specify both \"--gui\" and \"--interactive\" simultaneously.");
+        LOG_FATAL(App::getLogger(), "Cannot specify both \"--gui\" and \"--interactive\" simultaneously.");
         std::exit(1);
       }
       if (gui_) {
-        LOG_WARN(s_logger_, "Option \"" << arg << "\" already specified. Ignoring.");
+        LOG_WARN(App::getLogger(), "Option \"" << arg << "\" already specified. Ignoring.");
       }
       gui_ = true;
     } else if (matches_option(arg, "interactive")) {
       if (gui_) {
-        LOG_FATAL(s_logger_, "Cannot specify both \"--gui\" and \"--interactive\" simultaneously.");
+        LOG_FATAL(App::getLogger(), "Cannot specify both \"--gui\" and \"--interactive\" simultaneously.");
         std::exit(1);
       }
       if (interactive_) {
-        LOG_WARN(s_logger_, "Option \"" << arg << "\" already specified. Ignoring.");
+        LOG_WARN(App::getLogger(), "Option \"" << arg << "\" already specified. Ignoring.");
       }
       interactive_ = true;
     } else {
-      LOG_WARN(s_logger_, "Unrecognized option \"" << arg << "\". Ignoring");
+      LOG_WARN(App::getLogger(), "Unrecognized option \"" << arg << "\". Ignoring");
     }
     idx++;
   }
@@ -186,7 +186,7 @@ App* App::Instance() {
 
 void App::InitGui() {
   monitor::Core core("../agents/");
-  LOG_FATAL(s_logger_, "Gui has not been implemented yet.");
+  LOG_FATAL(App::getLogger(), "Gui has not been implemented yet.");
 }
 
 void App::InteractiveMain() {
@@ -385,13 +385,17 @@ App::setLogLevel(const std::string& logger, const std::string& level)
 //  }else if ( (lowercaselevel == "off")  || (lowercaselevel == "none") ){
 //    loggerptr->SetLevel(diagnostic::LogLevel::Off);
   }else{
-    LOG_FATAL(s_logger_, "Unrecognized logging level: \"" << level << "\".");
+    LOG_FATAL(App::getLogger(), "Unrecognized logging level: \"" << level << "\".");
     std::exit(1);
   }
 }
 
 App* App::s_instance_ = nullptr;
 
-auto App::s_logger_ = diagnostic::Logger::getLogger("myApp");
+diagnostic::LoggerPtr App::getLogger() {
+  static diagnostic::LoggerPtr s_logger_ = diagnostic::Logger::getLogger("bruh momento");
+  return s_logger_;
+}
+
 
 }

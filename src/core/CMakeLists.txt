@@ -21,6 +21,7 @@ ADD_LINK_OPTIONS(-L${MAINFOLDER}/third_party/LogLite/lib -lLogLite)
 #    )
 
 ADD_EXECUTABLE(${project_BIN}
+${MAINFOLDER}/third_party/LogLite/lib/libLogLite.a
     main.cc
     app/App.h
     app/App.cc

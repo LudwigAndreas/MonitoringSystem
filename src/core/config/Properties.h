@@ -21,11 +21,14 @@ class Properties {
 
   void Load(std::istream& reader);
 
-  std::string Get(const std::string& key);
+  std::string Get(std::string key);
+  // std::string Get(const std::string& key);
 
-  std::string GetProperty(const std::string& key);
+  std::string GetProperty(std::string key);
+  // std::string GetProperty(const std::string& key);
 
-  std::string GetProperty(const std::string& key, std::string default_value);
+  std::string GetProperty(std::string key, std::string default_value);
+  // std::string GetProperty(const std::string& key, std::string default_value);
 
   std::set<std::string> StringPropertyNames();
 

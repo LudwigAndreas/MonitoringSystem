@@ -26,7 +26,8 @@
 #include "../include/pstream.h"
 
 extern "C" {
-    std::string __attribute__((visibility("default"))) url(std::vector<std::string> url);
+    std::string __attribute__((visibility("default"))) url(std::string url);
     std::string __attribute__((visibility("default"))) inet_throughput();
 }
+
 #endif

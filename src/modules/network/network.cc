@@ -114,9 +114,9 @@ double GetNetworkThroughput() {
 #endif
 
 extern "C" {
-std::string url(std::vector<std::string> url) {
+std::string url(std::string url) {
   std::stringstream ss;
-  ss << GetURLAvailability(url.at(0));
+  ss << GetURLAvailability(url);
   return ss.str();
 }
 
