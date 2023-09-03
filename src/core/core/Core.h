@@ -54,6 +54,14 @@ class Core {
    * */
   void DisableMonitoring();
 
+  void SubscribeAgentEvents(IAgentSubscriber* subscriber);
+
+  void UnsubscribeAgentEvents(IAgentSubscriber* subscriber);
+
+  void SubscribeMetricEvents(IMetricSubscriber* subscriber);
+
+  void UnsubscribeMetricEvents(IMetricSubscriber* subscriber);
+
  private:
 
   /**
@@ -66,6 +74,8 @@ class Core {
    *
    * */
   void ConfigureMetricLogger();
+
+//  std::vector GetAgentsList()
 
   static Core* s_instance_;
   std::string log_dir_;

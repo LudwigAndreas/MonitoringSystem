@@ -1,0 +1,7 @@
+<RCC>
+    <qresource prefix="/images"/>
+    <qresource prefix="/">
+        <file>resources/mosaic.fill@2x.png</file>
+        <file>resources/terminal@2x.png</file>
+    </qresource>
+</RCC>

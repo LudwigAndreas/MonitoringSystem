@@ -6,9 +6,10 @@
 
 #include <iostream>
 #include <string>
+#include <QTranslator>
 
 #include "appinfo.h"
-#include "Core.h"
+
 
 namespace s21 {
 
@@ -28,7 +29,7 @@ namespace {
   }
 }
 
-App::App(int &argc, char **argv) : invocation_(argv[0]), gui_(false), interactive_(
+App::App(int &argc, char **argv) : QApplication(argc,argv), invocation_(argv[0]), gui_(false), interactive_(
     false) {
   if (s_instance_) {
 //    Only one instance of App allowed.
@@ -40,7 +41,7 @@ App::App(int &argc, char **argv) : invocation_(argv[0]), gui_(false), interactiv
   s_instance_ = this;
 
 //  setApplication
-
+  getLogger();
   diagnostic::LoggerPtr rootlogger = diagnostic::Logger::getRootLogger();
   rootlogger->SetPatternLayout(diagnostic::PatternLayout("%d{%Y-%m-%d %X} %Y%5.5p%y \x1B[35m%-5P%y --- [%M] \x1B[36m%-25.40F%y : %m%n"));
   rootlogger->AddOutputStream(std::cout, false);
@@ -61,7 +62,7 @@ App::App(int &argc, char **argv) : invocation_(argv[0]), gui_(false), interactiv
       std::exit(0);
     } else if (matches_option(arg, "prefset")) {
       if ( (idx + 1) >= argc ) {
-        LOG_FATAL(s_logger_, "Option \"" << arg << "\" requires a parameter");
+        LOG_FATAL(getLogger(), "Option \"" << arg << "\" requires a parameter");
         std::exit(1);
       }
 
@@ -86,7 +87,7 @@ App::App(int &argc, char **argv) : invocation_(argv[0]), gui_(false), interactiv
     } else if (matches_option(arg, "prefdel")) {
       // Verify that there another argument
       if ( (idx + 1) >= argc ) {
-        LOG_FATAL(s_logger_, "Option \"" << arg << "\" requires a parameter");
+        LOG_FATAL(getLogger(), "Option \"" << arg << "\" requires a parameter");
         std::exit(1);
       }
 
@@ -103,7 +104,7 @@ App::App(int &argc, char **argv) : invocation_(argv[0]), gui_(false), interactiv
     } else if (matches_option(arg, "prefget")) {
       // Verify that there another argument
       if ( (idx + 1) >= argc ) {
-        LOG_FATAL(s_logger_, "Option \"" << arg << "\" requires a parameter");
+        LOG_FATAL(getLogger(), "Option \"" << arg << "\" requires a parameter");
         std::exit(1);
       }
 
@@ -117,7 +118,7 @@ App::App(int &argc, char **argv) : invocation_(argv[0]), gui_(false), interactiv
     } else if (matches_option(arg, "loglevel")) {
       // Verify that there another argument
       if ( (idx + 1) >= argc ) {
-        LOG_FATAL(s_logger_, "Option \"" << arg << "\" requires a parameter");
+        LOG_FATAL(getLogger(), "Option \"" << arg << "\" requires a parameter");
         std::exit(1);
       }
 
@@ -135,29 +136,29 @@ App::App(int &argc, char **argv) : invocation_(argv[0]), gui_(false), interactiv
       } else {
         setLogLevel("", param);
       }
-    } else if (matches_option(arg, "appid") || matches_option(arg, "application-identifier")) {
+    } else if (matches_option(arg, "appid") || matches_option(arg, "view-identifier")) {
       printApplicationIdentifier();
       std::exit(0);
     } else if (matches_option(arg, "gui")) {
       if (interactive_) {
-        LOG_FATAL(s_logger_, "Cannot specify both \"--gui\" and \"--interactive\" simultaneously.");
+        LOG_FATAL(getLogger(), "Cannot specify both \"--gui\" and \"--interactive\" simultaneously.");
         std::exit(1);
       }
       if (gui_) {
-        LOG_WARN(s_logger_, "Option \"" << arg << "\" already specified. Ignoring.");
+        LOG_WARN(getLogger(), "Option \"" << arg << "\" already specified. Ignoring.");
       }
       gui_ = true;
     } else if (matches_option(arg, "interactive")) {
       if (gui_) {
-        LOG_FATAL(s_logger_, "Cannot specify both \"--gui\" and \"--interactive\" simultaneously.");
+        LOG_FATAL(getLogger(), "Cannot specify both \"--gui\" and \"--interactive\" simultaneously.");
         std::exit(1);
       }
       if (interactive_) {
-        LOG_WARN(s_logger_, "Option \"" << arg << "\" already specified. Ignoring.");
+        LOG_WARN(getLogger(), "Option \"" << arg << "\" already specified. Ignoring.");
       }
       interactive_ = true;
     } else {
-      LOG_WARN(s_logger_, "Unrecognized option \"" << arg << "\". Ignoring");
+      LOG_WARN(getLogger(), "Unrecognized option \"" << arg << "\". Ignoring");
     }
     idx++;
   }
@@ -185,17 +186,34 @@ App* App::Instance() {
 }
 
 void App::InitGui() {
-  monitor::Core core("../agents/");
-  LOG_FATAL(s_logger_, "Gui has not been implemented yet.");
+  mainwindow_ = std::make_shared<MainWindow>();
+  core_ = std::make_shared<monitor::Core>("../agents/", "../logs/");
+  maincontroller_ = std::make_shared<MainController>(mainwindow_, core_);
+
+  mainwindow_->SetController(maincontroller_);
+
+  core_->SubscribeAgentEvents(maincontroller_.get());
+  core_->SubscribeMetricEvents(maincontroller_.get());
+  QTranslator translator;
+  const QStringList uiLanguages = QLocale::system().uiLanguages();
+  for (const QString &locale : uiLanguages) {
+    const QString baseName = "MonitoringSystem_" + QLocale(locale).name();
+    if (translator.load(":/i18n/" + baseName)) {
+      s21::App::installTranslator(&translator);
+      break;
+    }
+  }
+  mainwindow_->show();
+  core_->EnableMonitoring();
 }
 
 void App::InteractiveMain() {
-  std::cout << "Hello world!" << std::endl;
+  ConsoleMain();
 }
 
 void App::ConsoleMain() {
-  monitor::Core core("../agents/", "../logs/");
-  core.EnableMonitoring();
+  core_ = std::make_shared<monitor::Core>("../agents/", "../logs/");
+  core_->EnableMonitoring();
   while (true) {
     std::this_thread::sleep_for(std::chrono::seconds(10));
   }
@@ -209,7 +227,7 @@ App::printHelpMessage()
   std::cout << "    --help                       Displays this help message." << std::endl;
   std::cout << "    --version                    Prints the program version." << std::endl;
   std::cout << "    --version-triplet            Prints the undecorated program version." << std::endl;
-  std::cout << "    --appid                      Prints the unique application identifier." << std::endl;
+  std::cout << "    --appid                      Prints the unique view identifier." << std::endl;
   std::cout << "    --prefset <key>=<val>        Sets the given preference." << std::endl;
   std::cout << "    --prefdel <key>              Unsets the given preference." << std::endl;
   std::cout << "    --prefget <key>              Prints the given preference." << std::endl;
@@ -385,13 +403,17 @@ App::setLogLevel(const std::string& logger, const std::string& level)
 //  }else if ( (lowercaselevel == "off")  || (lowercaselevel == "none") ){
 //    loggerptr->SetLevel(diagnostic::LogLevel::Off);
   }else{
-    LOG_FATAL(s_logger_, "Unrecognized logging level: \"" << level << "\".");
+    LOG_FATAL(getLogger(), "Unrecognized logging level: \"" << level << "\".");
     std::exit(1);
   }
 }
 
 App* App::s_instance_ = nullptr;
 
-auto App::s_logger_ = diagnostic::Logger::getLogger("myApp");
+//auto App::s_logger_ = diagnostic::Logger::getLogger("myApp");
+diagnostic::LoggerPtr App::getLogger() {
+  static diagnostic::LoggerPtr s_logger_ = diagnostic::Logger::getLogger("bruh momento");
+  return s_logger_;
+}
 
 }

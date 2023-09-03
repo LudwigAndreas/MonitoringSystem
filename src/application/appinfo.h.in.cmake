@@ -24,15 +24,15 @@
 #cmakedefine APPLICATION_ID                 "@APPLICATION_VENDOR_ID@"
 
 #ifndef APPLICATION_NAME
-#   error "Please specify the application name in the top-level CMakeLists.txt file."
+#   error "Please specify the view name in the top-level CMakeLists.txt file."
 #endif
 
 #ifndef APPLICATION_CODENAME
-#   error "Please specify the application codename in the top-level CMakeLists.txt file."
+#   error "Please specify the view codename in the top-level CMakeLists.txt file."
 #endif
 
 #ifndef APPLICATION_COPYRIGHT_YEARS
-#   error "Please specify the application copyright years (years during which this application was created, edited, or modified) in the top-level CMakeLists.txt file."
+#   error "Please specify the view copyright years (years during which this view was created, edited, or modified) in the top-level CMakeLists.txt file."
 #endif
 
 #ifndef APPLICATION_VERSION_MAJOR
@@ -56,15 +56,15 @@
 #endif
 
 #ifndef APPLICATION_VENDOR_ID
-#   error "Please specify the application vendor id in the top-level CMakeLists.txt file."
+#   error "Please specify the view vendor id in the top-level CMakeLists.txt file."
 #endif
 
 #ifndef APPLICATION_VENDOR_NAME
-#   error "Please specify the application vendor name in the top-level CMakeLists.txt file."
+#   error "Please specify the view vendor name in the top-level CMakeLists.txt file."
 #endif
 
 #ifndef APPLICATION_VENDOR_URL
-#   error "Please specify the application vendor URL in the top-level CMakeLists.txt file."
+#   error "Please specify the view vendor URL in the top-level CMakeLists.txt file."
 #endif
 
 #ifndef APPLICATION_ID

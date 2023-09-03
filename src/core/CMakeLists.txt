@@ -21,9 +21,9 @@ ADD_LINK_OPTIONS(-L${MAINFOLDER}/third_party/LogLite/lib -lLogLite)
 #    )
 
 ADD_EXECUTABLE(${project_BIN}
-    main.cc
-    app/App.h
-    app/App.cc
+    ../application/main.cc
+    ../application/App.h
+    ../application/App.cc
     ../modules/include/Metric.cc
     ../modules/include/Metric.h
     ../modules/include/Agent.h
@@ -41,8 +41,8 @@ ADD_EXECUTABLE(${project_BIN}
     metric/MetricCriticalValue.h
     metric/MetricEvent.cc
     metric/MetricEvent.h
-    app/Core.h
-    app/Core.cc
+    core/Core.h
+    core/Core.cc
     executor/AgentScheduler.cc
     executor/AgentScheduler.h
     analyzer/MetricAnalyzer.cc
@@ -50,7 +50,7 @@ ADD_EXECUTABLE(${project_BIN}
     agent/IAgentSubscriber.h
     executor/AgentExecutor.cc
     executor/AgentExecutor.h
-    notifier/IMetricNotifier.h
+    notifier/IMetricSubscriber.h
     )
 
 TARGET_LINK_OPTIONS(${project_BIN} PRIVATE -rdynamic)

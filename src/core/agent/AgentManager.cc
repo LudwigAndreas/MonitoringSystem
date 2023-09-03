@@ -77,9 +77,13 @@ void AgentManager::MonitorAgentsDirectory() {
 
       current_files = new_files;
     } catch (const std::filesystem::filesystem_error &ex) {
-      LOG_ERROR(app_logger_,
-                "Unable to open " << agents_directory_
-                                  << ". Directory does not exist.");
+//      LOG_ERROR(app_logger_,
+//                "Unable to open " << agents_directory_
+//                                  << ". Directory does not exist.");
+      fs::create_directory(agents_directory_);
+    }
+    if (!is_monitoring_) {
+      break;
     }
     std::this_thread::sleep_for(std::chrono::seconds(sleep_duration_));
   }

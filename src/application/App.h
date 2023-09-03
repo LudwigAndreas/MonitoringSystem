@@ -6,12 +6,19 @@
 #define MONITORINGSYSTEM_SRC_CORE_APP_H_
 
 #include <string>
+#include <QApplication>
+#include <QMainWindow>
 
 #include "Logger.h"
 
+#include "../gui/view/mainwindow.h"
+#include "core/Core.h"
+#include "../gui/controller/MainController.h"
+
 namespace s21 {
 
-class App {
+class App : public QApplication {
+    Q_OBJECT
  public:
   App(int &argc, char** argv);
   ~App();
@@ -47,14 +54,18 @@ class App {
   std::string getKeyName(const std::string& key)const;
   std::string getKeyRepr(const std::string& key)const;
   std::string convert(const std::string& str)const;
+  static diagnostic::LoggerPtr getLogger();
+
 
 
   static App* s_instance_;
-  static diagnostic::LoggerPtr s_logger_;
+//  static diagnostic::LoggerPtr s_logger_;
   std::string invocation_;
   bool gui_;
   bool interactive_;
-//  std::shared_ptr<QMainWindow> _mainwindow;
+  std::shared_ptr<monitor::Core> core_;
+  std::shared_ptr<MainWindow> mainwindow_;
+  std::shared_ptr<MainController> maincontroller_;
 };
 
 }

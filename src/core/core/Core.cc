@@ -9,7 +9,8 @@
 
 namespace s21::monitor {
 
-Core::Core(const std::string& agents_dir, const std::string& metric_output_dir) : log_dir_(metric_output_dir){
+Core::Core(const std::string &agents_dir, const std::string &metric_output_dir)
+    : log_dir_(metric_output_dir) {
   app_logger_ = diagnostic::Logger::getRootLogger();
   if (s_instance_) {
     LOG_FATAL(app_logger_, "Only one instance of Core allowed.");
@@ -19,11 +20,11 @@ Core::Core(const std::string& agents_dir, const std::string& metric_output_dir) 
   ConfigureMetricLogger();
 
   agent_manager_ = std::make_shared<AgentManager>(agents_dir);
-  metric_analyzer_ = std::make_shared<MetricAnalyzer>(metric_output_dir, metric_logger_);
+  metric_analyzer_ =
+      std::make_shared<MetricAnalyzer>(metric_output_dir, metric_logger_);
   agent_executor_ = std::make_shared<AgentExecutor>(metric_analyzer_);
   LOG_INFO(app_logger_, "Agents monitoring started.");
   agent_manager_->Subscribe(agent_executor_.get());
-  agent_manager_->StartMonitoring();
 }
 
 Core::~Core() {
@@ -32,16 +33,16 @@ Core::~Core() {
 }
 
 Core *Core::Instance() {
-    if (!s_instance_) {
-        LOG_FATAL(Core::s_instance_->app_logger_, "Core not initialized.");
-        std::exit(0);
-    }
+  if (!s_instance_) {
+    LOG_FATAL(Core::s_instance_->app_logger_, "Core not initialized.");
+    std::exit(0);
+  }
   return s_instance_;
 }
 
 void Core::ConfigureMetricLogger() {
   metric_logger_ = diagnostic::Logger::getLogger("MonitoringSystem");
-  metric_logger_->SetPatternLayout(diagnostic::PatternLayout("[%d{%Y-%m-%d %X}] | %m%n"));
+  metric_logger_->SetPatternLayout(diagnostic::PatternLayout("%m"));
 }
 
 void Core::EnableMonitoring() {
@@ -52,6 +53,22 @@ void Core::DisableMonitoring() {
   agent_manager_->StopMonitoring();
 }
 
-Core* Core::s_instance_ = nullptr;
+void Core::SubscribeAgentEvents(IAgentSubscriber *subscriber) {
+  agent_manager_->Subscribe(subscriber);
+}
+
+void Core::UnsubscribeAgentEvents(IAgentSubscriber *subscriber) {
+  agent_manager_->Unsubscribe(subscriber);
+}
+
+void Core::SubscribeMetricEvents(IMetricSubscriber *subscriber) {
+  metric_analyzer_->Subscribe(subscriber);
+}
+
+void Core::UnsubscribeMetricEvents(IMetricSubscriber *subscriber) {
+  metric_analyzer_->Unsubscribe(subscriber);
+}
+
+Core *Core::s_instance_ = nullptr;
 
 }

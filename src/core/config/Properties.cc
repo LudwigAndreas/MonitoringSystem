@@ -54,15 +54,15 @@ void Properties::Load(std::istream &reader) {
   properties_ = key_value_map;
 }
 
-std::string Properties::Get(const std::string& key) {
+std::string Properties::Get(std::string key) {
   return properties_.at(key);
 }
 
-std::string Properties::GetProperty(const std::string& key) {
+std::string Properties::GetProperty(std::string key) {
   return properties_.at(key);
 }
 
-std::string Properties::GetProperty(const std::string& key, std::string default_value) {
+std::string Properties::GetProperty(std::string key, std::string default_value) {
   try {
     return properties_.at(key);
   } catch (std::out_of_range& e) {
