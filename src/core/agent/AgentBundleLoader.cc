@@ -47,6 +47,7 @@ std::shared_ptr<Agent> AgentBundleLoader::Instantiate(DynamicLib lib) {
   });
 }
 
+// TODO add configuring enabling and disabling via properties
 std::shared_ptr<AgentBundle> AgentBundleLoader::LoadAgentBundle(const std::filesystem::path &agent_path) {
   diagnostic::LoggerPtr app_logger_ = diagnostic::Logger::getRootLogger();
 

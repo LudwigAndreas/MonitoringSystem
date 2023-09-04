@@ -32,7 +32,7 @@ class AgentScheduler {
 
  public:
 
-  AgentScheduler(AgentBundlePtr agent, MetricAnalyzerPtr analyzer);
+  AgentScheduler(AgentBundlePtr &agent, MetricAnalyzerPtr &analyzer);
 
   ~AgentScheduler();
 
@@ -57,6 +57,7 @@ class AgentScheduler {
   std::thread scheduler_thread_;
   std::vector<MetricData> metrics_;
   MetricAnalyzerPtr analyzer_;
+  AgentBundlePtr agent_;
 };
 }
 

@@ -23,6 +23,9 @@ AgentManager::AgentManager(std::string agents_directory)
 
 AgentManager::~AgentManager() {
   StopMonitoring();
+  if (monitoring_thread_.joinable()) {
+    monitoring_thread_.join();
+  }
   delete agent_list_;
 }
 
@@ -37,9 +40,6 @@ void AgentManager::StartMonitoring() {
 void AgentManager::StopMonitoring() {
   if (is_monitoring_) {
     is_monitoring_ = false;
-    if (monitoring_thread_.joinable()) {
-      monitoring_thread_.join();
-    }
   }
 }
 
@@ -66,7 +66,6 @@ void AgentManager::MonitorAgentsDirectory() {
           LOG_INFO(app_logger_, "Dynamic library added: " << file);
         }
       }
-
       for (const auto &file: current_files) {
         if (new_files.find(file) == new_files.end()) {
           LOG_INFO(app_logger_, "Dynamic library removed: " << file);
@@ -82,10 +81,7 @@ void AgentManager::MonitorAgentsDirectory() {
 //                                  << ". Directory does not exist.");
       fs::create_directory(agents_directory_);
     }
-    if (!is_monitoring_) {
-      break;
-    }
-    std::this_thread::sleep_for(std::chrono::seconds(sleep_duration_));
+    Sleep(std::chrono::seconds(sleep_duration_));
   }
 }
 
@@ -138,6 +134,22 @@ void AgentManager::NotifyAgentRemoved(AgentBundlePtr agent) {
 void AgentManager::NotifyAgentUpdated(AgentBundlePtr agent) {
   for (auto subscriber: subscribers_) {
     subscriber->OnAgentUpdated(agent);
+  }
+}
+
+void AgentManager::Sleep(std::chrono::milliseconds sleep_time) {
+  auto start_time = std::chrono::steady_clock::now();
+  auto half_second = std::chrono::milliseconds(500);
+
+  while (is_monitoring_) {
+    auto elapsed_time = std::chrono::duration_cast<std::chrono::milliseconds>(
+        std::chrono::steady_clock::now() - start_time);
+
+    if (elapsed_time >= sleep_time) {
+      break; // Время сна истекло, выходим из цикла
+    }
+
+    std::this_thread::sleep_for(half_second);
   }
 }
 

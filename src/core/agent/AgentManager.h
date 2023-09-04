@@ -79,8 +79,10 @@ class AgentManager {
   void NotifyAgentRemoved(AgentBundlePtr agent);
   void NotifyAgentUpdated(AgentBundlePtr agent);
 
+  void Sleep(std::chrono::milliseconds sleep_time_ms);
+
   std::string agent_extension_ = ".agent";
-  size_t sleep_duration_ = 30;
+  size_t sleep_duration_ = 10;
   std::string agents_directory_;
   bool is_monitoring_;
   std::thread monitoring_thread_;

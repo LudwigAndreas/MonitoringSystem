@@ -74,6 +74,14 @@ class AgentBundle {
    * */
   std::string GetAgentType() const;
 
+  std::chrono::system_clock::time_point GetUptimePoint() const;
+
+  void SetUptimePoint(std::chrono::system_clock::time_point uptime_point);
+
+  bool IsEnabled() const;
+
+  void SetIsEnabled(bool is_enabled);
+
   /**
    * Updates the agent's properties.
    *
@@ -99,6 +107,8 @@ class AgentBundle {
   std::string type_;
   std::vector<ConfiguredMetricPtr>* configured_metrics_;
   size_t default_update_interval_ = 60;
+  std::chrono::system_clock::time_point uptime_point_;
+  bool is_enabled_ = true;
 };
 
 }

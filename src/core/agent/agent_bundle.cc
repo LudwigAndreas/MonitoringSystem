@@ -73,4 +73,20 @@ void AgentBundle::ConfigureMetric(const PropertiesPtr& properties,
   }
 }
 
+std::chrono::system_clock::time_point AgentBundle::GetUptimePoint() const {
+  return uptime_point_;
+}
+
+void AgentBundle::SetUptimePoint(std::chrono::system_clock::time_point uptime_point) {
+  AgentBundle::uptime_point_ = uptime_point;
+}
+
+bool AgentBundle::IsEnabled() const {
+  return is_enabled_;
+}
+
+void AgentBundle::SetIsEnabled(bool is_enabled) {
+  AgentBundle::is_enabled_ = is_enabled;
+}
+
 }
