@@ -51,7 +51,12 @@ LIST (APPEND CMAKE_PREFIX_PATH "${MAINFOLDER}")
 LIST (APPEND CMAKE_PREFIX_PATH "${MAINFOLDER}/tools")
 LIST (APPEND CMAKE_PREFIX_PATH "${MAINFOLDER}/third_party")
 SET (CMAKE_MODULE_PATH "${MAINFOLDER}/tools/share/cmake")
-INCLUDE_DIRECTORIES("${MAINFOLDER}/include")
+INCLUDE_DIRECTORIES("${MAINFOLDER}/include"
+    ${Boost_INCLUDE_DIRS}
+    ${OPENSSL_INCLUDE_DIR}
+    ${ZLIB_INCLUDE_DIRS}
+    ${CURL_INCLUDE_DIRS}
+    )
 
 #
 # Locate Project Prerequisites
@@ -67,6 +72,11 @@ FetchContent_MakeAvailable(googletest)
 add_library(GTest::GTest INTERFACE IMPORTED src/parse/converters/LiteralPatternConverter.cc include/logger/parse/converters/LiteralPatternConverter.h third_party/libs21/test/properties_reader_class_test.cc)
 target_link_libraries(GTest::GTest INTERFACE gtest_main)
 SET (GTest_Library GTest::gtest_main)
+
+find_package(Boost REQUIRED)
+find_package(OpenSSL REQUIRED)
+find_package(ZLIB REQUIRED)
+find_package(CURL REQUIRED)
 
 #
 # Configure Files
