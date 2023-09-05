@@ -18,20 +18,23 @@ class TelegramSender : public IMessageSender {
   static const int DEFAULT_USER = -1;
   TgBot::Bot bot;
   TelegramUserRepository users;
+  std::thread polling_thread;
   std::set<std::string> receivers;
+  bool is_polling_running = false;
 
   std::string prepareMessage(FailedMetric fm);
 
  public:
   TelegramSender();
-  virtual ~TelegramSender() = default;
+  virtual ~TelegramSender();
 
   virtual void sendMessage(FailedMetric fm) override;
 
   std::set<std::string> getReceivers();
   void addReceiver(std::string username,
-                   int chat_id = TelegramSender::DEFAULT_USER);
+                   long chat_id = TelegramSender::DEFAULT_USER);
   void removeReceiver(std::string username);
+  void PollingFunction();
 };
 
 using TelegramSenderPtr = std::shared_ptr<TelegramSender>;

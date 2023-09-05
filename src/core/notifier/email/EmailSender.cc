@@ -72,29 +72,33 @@ void EmailSender::sendMessage(FailedMetric fm) {
 }
 
 size_t EmailSender::payloadSource(char *ptr,
-                                  size_t size,
-                                  size_t nmemb,
-                                  void *userp) {
-  struct upload_status *upload_ctx = (struct upload_status *) userp;
-  const char *data;
-  size_t room = size * nmemb;
+                size_t size,
+                size_t nmemb,
+                void *userp) {
+  // struct upload_status *upload_ctx = (struct upload_status *) userp;
+  // const char *data;
+  // size_t room = size * nmemb;
 
-  if ((size == 0) || (nmemb == 0) || ((size * nmemb) < 1)) {
-    return 0;
-  }
+  // if ((size == 0) || (nmemb == 0) || ((size * nmemb) < 1)) {
+  //   return 0;
+  // }
 
-  data =
-      &message.c_str()[upload_ctx->bytes_read]; // maybe needs to be converted to c string
+  // data = &message.c_str()[upload_ctx->bytes_read];
 
-  if (data) {
-    size_t len = strlen(data);
-    if (room < len)
-      len = room;
-    memcpy(ptr, data, len);
-    upload_ctx->bytes_read += len;
+  // if (data) {
+  //   size_t len = strlen(data);
+  //   if (room < len)
+  //     len = room;
+  //   memcpy(ptr, data, len);
+  //   upload_ctx->bytes_read += len;
 
-    return len;
-  }
+  //   return len;
+  // }
+  
+  (void)ptr;
+  (void)size;
+  (void)nmemb;
+  (void)userp;
 
   return 0;
 }

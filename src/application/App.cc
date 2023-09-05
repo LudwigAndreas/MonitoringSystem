@@ -212,7 +212,8 @@ void App::ConfigureCore() {
   core_->SubscribeMetricEvents(maincontroller_.get());
 
   TelegramSenderPtr telegram = std::make_shared<TelegramSender>();
-  telegram->addReceiver("Ludwig_andreas");
+  telegram->addReceiver("kdancy");
+  telegram->addReceiver("Ludwig_Andreas");
   EmailSenderPtr email = std::make_shared<EmailSender>();
   email->addReceiver("ev.sand.raw@gmail.com");
   notification_controller_ = std::make_shared<NotificationController>();

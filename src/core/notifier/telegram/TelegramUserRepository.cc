@@ -1,10 +1,10 @@
 #include "TelegramUserRepository.h"
 
-std::map<std::string, int> TelegramUserRepository::getUsers() {
+std::map<std::string, long> TelegramUserRepository::getUsers() {
 	return db;
 }
 
-void TelegramUserRepository::addUser(std::string username, int chat_id) {
+void TelegramUserRepository::addUser(std::string username, long chat_id) {
 	db[username] = chat_id;
 }
 
