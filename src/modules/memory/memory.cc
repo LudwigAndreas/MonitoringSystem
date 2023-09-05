@@ -8,13 +8,14 @@ double GetTotalRAM() {
   return pages * page_size;
 }
 
-double GetFreeRAM() {
 #ifdef __linux__
-  // Linux implementation
-    long pages = sysconf(_SC_AVPHYS_PAGES);
-    long page_size = sysconf(_SC_PAGE_SIZE);
-    return pages * page_size;
+double GetFreeRAM() {
+  long pages = sysconf(_SC_AVPHYS_PAGES);
+  long page_size = sysconf(_SC_PAGE_SIZE);
+  return pages * page_size;
+}
 #elif __APPLE__
+double GetFreeRAM() {
   mach_port_t host_port = mach_host_self();
   mach_msg_type_number_t count = HOST_VM_INFO_COUNT;
   vm_statistics_data_t vm_stats;
@@ -26,19 +27,21 @@ double GetFreeRAM() {
   }
 
   return (double) vm_stats.free_count * (double) vm_page_size;
-#else
-  // Unsupported platform
-    return 0.0;
-#endif
 }
+#else
+double GetFreeRAM() {
+  // Unsupported platform
+  return 0.0;
+}
+#endif
 
 double GetUsedDisk() {
   const std::filesystem::space_info si = std::filesystem::space("/");
   return (1 - (double) si.free / si.capacity) * 100;
 }
 
+#if __linux__
 int GetDiskIO() {
-  #if __linux__
   std::ifstream file("/proc/diskstats");
   static int io = 0;
   int old_io = io;
@@ -58,28 +61,42 @@ int GetDiskIO() {
     return io - old_io;
   else
     return 0;
-  #elif __APPLE__
+}
+#elif __APPLE__
+int GetDiskIO() {
   return 0;
-  #else
-  #error "Unsupported platform"
-  #endif
+}
+#else
+int GetDiskIO() {
+  return 0;
+}
+#endif
+
+std::string ram_total() {
+  std::stringstream ss;
+  ss << std::fixed << GetTotalRAM();
+  return ss.str();
 }
 
-extern "C" {
-double ram_total() {
-  return GetTotalRAM();
-}
-
-double ram() {
+std::string ram() {
+  std::stringstream ss;
   double total = GetTotalRAM();
-  return ((total - GetFreeRAM()) / total) * 100;
+  ss << std::fixed << ((total - GetFreeRAM()) / total) * 100;
+  return ss.str();
 }
 
-double hard_volume() {
-  return GetUsedDisk();
+std::string hard_volume() {
+  std::stringstream ss;
+  ss << std::fixed << GetUsedDisk();
+  return ss.str();
 }
 
-int hard_ops() {
-  return GetDiskIO();
+std::string hard_ops() {
+  std::stringstream ss;
+  ss << std::fixed << GetDiskIO();
+  return ss.str();
 }
+
+std::string hard_throughput() {
+  return "";
 }

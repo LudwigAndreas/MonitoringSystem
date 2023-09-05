@@ -1,10 +1,12 @@
 #ifndef MEMORY_H
 #define MEMORY_H
 
-#include "modules/include/pstream.h"
+#include "../include/pstream.h"
 #include <cstdlib>
 #include <fstream>
+#include <string>
 #include <filesystem>
+
 #if __APPLE__
 #include <stdlib.h> // For malloc on macOS
 #include <mach/mach.h> // For vm_statistics on macOS
@@ -14,18 +16,13 @@
 #include <IOKit/storage/IOMedia.h>
 #endif
 
-#include "modules/include/module_header.h"
-
 double GetTotalRAM();
 double GetUsedRAM();
 
-extern "C" {
-    double __attribute__((visibility("default"))) ram_total ();
+std::string __attribute__((visibility("default"))) ram_total ();
+std::string __attribute__((visibility("default"))) ram ();
+std::string __attribute__((visibility("default"))) hard_volume ();
+std::string __attribute__((visibility("default"))) hard_ops ();
+std::string __attribute__((visibility("default"))) hard_throughput ();
 
-    double __attribute__((visibility("default"))) ram ();
-
-    double __attribute__((visibility("default"))) hard_volume ();
-
-    int __attribute__((visibility("default"))) hard_ops ();
-}
 #endif

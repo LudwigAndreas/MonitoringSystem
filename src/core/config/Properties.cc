@@ -70,6 +70,22 @@ std::string Properties::GetProperty(std::string key, std::string default_value) 
   }
 }
 
+// std::string Properties::Get(const std::string& key) {
+//   return properties_.at(key);
+// }
+
+// std::string Properties::GetProperty(const std::string& key) {
+//   return properties_.at(key);
+// }
+
+// std::string Properties::GetProperty(const std::string& key, std::string default_value) {
+//   try {
+//     return properties_.at(key);
+//   } catch (std::out_of_range& e) {
+//     return default_value;
+//   }
+// }
+
 std::set<std::string> Properties::StringPropertyNames() {
   std::set<std::string> keys;
 
