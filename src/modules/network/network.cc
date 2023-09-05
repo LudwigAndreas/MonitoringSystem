@@ -5,7 +5,7 @@ int streams = 0;
 int GetURLAvailability(std::string url) {
   int exit_status;
   std::stringstream ss;
-  ss << "ping " << url << " -W 0.3 -qc 1 >/dev/null 2>&1; echo $?";
+  ss << std::fixed << "ping " << url << " -W 0.3 -qc 1 >/dev/null 2>&1; echo $?";
   redi::ipstream in(ss.str());
   in >> exit_status;
   return (exit_status == 0);
@@ -113,16 +113,14 @@ double GetNetworkThroughput() {
 
 #endif
 
-extern "C" {
 std::string url(std::string url) {
   std::stringstream ss;
-  ss << GetURLAvailability(url);
+  ss << std::fixed << GetURLAvailability(url);
   return ss.str();
 }
 
 std::string inet_throughput() {
   std::stringstream ss;
-  ss << GetNetworkThroughput();
+  ss << std::fixed << GetNetworkThroughput();
   return ss.str();
-}
 }

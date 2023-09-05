@@ -16,9 +16,7 @@ int		__attribute__((visibility("hidden"))) GetNumberOfProcesses();
 double	__attribute__((visibility("hidden"))) GetCPULoad();
 
 
-extern "C" {
-	std::string __attribute__((visibility("default"))) cpu();
-	std::string __attribute__((visibility("default"))) processes();
-}
+std::string __attribute__((visibility("default"))) cpu();
+std::string __attribute__((visibility("default"))) processes();
 
 #endif

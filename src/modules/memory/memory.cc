@@ -72,33 +72,31 @@ int GetDiskIO() {
 }
 #endif
 
-extern "C" {
 std::string ram_total() {
   std::stringstream ss;
-  ss << GetTotalRAM();
+  ss << std::fixed << GetTotalRAM();
   return ss.str();
 }
 
 std::string ram() {
   std::stringstream ss;
   double total = GetTotalRAM();
-  ss << ((total - GetFreeRAM()) / total) * 100;
+  ss << std::fixed << ((total - GetFreeRAM()) / total) * 100;
   return ss.str();
 }
 
 std::string hard_volume() {
   std::stringstream ss;
-  ss << GetUsedDisk();
+  ss << std::fixed << GetUsedDisk();
   return ss.str();
 }
 
 std::string hard_ops() {
   std::stringstream ss;
-  ss << GetDiskIO();
+  ss << std::fixed << GetDiskIO();
   return ss.str();
 }
 
 std::string hard_throughput() {
   return "";
-}
 }

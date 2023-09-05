@@ -82,16 +82,14 @@ int GetNumberOfProcesses() {
 	return nop - 1;
 }
 
-extern "C" {
 std::string cpu() {
   std::stringstream ss;
-  ss << GetCPULoad();
+  ss << std::fixed << GetCPULoad();
   return ss.str();
 }
 
 std::string processes() {
   std::stringstream ss;
-  ss << GetNumberOfProcesses();
+  ss << std::fixed << GetNumberOfProcesses();
   return ss.str();
-}
 }

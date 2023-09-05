@@ -19,11 +19,10 @@
 double GetTotalRAM();
 double GetUsedRAM();
 
-extern "C" {
-    std::string __attribute__((visibility("default"))) ram_total ();
-    std::string __attribute__((visibility("default"))) ram ();
-    std::string __attribute__((visibility("default"))) hard_volume ();
-    std::string __attribute__((visibility("default"))) hard_ops ();
-    std::string __attribute__((visibility("default"))) hard_throughput ();
-}
+std::string __attribute__((visibility("default"))) ram_total ();
+std::string __attribute__((visibility("default"))) ram ();
+std::string __attribute__((visibility("default"))) hard_volume ();
+std::string __attribute__((visibility("default"))) hard_ops ();
+std::string __attribute__((visibility("default"))) hard_throughput ();
+
 #endif
