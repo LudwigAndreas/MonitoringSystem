@@ -21,11 +21,11 @@ MetricCriticalValue::MetricCriticalValue(std::string critical_value) {
       condition_operator_ = op;
       try {
         critical_value_ =
-            std::stod(critical_value.substr(critical_value.find(op) + 2));
+            std::stod(critical_value.substr(critical_value.find(op) + strlen(op)));
       } catch (std::exception &e) {
         LOG_ERROR(diagnostic::Logger::getRootLogger(),
                   "Critical value is not a number: "
-                      + critical_value.substr(critical_value.find(op) + 2));
+                      + critical_value.substr(critical_value.find(op) + strlen(op)));
         critical_value = 0.;
       }
       is_set = true;
