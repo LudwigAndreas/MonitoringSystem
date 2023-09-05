@@ -8,7 +8,7 @@
 #include "metric/MetricEvent.h"
 #include "core/Core.h"
 #include "agent/IAgentSubscriber.h"
-#include "notifier/IMetricSubscriber.h"
+#include "metric/IMetricSubscriber.h"
 #include "../view/mainwindow.h"
 
 namespace s21 {

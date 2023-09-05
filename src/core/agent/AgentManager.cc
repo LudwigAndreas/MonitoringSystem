@@ -11,6 +11,16 @@
 
 #include "AgentBundleLoader.h"
 
+#ifdef _WIN32
+#define LIB_EXTENSION ".dll"
+#elif defined(__linux__)
+#define LIB_EXTENSION ".so"
+#elif defined(__APPLE__)
+#define LIB_EXTENSION ".dylib"
+#else
+#error Unsupported platform
+#endif
+
 namespace s21 {
 
 namespace fs = std::filesystem;
@@ -76,9 +86,6 @@ void AgentManager::MonitorAgentsDirectory() {
 
       current_files = new_files;
     } catch (const std::filesystem::filesystem_error &ex) {
-//      LOG_ERROR(app_logger_,
-//                "Unable to open " << agents_directory_
-//                                  << ". Directory does not exist.");
       fs::create_directory(agents_directory_);
     }
     Sleep(std::chrono::seconds(sleep_duration_));
@@ -96,7 +103,7 @@ bool AgentManager::CheckAgentStructure(const std::filesystem::path &agent_path) 
   for (const auto &entry: fs::directory_iterator(agent_path)) {
     if (fs::is_regular_file(entry)) {
       fs::path filename = entry.path().filename();
-      if (filename.extension() == ".dylib"
+      if (filename.extension() == LIB_EXTENSION
           && fs::exists(agent_path / propertiesFilename)) {
         return true;
       }

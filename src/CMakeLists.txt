@@ -44,14 +44,24 @@ set(PROJECT_SOURCES
     core/agent/IAgentSubscriber.h
     core/executor/AgentExecutor.cc
     core/executor/AgentExecutor.h
-    core/notifier/IMetricSubscriber.h
+    core/metric/IMetricSubscriber.h
+    core/notifier/CriticalValueHandler.cc
+    core/notifier/CriticalValueHandler.h
+    core/notifier/FailedMetric.h
+    core/notifier/IMessageSender.h
+    core/notifier/email/EmailSender.cc
+    core/notifier/email/EmailSender.h
+    core/notifier/telegram/TelegramSender.cc
+    core/notifier/telegram/TelegramSender.h
+    core/notifier/telegram/TelegramUserRepository.cc
+    core/notifier/telegram/TelegramUserRepository.h
     gui/view/mainwindow.cpp
     gui/view/mainwindow.h
     gui/view/mainwindow.ui
     ${TS_FILES}
     gui/controller/MainController.cc
     gui/controller/MainController.h
-    )
+    core/notifier/NotificationController.cc core/notifier/NotificationController.h)
 
 if(${QT_VERSION_MAJOR} GREATER_EQUAL 6)
   qt_add_executable(SystemMonitoring
@@ -112,7 +122,8 @@ endif()
 
 INCLUDE_DIRECTORIES(${MAINFOLDER}/src/core
     ${MAINFOLDER}/third_party/LogLite/include
-    ${MAINFOLDER}/third_party/libs21/include)
+    ${MAINFOLDER}/third_party/libs21/include
+    ${MAINFOLDER}/third_party/tgbot-cpp/include)
 
 SET (project_MOC_HEADERS ${MAINFOLDER}/include
     ${MAINFOLDER}/third_party/LogLite/include)
@@ -123,17 +134,28 @@ ADD_LIBRARY(LogLite STATIC IMPORTED)
 SET_TARGET_PROPERTIES(LogLite PROPERTIES IMPORTED_LOCATION
     ${MAINFOLDER}/third_party/LogLite/lib/libLogLite.a)
 
-SET (project_LIBS LogLite)
+#SET_TARGET_PROPERTIES(TgBot PROPERTIES IMPORTED_LOCATION
+#    ${MAINFOLDER}/third_party/tgbot-cpp/build/libTgBot.a)
+
+
+SET (project_LIBS LogLite ${MAINFOLDER}/third_party/tgbot-cpp/build/libTgBot.a)
 SET (project_BIN ${PROJECT_NAME})
 
-ADD_LINK_OPTIONS(-L${MAINFOLDER}/third_party/LogLite/lib -lLogLite)
+#find_package(Boost REQUIRED COMPONENTS filesystem system)
+
+#ADD_LINK_OPTIONS(-L${MAINFOLDER}/third_party/LogLite/lib -lLogLite)
 
 TARGET_LINK_OPTIONS(${project_BIN} PRIVATE -rdynamic)
 
 TARGET_INCLUDE_DIRECTORIES(${project_BIN} PRIVATE ../include/src
-    $<TARGET_PROPERTY:LogLite,INTERFACE_INCLUDE_DIRECTORIES>)
+    $<TARGET_PROPERTY:LogLite,INTERFACE_INCLUDE_DIRECTORIES> )
 
-TARGET_LINK_LIBRARIES(${project_BIN} PRIVATE ${project_LIBS})
+TARGET_LINK_LIBRARIES(${project_BIN} PRIVATE ${project_LIBS}
+    ${Boost_LIBRARIES}
+    ${OPENSSL_LIBRARIES}
+    ${ZLIB_LIBRARIES}
+    ${CURL_LIBRARIES}
+    )
 SET_TARGET_PROPERTIES(${project_BIN} PROPERTIES VERSION "${APPLICATION_VERSION_MAJOR}.${APPLICATION_VERSION_MINOR}" OUTPUT_NAME ${project_BIN} CLEAN_DIRECT_OUTPUT 1)
 
 INSTALL(TARGETS ${project_BIN} DESTINATION bin)

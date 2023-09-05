@@ -5,6 +5,8 @@
 #ifndef MONITORINGSYSTEM_IMETRICSUBSCRIBER_H_
 #define MONITORINGSYSTEM_IMETRICSUBSCRIBER_H_
 
+#include "metric/MetricEvent.h"
+
 namespace s21 {
 
 class IMetricSubscriber {

@@ -14,6 +14,7 @@
 #include "../gui/view/mainwindow.h"
 #include "core/Core.h"
 #include "../gui/controller/MainController.h"
+#include "notifier/NotificationController.h"
 
 namespace s21 {
 
@@ -41,6 +42,7 @@ class App : public QApplication {
   void InitGui();
   void InteractiveMain();
   void ConsoleMain();
+  void ConfigureCore();
 
   void printHelpMessage();
   void printVersionMessage();
@@ -66,6 +68,7 @@ class App : public QApplication {
   std::shared_ptr<monitor::Core> core_;
   std::shared_ptr<MainWindow> mainwindow_;
   std::shared_ptr<MainController> maincontroller_;
+  std::shared_ptr<NotificationController> notification_controller_;
 };
 
 }

@@ -13,7 +13,7 @@
 
 #include "agent/agent_bundle.h"
 #include "metric/MetricEvent.h"
-#include "notifier/IMetricSubscriber.h"
+#include "metric/IMetricSubscriber.h"
 
 namespace s21 {
 
