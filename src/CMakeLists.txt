@@ -49,8 +49,11 @@ set(PROJECT_SOURCES
     core/notifier/CriticalValueHandler.h
     core/notifier/FailedMetric.h
     core/notifier/IMessageSender.h
+    core/notifier/IMessageSender.cc
     core/notifier/email/EmailSender.cc
     core/notifier/email/EmailSender.h
+    core/notifier/email/Email.cc
+    core/notifier/email/Email.h
     core/notifier/telegram/TelegramSender.cc
     core/notifier/telegram/TelegramSender.h
     core/notifier/telegram/TelegramUserRepository.cc

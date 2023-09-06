@@ -30,18 +30,13 @@ TelegramSender::~TelegramSender() {
   }
 }
 
-
 std::string TelegramSender::prepareMessage(FailedMetric fm) {
   std::ostringstream ss;
-  ss << "Metric \""
-     << fm.metric_name
-     << "\" failed at "
-     << fm.date
-     << " with value of "
-     << fm.value
-     << " and critical value threshold \""
-     << fm.critical_value
-     << "\".";
+  ss  << "Metric: "         << "\"" << fm.metric_name << "\""     << "\n"
+    << "Hostname: "       << "[" << this->hostname << "]"       << "\n"
+    << "Date: "           << fm.date                            /*<< "\n"*/
+    << "Value: "          << fm.value                           << "\n"
+    << "Critical value: " << "\"" << fm.critical_value << "\""  << ".";
   return ss.str();
 }
 

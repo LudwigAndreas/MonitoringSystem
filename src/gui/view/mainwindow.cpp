@@ -2,6 +2,7 @@
 #include "mainwindow.h"
 
 #include <QStandardItemModel>
+#include <QTextStream>
 #include <QTimer>
 #include <utility>
 #include <QtCore/qfile.h>
@@ -42,7 +43,7 @@ void MainWindow::update_monitor_log_view() {
 
   log_file_->seek(last_read_pos_);
 
-  QTextStream in(log_file_);
+  QTextStream in = QTextStream(log_file_);
   QString new_text = in.readAll();
 
   ui->monitor_log_view->moveCursor(QTextCursor::End);

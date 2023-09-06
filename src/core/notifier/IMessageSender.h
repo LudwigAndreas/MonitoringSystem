@@ -3,12 +3,21 @@
 #include <string>
 #include <memory>
 
+#include "../../modules/include/pstream.h"
 #include "FailedMetric.h"
 
+#if __linux
+#define hostname_command "cat /etc/hostname"
+#elif __MACOS
+#define hostname_command "hostname"
+#endif
+
 class IMessageSender {
+protected:
+	std::string hostname;
 
 public:
-	IMessageSender() = default;
+	IMessageSender();
 
 	virtual void sendMessage(FailedMetric fm) = 0;
 };

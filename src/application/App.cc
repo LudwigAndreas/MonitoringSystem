@@ -215,6 +215,8 @@ void App::ConfigureCore() {
   telegram->addReceiver("kdancy");
   telegram->addReceiver("Ludwig_Andreas");
   EmailSenderPtr email = std::make_shared<EmailSender>();
+  email->addReceiver("kalininandrey727@gmail.com");
+  email->addReceiver("andreyk2107@mail.ru");
   email->addReceiver("ev.sand.raw@gmail.com");
   notification_controller_ = std::make_shared<NotificationController>();
   notification_controller_->AddNotifier(telegram);

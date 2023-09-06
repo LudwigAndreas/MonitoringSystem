@@ -21,9 +21,10 @@ struct FailedMetric {
 		date(date) {}
 
     FailedMetric(s21::MetricEvent event) {
-      metric_name = event.GetMetric()->GetName();
-      critical_value = event.GetMetric()->GetCriticalValue().GetConditionOperator() + std::to_string(event.GetMetric()->GetCriticalValue().GetCriticalValue());
-      value = event.GetValue();
-      date = std::to_string(event.GetTimestamp());
+		time_t time = event.GetTimestamp();
+		metric_name = event.GetMetric()->GetName();
+		critical_value = event.GetMetric()->GetCriticalValue().GetConditionOperator() + std::to_string(event.GetMetric()->GetCriticalValue().GetCriticalValue());
+		value = event.GetValue();
+		date = asctime(gmtime(&time));
     }
 };

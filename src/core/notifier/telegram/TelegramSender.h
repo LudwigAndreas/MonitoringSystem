@@ -11,11 +11,10 @@
 
 #include "tgbot/tgbot.h"
 
-#define __token "5426071766:AAG3rchPUG-V6gswM3-tPGVDjnG5hVgmBdw"
-
 class TelegramSender : public IMessageSender {
  private:
   static const int DEFAULT_USER = -1;
+  const std::string __token = "5426071766:AAG3rchPUG-V6gswM3-tPGVDjnG5hVgmBdw";
   TgBot::Bot bot;
   TelegramUserRepository users;
   std::thread polling_thread;
