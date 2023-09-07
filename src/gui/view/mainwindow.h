@@ -39,6 +39,7 @@ class MainWindow : public QMainWindow {
   void on_add_agent_action();
   void on_delete_agent_button_clicked();
   void on_add_agent_button_clicked();
+  void UpdateAgentUptime();
 
  private:
   void closeEvent(QCloseEvent *event) override;
@@ -49,6 +50,7 @@ class MainWindow : public QMainWindow {
 
   Ui::MainWindow *ui;
   QTimer *log_timer_;
+  QTimer *uptime_timer_;
   qint64 last_read_pos_ = 0;
   QString log_file_path_;
   std::map<QString, std::shared_ptr<s21::AgentBundle>> agents_;

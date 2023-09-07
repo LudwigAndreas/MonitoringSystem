@@ -19,10 +19,13 @@ MainWindow::MainWindow(std::string &agents_folder, QWidget *parent)
   connect(ui->actionAdd_Agent, SIGNAL(triggered()), this, SLOT(on_add_agent_action()));
 
   log_timer_ = new QTimer(this);
+  uptime_timer_ = new QTimer(this);
   connect(log_timer_, SIGNAL(timeout()), this, SLOT(update_monitor_log_view()));
+  connect(uptime_timer_, SIGNAL(timeout()), this, SLOT(UpdateAgentUptime()));
   log_timer_->start(3000);
+  uptime_timer_->start(1000);
   last_read_pos_ = 0;
-//  update_monitor_log_view();
+
   ClearMetricDetails();
   ClearAgentDetails();
   SetAgentsPath(agents_folder);
@@ -83,9 +86,16 @@ void MainWindow::AddAgent(std::shared_ptr<s21::AgentBundle> &agent) {
 }
 
 void MainWindow::RemoveAgent(std::shared_ptr<s21::AgentBundle> &agent) {
-  ui->agent_list_widget->removeItemWidget(ui->agent_list_widget->findItems(
-      QString::fromStdString(agent->GetAgentName()),
-      Qt::MatchExactly).at(0));
+  if (ui->agent_list_widget->currentItem()) {
+    if (ui->agent_list_widget->currentItem()->text() == QString::fromStdString(agent->GetAgentName())) {
+      ui->metric_list_widget->clear();
+      ClearAgentDetails();
+      ClearMetricDetails();
+    }
+  }
+  QListWidgetItem *agent_item = ui->agent_list_widget->findItems(
+      QString::fromStdString(agent->GetAgentName()), Qt::MatchCaseSensitive).at(0);
+  delete ui->agent_list_widget->takeItem(ui->agent_list_widget->row(agent_item));
   agents_.erase(QString::fromStdString(agent->GetAgentName()));
 }
 
@@ -118,6 +128,23 @@ void MainWindow::SetAgentsPath(const std::string &agents_path) {
   agents_folder_ = QDir::cleanPath(agents_folder_);
 }
 
+void MainWindow::UpdateAgentUptime() {
+  if (ui->agent_list_widget->currentItem() != nullptr && ui->uptime_value_label->isEnabled()) {
+    auto agent = agents_.find(ui->agent_list_widget->currentItem()->text());
+    if (agent != agents_.end()) {
+      std::chrono::system_clock::time_point currentTime = std::chrono::system_clock::now();
+      std::chrono::duration<double> elapsedSeconds = currentTime - agent->second->GetUptimePoint();
+
+      long hours = std::chrono::duration_cast<std::chrono::hours>(elapsedSeconds).count();
+      long minutes = std::chrono::duration_cast<std::chrono::minutes>(elapsedSeconds).count() % 60;
+      long seconds = std::chrono::duration_cast<std::chrono::seconds>(elapsedSeconds).count() % 60;
+
+      ui->uptime_value_label->setText(QString("%1:%2:%3").arg(hours).arg(minutes).arg(seconds));
+    }
+  }
+
+}
+
 void MainWindow::ShowAgentDetails(std::shared_ptr<s21::AgentBundle> &agent) {
   ui->delete_agent_button->setEnabled(true);
 //  ui->add_agent_button->setEnabled(true);
@@ -130,7 +157,7 @@ void MainWindow::ShowAgentDetails(std::shared_ptr<s21::AgentBundle> &agent) {
   ui->uptime_label->setEnabled(true);
   ui->uptime_value_label->setEnabled(true);
   ui->num_of_metrics_value_label->setText(QString::number(agent->GetMetrics()->size()));
-//TODO  ui->uptime_value_label->setText(QString::number(agent->GetUptime()));
+  ui->uptime_value_label->setEnabled(true);
   ui->agent_type_value_line_edit->setText(QString::fromStdString(agent->GetAgentType()));
 }
 
@@ -150,7 +177,8 @@ void MainWindow::ShowMetricDetails(std::shared_ptr<s21::ConfiguredMetric> &metri
 
 void MainWindow::ClearAgentDetails() {
   ui->delete_agent_button->setDisabled(true);
-//  ui->add_agent_button->setDisabled(true);
+  ui->uptime_value_label->setDisabled(true);
+  ui->uptime_value_label->setText("00:00:00");
   ui->agent_enabled_checkbox->setDisabled(true);
   ui->type_label->setDisabled(true);
   ui->agent_type_value_line_edit->clear();
