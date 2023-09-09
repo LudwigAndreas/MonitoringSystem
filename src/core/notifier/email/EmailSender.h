@@ -9,33 +9,33 @@
 #include <string.h>
 #include <curl/curl.h>
 
+#include "Email.h"
 #include "notifier/IMessageSender.h"
 
-#define __email "andrew02541632@gmail.com"
-#define __password "mzgonnorlsctjzfn"
-#define __server "smtp://smtp.gmail.com:587"
+namespace s21 {
 
-struct upload_status {
-  size_t bytes_read;
-};
 
 class EmailSender : public IMessageSender {
  private:
   std::set<std::string> receivers;
-  std::string message;
+  std::string           email_;
+  std::string           password_;
+  std::string           server_;
 
-  size_t payloadSource(char *ptr, size_t size, size_t nmemb, void *userp);
-  std::string prepareMessage(FailedMetric fm);
+  std::string PrepareSubject(FailedMetric fm);
+  std::string PrepareMessage(FailedMetric fm);
 
  public:
-  EmailSender();
+  EmailSender(std::string email, std::string password, std::string server);
   virtual ~EmailSender() = default;
 
-  virtual void sendMessage(FailedMetric fm);
+  virtual void SendMessage(FailedMetric fm);
 
-  std::set<std::string> getReceivers();
-  void addReceiver(std::string username);
-  void removeReceiver(std::string username);
+  std::set<std::string> GetRecievers();
+  void AddReceiver(std::string username);
+  void RemoveReceiver(std::string username);
 };
 
 using EmailSenderPtr = std::shared_ptr<EmailSender>;
+
+}

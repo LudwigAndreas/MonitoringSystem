@@ -5,36 +5,50 @@
 #include <memory>
 #include <vector>
 #include <set>
+#include <thread>
 
+#include "config/Properties.h"
 #include "notifier/IMessageSender.h"
 #include "TelegramUserRepository.h"
 
 #include "tgbot/tgbot.h"
 
-#define __token "5426071766:AAG3rchPUG-V6gswM3-tPGVDjnG5hVgmBdw"
+namespace s21 {
 
 class TelegramSender : public IMessageSender {
  private:
-  static const int DEFAULT_USER = -1;
-  TgBot::Bot bot;
-  TelegramUserRepository users;
-  std::thread polling_thread;
-  std::set<std::string> receivers;
-  bool is_polling_running = false;
+  static const int              DEFAULT_USER        = -1;
+  const std::string             config_file         = "config/telegram.properties";
+  const std::string             __token             = "5426071766:AAG3rchPUG-V6gswM3-tPGVDjnG5hVgmBdw";
+  Properties                    properties;
+  bool                          is_polling_running  = false;
+  TgBot::Bot                    bot;
+  TelegramUserRepository        users;
+  std::shared_ptr<std::thread>  polling_thread;
+  std::set<std::string>         receivers;
 
-  std::string prepareMessage(FailedMetric fm);
+  void        ConfigPolling();
+  void        StartPolling();
+  void        StopPolling();
+  void        InitializeRepository();
+  void        InitializeReceivers(std::string receivers);
+  bool        PollingCheck();
+  void        PollingFunctionCheck();
+  std::string PrepareMessage(FailedMetric fm);
 
  public:
-  TelegramSender();
+  TelegramSender(std::string token, std::string receivers = "");
   virtual ~TelegramSender();
 
-  virtual void sendMessage(FailedMetric fm) override;
+  virtual void SendMessage(FailedMetric fm) override;
 
-  std::set<std::string> getReceivers();
-  void addReceiver(std::string username,
+  std::set<std::string> GetRecievers();
+  void AddReceiver(std::string username,
                    long chat_id = TelegramSender::DEFAULT_USER);
-  void removeReceiver(std::string username);
+  void RemoveReceiver(std::string username);
   void PollingFunction();
 };
 
 using TelegramSenderPtr = std::shared_ptr<TelegramSender>;
+
+}

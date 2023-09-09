@@ -1,14 +1,18 @@
 #include "TelegramUserRepository.h"
 
-std::map<std::string, long> TelegramUserRepository::getUsers() {
+namespace s21 {
+
+TelegramUserRepository::TelegramUserRepository(std::map<std::string, long> users) : db(std::move(users)) {}
+
+std::map<std::string, long> TelegramUserRepository::GetUsers() {
 	return db;
 }
 
-void TelegramUserRepository::addUser(std::string username, long chat_id) {
+void TelegramUserRepository::AddUser(std::string username, long chat_id) {
 	db[username] = chat_id;
 }
 
-int TelegramUserRepository::getUser(std::string username) {
+int TelegramUserRepository::GetUser(std::string username) {
 	try {
 		return db.at(username);
 	} catch (std::out_of_range& e) {
@@ -16,8 +20,8 @@ int TelegramUserRepository::getUser(std::string username) {
 	}
 }
 
-void TelegramUserRepository::removeUser(std::string username) {
+void TelegramUserRepository::RemoveUser(std::string username) {
 	db.erase(username);
 }
 
-// };
+}

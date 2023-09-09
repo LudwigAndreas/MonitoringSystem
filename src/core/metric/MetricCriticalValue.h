@@ -6,6 +6,7 @@
 #define MONITORINGSYSTEM_SRC_CORE_METRIC_METRICCRITICALVALUE_H_
 
 #include <string>
+#include <cstring>
 
 namespace s21 {
 

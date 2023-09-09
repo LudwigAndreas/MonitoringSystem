@@ -1,9 +1,13 @@
 #include "CriticalValueHandler.h"
 
+namespace s21 {
+
 CriticalValueHandler::CriticalValueHandler() : 
 	email_sender(), telegram_sender() {}
 
-void CriticalValueHandler::sendMessage(FailedMetric fm) {
-	email_sender.sendMessage(fm);
-	telegram_sender.sendMessage(fm);
+void CriticalValueHandler::SendMessage(FailedMetric fm) {
+	email_sender.SendMessage(fm);
+	telegram_sender.SendMessage(fm);
+}
+
 }

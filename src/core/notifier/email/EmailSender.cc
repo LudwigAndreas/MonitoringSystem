@@ -2,115 +2,59 @@
 
 #include <iostream>
 
-EmailSender::EmailSender() {}
+namespace s21 {
 
-std::string EmailSender::prepareMessage(FailedMetric fm) {
+EmailSender::EmailSender(std::string email, std::string password, std::string server) {
+  this->email_ = email;
+  this->password_ = password;
+  this->server_ = server;
+}
+
+std::string EmailSender::PrepareSubject(FailedMetric fm) {
   std::ostringstream ss;
-  ss << "To: ";
-  for (auto receiver: receivers) {
-    ss << receiver << ", ";
-  }
-  ss << "\r\n"
-     << "Subject: Failed Metric \""
-     << fm.metric_name << "\"\r\n\r\n"
-     << "Metric \""
-     << fm.metric_name
-     << "\" failed at "
-     << fm.date
-     << " with value of "
-     << fm.value
-     << " and critical value threshold \""
-     << fm.critical_value
-     << "\".\r\n";
+  ss  << "Failed metric "
+    << "\"" << fm.metric_name << "\""
+    << " on "
+    << "[" << this->hostname << "]";
   return ss.str();
 }
 
-void EmailSender::sendMessage(FailedMetric fm) {
-  CURL *curl;
-  CURLcode res = CURLE_OK;
-  struct curl_slist *recipients = NULL;
-  struct upload_status upload_ctx = {0};
-  message = prepareMessage(fm);
+std::string EmailSender::PrepareMessage(FailedMetric fm) {
+  std::ostringstream ss;
+  ss  << "Metric: "         << "\"" << fm.metric_name << "\""     << "\n"
+    << "Hostname: "       << "[" << this->hostname << "]"       << "\n"
+    << "Date: "           << fm.date                            /*<< "\n"*/
+    << "Value: "          << fm.value                           << "\n"
+    << "Critical value: " << "\"" << fm.critical_value << "\""  << ".";
+  return ss.str();
+}
 
-  curl = curl_easy_init();
-  if (curl) {
-    /* Set username and password */
-    curl_easy_setopt(curl, CURLOPT_USERNAME, __email);
-    curl_easy_setopt(curl, CURLOPT_PASSWORD, __password);
-
-    curl_easy_setopt(curl, CURLOPT_URL, __server);
-
-    curl_easy_setopt(curl, CURLOPT_USE_SSL, (long) CURLUSESSL_ALL);
-
-    curl_easy_setopt(curl, CURLOPT_SSL_VERIFYPEER, 0L);
-    curl_easy_setopt(curl, CURLOPT_SSL_VERIFYHOST, 0L);
-
-    curl_easy_setopt(curl, CURLOPT_MAIL_FROM, __email);
-
-    for (auto receiver: receivers)
-      recipients = curl_slist_append(recipients, receiver.c_str());
-    curl_easy_setopt(curl, CURLOPT_MAIL_RCPT, recipients);
-
-    curl_easy_setopt(curl, CURLOPT_READFUNCTION, &EmailSender::payloadSource);
-    curl_easy_setopt(curl, CURLOPT_READDATA, &upload_ctx);
-    curl_easy_setopt(curl, CURLOPT_UPLOAD, 1L);
-
-    curl_easy_setopt(curl, CURLOPT_VERBOSE, 0L);
-    res = curl_easy_perform(curl);
-
-    /* Check for errors */
-    if (res != CURLE_OK) {
-      // std::cerr << "curl_easy_perform() failed: " << curl_easy_strerror(res);
-    }
-
-    /* Free the list of recipients */
-    curl_slist_free_all(recipients);
-
-    /* Always cleanup */
-    curl_easy_cleanup(curl);
+void EmailSender::SendMessage(FailedMetric fm) {
+  if (!receivers.empty()) {
+    Email email(
+      EmailAddress(email_, "kdancybot"),
+      std::vector<EmailAddress>(std::next(receivers.begin()), receivers.end()),
+      PrepareSubject(fm),
+      PrepareMessage(fm)
+    );
+    email.SendMessage(
+      server_,
+      email_,
+      password_
+    );
   }
 }
 
-size_t EmailSender::payloadSource(char *ptr,
-                size_t size,
-                size_t nmemb,
-                void *userp) {
-  // struct upload_status *upload_ctx = (struct upload_status *) userp;
-  // const char *data;
-  // size_t room = size * nmemb;
-
-  // if ((size == 0) || (nmemb == 0) || ((size * nmemb) < 1)) {
-  //   return 0;
-  // }
-
-  // data = &message.c_str()[upload_ctx->bytes_read];
-
-  // if (data) {
-  //   size_t len = strlen(data);
-  //   if (room < len)
-  //     len = room;
-  //   memcpy(ptr, data, len);
-  //   upload_ctx->bytes_read += len;
-
-  //   return len;
-  // }
-  
-  (void)ptr;
-  (void)size;
-  (void)nmemb;
-  (void)userp;
-
-  return 0;
-}
-
-std::set<std::string> EmailSender::getReceivers() {
+std::set<std::string> EmailSender::GetRecievers() {
   return receivers;
 }
 
-void EmailSender::addReceiver(std::string username) {
+void EmailSender::AddReceiver(std::string username) {
   receivers.insert(username);
 }
 
-void EmailSender::removeReceiver(std::string username) {
+void EmailSender::RemoveReceiver(std::string username) {
   receivers.erase(username);
+}
+
 }

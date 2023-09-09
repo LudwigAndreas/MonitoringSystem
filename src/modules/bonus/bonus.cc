@@ -64,9 +64,6 @@ namespace s21 {
 
     void memory::update_values() {
         meminfo = s21::properties_reader("/proc/meminfo", ':');
-        for (auto it = meminfo.cbegin(); it != meminfo.cend(); ++it) {
-            std::cerr << "meminfo[" << it->first << "] = " << it->second << std::endl; 
-        }
     }
 
     double memory::get_value(std::string key) {
