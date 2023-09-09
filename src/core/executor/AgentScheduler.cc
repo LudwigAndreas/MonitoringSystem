@@ -35,9 +35,9 @@ void AgentScheduler::Run(size_t sleep_time_ms) {
     for (auto &metric_data: metrics_) {
       auto interval = metric_data.metric->GetUpdateTime();
       if (std::chrono::system_clock::now() >= metric_data.scheduled_time) {
-        std::string value = metric_data.metric->Run();
         time_t timestamp =
             std::chrono::system_clock::to_time_t(std::chrono::system_clock::now());
+        std::string value = metric_data.metric->Run();
         analyzer_->Log(MetricEvent(metric_data.metric, value, timestamp));
         metric_data.scheduled_time =
             std::chrono::system_clock::now() + std::chrono::seconds(interval);

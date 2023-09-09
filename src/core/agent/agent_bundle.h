@@ -41,7 +41,7 @@ class AgentBundle {
    *
    * @param properties The properties of the agent.
    * */
-  AgentBundle(const AgentPtr& agent, const PropertiesPtr& properties);
+  AgentBundle(const AgentPtr& agent, const PropertiesPtr& properties, const std::string &agent_path);
 
   ~AgentBundle();
 
@@ -100,6 +100,7 @@ class AgentBundle {
    * */
   AgentBundle();
 
+  void ConfigureAgent(const PropertiesPtr& properties);
 
   void ConfigureMetric(const PropertiesPtr& properties, ConfiguredMetricPtr &metric) const;
 
@@ -108,6 +109,7 @@ class AgentBundle {
   std::vector<ConfiguredMetricPtr>* configured_metrics_;
   size_t default_update_interval_ = 60;
   std::chrono::system_clock::time_point uptime_point_;
+  std::string agent_path_;
   bool is_enabled_ = true;
 };
 

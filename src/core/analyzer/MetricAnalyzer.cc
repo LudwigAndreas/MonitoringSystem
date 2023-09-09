@@ -59,7 +59,12 @@ void MetricAnalyzer::Log(const MetricEvent &event) {
     last_log_line << "] | ";
     out << last_log_line.str();
   }
-  out << event.GetMetric()->GetName() + " : " + event.GetValue() + " | ";
+  if (event.GetMetric()->GetArgs().empty()) {
+    out << event.GetMetric()->GetName() + " : " + event.GetValue() + " | ";
+  } else {
+    out << event.GetMetric()->GetName() + "<" + event.GetMetric()->GetArgs()
+        + ">" + " : " + event.GetValue() + " | ";
+  }
 
   last_log_line << out.str();
   LOG_INFO(logger_, out.str());

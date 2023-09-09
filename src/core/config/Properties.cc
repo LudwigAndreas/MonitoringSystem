@@ -5,6 +5,9 @@
 #include "Properties.h"
 
 #include <utility>
+#include <fstream>
+#include <sstream>
+#include <filesystem>
 
 namespace s21 {
 
@@ -18,7 +21,10 @@ Properties::Properties(std::string separator,
 
 Properties::Properties() : separator("="), comment_symb("#") {}
 
-void Properties::Load(std::istream &reader) {
+void Properties::Load(const std::string& file_name) {
+  file_name_ = file_name;
+
+  std::ifstream reader(file_name, std::ios::binary);
   if (reader.bad()) {
     properties_ = {};
   }
@@ -51,6 +57,8 @@ void Properties::Load(std::istream &reader) {
       key_value_map[key] = value;
     }
   }
+  if (reader && reader.is_open())
+    reader.close();
   properties_ = key_value_map;
 }
 
@@ -68,6 +76,61 @@ std::string Properties::GetProperty(std::string key, std::string default_value) 
   } catch (std::out_of_range& e) {
     return default_value;
   }
+}
+
+void Properties::SetProperty(const std::string& key, const std::string& value) {
+  properties_[key] = value;
+}
+
+void Properties::Save() {
+
+  std::string file_name = file_name_ + ".tmp";
+
+
+  std::map<std::string, std::string> properties = properties_;
+
+
+  std::ifstream reader(file_name_, std::ios::binary);
+  if (reader.bad()) {
+    return;
+  }
+  std::stringstream ss_out;
+
+
+  std::string line;
+  while (std::getline(reader, line)) {
+    size_t comment_pos = line.find(comment_symb);
+    size_t equal_pos = line.find(separator, 0);
+    if (equal_pos != std::string::npos && comment_pos > equal_pos) {
+      std::string key = line.substr(0, equal_pos);
+      key.erase(0, key.find_first_not_of(' '));
+      key.erase(key.find_last_not_of(' ') + 1);
+      try {
+        std::string value = properties.at(key);
+        ss_out << key << " " << separator << " \"" << value << "\"" << std::endl;
+        properties.erase(key);
+      } catch (std::out_of_range& e) {
+        ss_out << line << std::endl;
+      }
+    } else {
+      ss_out << line << std::endl;
+    }
+  }
+  if (reader && reader.is_open())
+      reader.close();
+
+  for (const auto& pair : properties) {
+    ss_out << pair.first << " " << separator << " " << pair.second << std::endl;
+  }
+
+  std::ofstream writer(file_name, std::ios::binary);
+  if (writer.bad()) {
+    return;
+  }
+  writer << ss_out.str();
+  writer.flush();
+  writer.close();
+  std::filesystem::rename(file_name, file_name_);
 }
 
 // std::string Properties::Get(const std::string& key) {
