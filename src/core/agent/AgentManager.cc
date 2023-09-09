@@ -69,13 +69,6 @@ void AgentManager::MonitorAgentsDirectory() {
         }
       }
 
-      for (const auto &file: new_files) {
-        if (current_files.find(file) == current_files.end()) {
-          agent_list_->insert({file, AgentBundleLoader::LoadAgentBundle(file)});
-          NotifyAgentAdded(agent_list_->at(file));
-          LOG_INFO(app_logger_, "Dynamic library added: " << file);
-        }
-      }
       for (const auto &file: current_files) {
         if (new_files.find(file) == new_files.end()) {
           LOG_INFO(app_logger_, "Dynamic library removed: " << file);
@@ -83,6 +76,22 @@ void AgentManager::MonitorAgentsDirectory() {
           agent_list_->erase(file);
         }
       }
+
+      for (const auto &file: new_files) {
+        if (current_files.find(file) == current_files.end()) {
+          agent_list_->insert({file, AgentBundleLoader::LoadAgentBundle(file)});
+          NotifyAgentAdded(agent_list_->at(file));
+          LOG_INFO(app_logger_, "Dynamic library added: " << file);
+        }
+      }
+
+//      TODO add update handling
+//      for (const auto &file: current_files) {
+//        if (new_files.find(file) == current_files.end()) {
+//          agent_list_->erase(file);
+//          agent_list_->insert()
+//        }
+//      }
 
       current_files = new_files;
     } catch (const std::filesystem::filesystem_error &ex) {

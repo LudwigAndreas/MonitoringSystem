@@ -10,9 +10,12 @@ namespace s21 {
 
 AgentBundle::AgentBundle() = default;
 
-AgentBundle::AgentBundle(const AgentPtr& agent, const PropertiesPtr& properties) {
+AgentBundle::AgentBundle(const AgentPtr &agent,
+                         const PropertiesPtr &properties,
+                         const std::string &agent_path) {
   name_ = agent->GetAgentName();
   type_ = agent->GetAgentType();
+  agent_path_ = agent_path;
   configured_metrics_ = new std::vector<ConfiguredMetricPtr>();
   for (const Metric &metric: agent->GetMetrics()) {
     configured_metrics_->emplace_back(std::make_shared<ConfiguredMetric>(metric));
@@ -36,18 +39,51 @@ std::string AgentBundle::GetAgentType() const {
   return type_;
 }
 
-void AgentBundle::Configure(const PropertiesPtr& properties) {
+void AgentBundle::Configure(const PropertiesPtr &properties) {
+  ConfigureAgent(properties);
   for (auto &configured_metric: *configured_metrics_) {
     ConfigureMetric(properties, configured_metric);
   }
 }
 
-void AgentBundle::ConfigureMetric(const PropertiesPtr& properties,
+void AgentBundle::ConfigureAgent(const PropertiesPtr &properties) {
+  std::string agent_name = properties->GetProperty("agent.name", "");
+  std::string agent_type = properties->GetProperty("agent.type", "");
+  bool is_enabled = properties->GetProperty("agent.enabled", "true") == "true";
+
+  if (!agent_name.empty()) {
+    name_ = agent_name;
+    LOG_INFO(diagnostic::Logger::getRootLogger(),
+             "Agent name is set to " + agent_name);
+  } else {
+    LOG_WARN(diagnostic::Logger::getRootLogger(), "Agent name is not set");
+  }
+  if (!agent_type.empty()) {
+    type_ = agent_type;
+    LOG_INFO(diagnostic::Logger::getRootLogger(),
+             "Agent type is set to " + agent_type);
+  } else {
+    LOG_WARN(diagnostic::Logger::getRootLogger(), "Agent type is not set");
+  }
+  is_enabled_ = is_enabled;
+}
+
+void AgentBundle::ConfigureMetric(const PropertiesPtr &properties,
                                   ConfiguredMetricPtr &metric) const {
   std::string metric_name = metric->GetName();
+
   std::string critical_value = properties->GetProperty(
       "metric." + metric_name + ".critical_value",
       "");
+
+  std::string update_interval = properties->GetProperty(
+      "metric." + metric_name + ".update_time",
+      "");
+
+  std::string metric_args = properties->GetProperty(
+      "metric." + metric_name + ".args",
+      "");
+
   if (!critical_value.empty()) {
     metric->SetCriticalValue(MetricCriticalValue(critical_value));
   } else {
@@ -55,9 +91,7 @@ void AgentBundle::ConfigureMetric(const PropertiesPtr& properties,
     LOG_WARN(diagnostic::Logger::getRootLogger(), "Critical value for metric "
         + metric_name + " is not set");
   }
-  std::string update_interval = properties->GetProperty(
-      "metric." + metric_name + ".update_time",
-      "");
+
   if (!update_interval.empty()) {
     metric->SetUpdateTime(std::stoi(update_interval));
   } else {
@@ -65,9 +99,7 @@ void AgentBundle::ConfigureMetric(const PropertiesPtr& properties,
     LOG_WARN(diagnostic::Logger::getRootLogger(), "Update interval for metric "
         + metric_name + " is not set");
   }
-    std::string metric_args = properties->GetProperty(
-        "metric." + metric_name + ".args",
-        "");
+
   if (!metric_args.empty()) {
     metric->SetArgs(metric_args);
   }

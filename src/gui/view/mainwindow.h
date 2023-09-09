@@ -36,7 +36,7 @@ class MainWindow : public QMainWindow {
   void on_agent_list_widget_itemClicked(QListWidgetItem *item);
   void on_metric_list_widget_itemClicked(QListWidgetItem *item);
   void update_monitor_log_view();
-  void on_add_agent_action();
+  void AddAgentAction();
   void on_delete_agent_button_clicked();
   void on_add_agent_button_clicked();
   void UpdateAgentUptime();

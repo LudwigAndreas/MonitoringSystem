@@ -47,7 +47,6 @@ std::shared_ptr<Agent> AgentBundleLoader::Instantiate(DynamicLib lib) {
   });
 }
 
-// TODO add configuring enabling and disabling via properties
 std::shared_ptr<AgentBundle> AgentBundleLoader::LoadAgentBundle(const std::filesystem::path &agent_path) {
   diagnostic::LoggerPtr app_logger_ = diagnostic::Logger::getRootLogger();
 
@@ -70,7 +69,7 @@ std::shared_ptr<AgentBundle> AgentBundleLoader::LoadAgentBundle(const std::files
     PropertiesPtr
         properties = LoadProperties(agent_path / agent_properties_path_);
     std::shared_ptr<AgentBundle> agent_bundle =
-        std::make_shared<AgentBundle>(agent, properties);
+        std::make_shared<AgentBundle>(agent, properties, agent_path);
     if (agent && properties) {
       LOG_INFO(app_logger_,
                "Agent was successfully loaded: "
@@ -93,9 +92,8 @@ std::shared_ptr<AgentBundle> AgentBundleLoader::LoadAgentBundle(const std::files
 }
 
 std::shared_ptr<s21::Properties> AgentBundleLoader::LoadProperties(const std::filesystem::path &properties_path) {
-  std::ifstream file(properties_path, std::ios::binary);
   PropertiesPtr properties = std::make_shared<Properties>();
-  properties->Load(file);
+  properties->Load(properties_path.string());
   return properties;
 }
 
