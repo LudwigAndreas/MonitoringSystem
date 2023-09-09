@@ -43,6 +43,7 @@ class App : public QApplication {
   void InteractiveMain();
   void ConsoleMain();
   void ConfigureCore();
+  void ReadProperties();
 
   void printHelpMessage();
   void printVersionMessage();
@@ -63,6 +64,8 @@ class App : public QApplication {
   static App* s_instance_;
 //  static diagnostic::LoggerPtr s_logger_;
   std::string invocation_;
+  std::string properties_file_ = "application.properties";
+  std::shared_ptr<Properties> properties_;
   bool gui_;
   bool interactive_;
   std::shared_ptr<monitor::Core> core_;

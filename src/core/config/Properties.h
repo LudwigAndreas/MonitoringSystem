@@ -19,13 +19,17 @@ class Properties {
 
   Properties();
 
-  void Load(std::istream& reader);
+  void Load(const std::string& file_name);
 
   std::string Get(std::string key);
 
   std::string GetProperty(std::string key);
 
   std::string GetProperty(std::string key, std::string default_value);
+
+  void SetProperty(const std::string& key, const std::string& value);
+
+  void Save();
 
   std::set<std::string> StringPropertyNames();
 
@@ -34,6 +38,7 @@ class Properties {
   std::string separator = "=";
   std::string comment_symb = "#";
   std::map<std::string, std::string> properties_;
+  std::string file_name_;
 };
 
 }

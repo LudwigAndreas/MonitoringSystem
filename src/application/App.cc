@@ -11,6 +11,7 @@
 #include "appinfo.h"
 #include "notifier/email/EmailSender.h"
 #include "notifier/telegram/TelegramSender.h"
+#include "config/Properties.h"
 
 namespace s21 {
 
@@ -199,33 +200,41 @@ App *App::Instance() {
   return s_instance_;
 }
 
+void App::ReadProperties() {
+  properties_ = std::make_shared<Properties>();
+  properties_->Load(properties_file_);
+  LOG_TRACE(getLogger(), "Properties loaded from " << properties_file_);
+}
+
 void App::ConfigureCore() {
-  std::string agents_folder = "../agents/";
-  std::string logs_folder = "../logs/";
+  ReadProperties();
+  std::string agents_folder = properties_->GetProperty("app.agents_folder", "../agents/");
+  std::string logs_folder = properties_->GetProperty("app.agents_folder", "../logs/");
+
   mainwindow_ = std::make_shared<MainWindow>(agents_folder);
   core_ = std::make_shared<monitor::Core>(agents_folder, logs_folder);
-  maincontroller_ = std::make_shared<MainController>(mainwindow_, core_);
 
-  mainwindow_->SetController(maincontroller_);
-
-  core_->SubscribeAgentEvents(maincontroller_.get());
-  core_->SubscribeMetricEvents(maincontroller_.get());
-
-  TelegramSenderPtr telegram = std::make_shared<TelegramSender>();
-  telegram->addReceiver("kdancy");
-  telegram->addReceiver("Ludwig_Andreas");
+//  TelegramSenderPtr telegram = std::make_shared<TelegramSender>();
+//  telegram->addReceiver("kdancy");
+//  telegram->addReceiver("Ludwig_Andreas");
   EmailSenderPtr email = std::make_shared<EmailSender>();
   email->addReceiver("kalininandrey727@gmail.com");
   email->addReceiver("andreyk2107@mail.ru");
   email->addReceiver("ev.sand.raw@gmail.com");
   notification_controller_ = std::make_shared<NotificationController>();
-  notification_controller_->AddNotifier(telegram);
+//  notification_controller_->AddNotifier(telegram);
   notification_controller_->AddNotifier(email);
   core_->SubscribeMetricEvents(notification_controller_.get());
 }
 
 void App::InitGui() {
   ConfigureCore();
+
+  maincontroller_ = std::make_shared<MainController>(mainwindow_, core_);
+  mainwindow_->SetController(maincontroller_);
+
+  core_->SubscribeAgentEvents(maincontroller_.get());
+  core_->SubscribeMetricEvents(maincontroller_.get());
 
   QTranslator translator;
   const QStringList uiLanguages = QLocale::system().uiLanguages();
@@ -245,11 +254,11 @@ void App::InteractiveMain() {
 }
 
 void App::ConsoleMain() {
-  core_ = std::make_shared<monitor::Core>("../agents/", "../logs/");
-  core_->EnableMonitoring();
-  while (true) {
-    std::this_thread::sleep_for(std::chrono::seconds(10));
-  }
+//  core_ = std::make_shared<monitor::Core>("../agents/", "../logs/");
+//  core_->EnableMonitoring();
+//  while (true) {
+//    std::this_thread::sleep_for(std::chrono::seconds(10));
+//  }
 }
 
 void
@@ -466,7 +475,7 @@ App *App::s_instance_ = nullptr;
 //auto App::s_logger_ = diagnostic::Logger::getLogger("myApp");
 diagnostic::LoggerPtr App::getLogger() {
   static diagnostic::LoggerPtr
-      s_logger_ = diagnostic::Logger::getLogger("bruh momento");
+      s_logger_ = diagnostic::Logger::getLogger("RootLogger");
   return s_logger_;
 }
 

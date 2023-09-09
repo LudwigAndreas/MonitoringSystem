@@ -17,7 +17,7 @@ MainWindow::MainWindow(std::string &agents_folder, QWidget *parent)
     : QMainWindow(parent), ui(new Ui::MainWindow) {
   ui->setupUi(this);
 
-  connect(ui->actionAdd_Agent, SIGNAL(triggered()), this, SLOT(on_add_agent_action()));
+  connect(ui->actionAdd_Agent, SIGNAL(triggered()), this, SLOT(AddAgentAction()));
 
   log_timer_ = new QTimer(this);
   uptime_timer_ = new QTimer(this);
@@ -33,7 +33,8 @@ MainWindow::MainWindow(std::string &agents_folder, QWidget *parent)
 }
 
 MainWindow::~MainWindow() {
-  log_file_->close();
+  if (log_file_ && log_file_->isOpen())
+    log_file_->close();
   delete log_file_;
   delete log_timer_;
   delete ui;
@@ -213,7 +214,7 @@ void MainWindow::SetController(std::shared_ptr<s21::MainController> &controller)
   controller_ = controller;
 }
 
-void MainWindow::on_add_agent_action() {
+void MainWindow::AddAgentAction() {
   QString agent_folder_path = QFileDialog::getExistingDirectory(this, "Select Agent Folder", QDir::homePath());
 
   if (!agent_folder_path.isEmpty())
@@ -246,7 +247,7 @@ void MainWindow::on_add_agent_action() {
 }
 
 void MainWindow::on_add_agent_button_clicked() {
-  on_add_agent_action();
+  AddAgentAction();
 }
 
 
