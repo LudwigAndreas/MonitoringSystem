@@ -10,17 +10,17 @@
 
 #include "EmailAddress.h"
 
+namespace s21 {
+
 class Email
 {
 public:
     Email(const EmailAddress   &from,
           const EmailAddresses &to,
           const std::string    &subject,
-          const std::string    &body,
-          const EmailAddresses &cc = EmailAddresses())                
+          const std::string    &body)                
         : from_{from}
         , to_{ to }
-        , cc_{cc.empty() ? to : cc}
         , subject_{subject}
         , body_{body} {}
 
@@ -42,6 +42,8 @@ private:
     std::string SetPayloadText();
 
     EmailAddress from_;
-    EmailAddresses to_, cc_;
+    EmailAddresses to_;
     std::string subject_, body_;
 };
+
+}

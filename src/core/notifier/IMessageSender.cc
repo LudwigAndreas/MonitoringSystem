@@ -1,6 +1,6 @@
 #include "IMessageSender.h"
 
-IMessageSender::IMessageSender() {
+s21::IMessageSender::IMessageSender() {
 	redi::ipstream is(hostname_command);
 	is >> hostname;
 }

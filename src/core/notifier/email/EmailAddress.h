@@ -8,6 +8,8 @@
 #include <random>
 #include <curl/curl.h>
 
+namespace s21 {
+
 class EmailAddress 
 {
 public:
@@ -25,3 +27,5 @@ private:
 using EmailAddresses = std::vector<EmailAddress>;
 
 std::ostream &operator<<(std::ostream &out, const EmailAddresses &emailAddresses);
+
+}

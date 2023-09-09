@@ -12,6 +12,8 @@
 #include "Email.h"
 #include "notifier/IMessageSender.h"
 
+namespace s21 {
+
 #define __email "andrew02541632@gmail.com"
 #define __password "mzgonnorlsctjzfn"
 #define __server "smtp://smtp.gmail.com:587"
@@ -20,7 +22,7 @@ class EmailSender : public IMessageSender {
  private:
   std::set<std::string> receivers;
 
-  std::string prepareSubject(FailedMetric fm);
+  std::string PrepareSubject(FailedMetric fm);
   std::string PrepareMessage(FailedMetric fm);
 
  public:
@@ -31,7 +33,9 @@ class EmailSender : public IMessageSender {
 
   std::set<std::string> GetRecievers();
   void AddReceiver(std::string username);
-  void removeReceiver(std::string username);
+  void RemoveReceiver(std::string username);
 };
 
 using EmailSenderPtr = std::shared_ptr<EmailSender>;
+
+}

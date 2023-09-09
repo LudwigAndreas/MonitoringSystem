@@ -4,13 +4,18 @@
 #include <stdexcept>
 #include <map>
 
+namespace s21 {
+
 class TelegramUserRepository {
 private:
 	std::map<std::string, long> db;
 
 public:
-	std::map<std::string, long> getUsers();
-	void addUser(std::string username, long chat_id);
-	int getUser(std::string username);
-	void removeUser(std::string username);
+	TelegramUserRepository(std::map<std::string, long> users = {});
+	std::map<std::string, long> GetUsers();
+	void AddUser(std::string username, long chat_id);
+	int GetUser(std::string username);
+	void RemoveUser(std::string username);
 };
+
+}

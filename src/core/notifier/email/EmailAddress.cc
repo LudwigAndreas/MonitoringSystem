@@ -1,5 +1,7 @@
 #include "EmailAddress.h"
 
+namespace s21 {
+
 EmailAddress::EmailAddress(const char *email) : email_{std::string(email)} {}
 
 EmailAddress::EmailAddress(const std::string &email, const std::string &display_name)
@@ -32,4 +34,6 @@ std::ostream &operator<<(std::ostream &out, const EmailAddresses &emailAddresses
 		}
     }
     return out;
+}
+
 }

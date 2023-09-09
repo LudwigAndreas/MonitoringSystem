@@ -1,18 +1,44 @@
 #include "TelegramSender.h"
 
-TelegramSender::TelegramSender() : bot(__token) {
+s21::TelegramSender::TelegramSender(std::string receivers) : 
+  properties(config_file), bot(properties.Get("config.token")) {
+  InitializeReceivers(receivers);
+  InitializeRepository();
   ConfigPolling();
+
+  // if (users.GetUser(std::string username))
   StartPolling();
 }
 
-TelegramSender::~TelegramSender() {
+s21::TelegramSender::~TelegramSender() {
   StopPolling();
 }
 
-void TelegramSender::ConfigPolling() {
+void s21::TelegramSender::InitializeRepository() {
+  
+}
+
+void s21::TelegramSender::InitializeReceivers(std::string receivers) {
+  std::stringstream ss(receivers);
+  std::string receiver;
+
+  while (ss >> receiver) {
+    std::transform(
+      receiver.begin(),
+      receiver.end(),
+      receiver.begin(),
+      [](unsigned char c) {
+        return std::tolower(c);
+      }
+    );
+    this->receivers.insert(receiver);
+  }
+}
+
+void s21::TelegramSender::ConfigPolling() {
   bot.getEvents().onCommand("start",
     [this](TgBot::Message::Ptr message) {
-      this->users.addUser(
+      this->users.AddUser(
         message->from->username,
         message->chat->id
       );
@@ -24,12 +50,12 @@ void TelegramSender::ConfigPolling() {
   );
 }
 
-void TelegramSender::StartPolling() {
+void s21::TelegramSender::StartPolling() {
   is_polling_running = true;
   polling_thread = std::thread(&TelegramSender::PollingFunction, this);
 }
 
-void TelegramSender::StopPolling() {
+void s21::TelegramSender::StopPolling() {
   if (is_polling_running) {
     is_polling_running = false;
   }
@@ -38,7 +64,7 @@ void TelegramSender::StopPolling() {
   }
 }
 
-std::string TelegramSender::PrepareMessage(FailedMetric fm) {
+std::string s21::TelegramSender::PrepareMessage(FailedMetric fm) {
   std::ostringstream ss;
   ss  << "Metric: "         << "\"" << fm.metric_name << "\""     << "\n"
     << "Hostname: "       << "[" << this->hostname << "]"       << "\n"
@@ -48,10 +74,10 @@ std::string TelegramSender::PrepareMessage(FailedMetric fm) {
   return ss.str();
 }
 
-void TelegramSender::SendMessage(FailedMetric fm) {
+void s21::TelegramSender::SendMessage(FailedMetric fm) {
   std::string message = PrepareMessage(fm);
   for (auto receiver: receivers) {
-    int chat_id = users.getUser(receiver);
+    int chat_id = users.GetUser(receiver);
     if (chat_id != DEFAULT_USER) {
       bot.getApi().sendMessage(
         chat_id,
@@ -61,21 +87,21 @@ void TelegramSender::SendMessage(FailedMetric fm) {
   }
 }
 
-std::set<std::string> TelegramSender::GetRecievers() {
+std::set<std::string> s21::TelegramSender::GetRecievers() {
   return receivers;
 }
 
-void TelegramSender::AddReceiver(std::string username, long chat_id) {
+void s21::TelegramSender::AddReceiver(std::string username, long chat_id) {
   receivers.insert(username);
-  if (chat_id != TelegramSender::DEFAULT_USER)
-    users.addUser(username, chat_id);
+  if (chat_id != s21::TelegramSender::DEFAULT_USER)
+    users.AddUser(username, chat_id);
 }
 
-void TelegramSender::removeReceiver(std::string username) {
+void s21::TelegramSender::RemoveReceiver(std::string username) {
   receivers.erase(username);
 }
 
-void TelegramSender::PollingFunction() {
+void s21::TelegramSender::PollingFunction() {
   TgBot::TgLongPoll longPoll(bot);
   while (is_polling_running) {
     longPoll.start();

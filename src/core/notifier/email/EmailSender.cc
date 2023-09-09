@@ -2,9 +2,11 @@
 
 #include <iostream>
 
+namespace s21 {
+
 EmailSender::EmailSender() {}
 
-std::string EmailSender::prepareSubject(FailedMetric fm) {
+std::string EmailSender::PrepareSubject(FailedMetric fm) {
   std::ostringstream ss;
   ss  << "Failed metric "
     << "\"" << fm.metric_name << "\""
@@ -28,7 +30,7 @@ void EmailSender::SendMessage(FailedMetric fm) {
     Email email(
       EmailAddress(__email, "kdancybot"),
       std::vector<EmailAddress>(std::next(receivers.begin()), receivers.end()),
-      prepareSubject(fm),
+      PrepareSubject(fm),
       PrepareMessage(fm)
     );
     email.SendMessage(
@@ -47,6 +49,8 @@ void EmailSender::AddReceiver(std::string username) {
   receivers.insert(username);
 }
 
-void EmailSender::removeReceiver(std::string username) {
+void EmailSender::RemoveReceiver(std::string username) {
   receivers.erase(username);
+}
+
 }

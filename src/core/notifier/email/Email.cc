@@ -1,5 +1,7 @@
 #include "Email.h"
 
+namespace s21 {
+
 CURLcode Email::SendMessage(const std::string &url,
                      const std::string &userName,
                      const std::string &password)
@@ -25,7 +27,6 @@ CURLcode Email::SendMessage(const std::string &url,
         curl_easy_setopt(curl, CURLOPT_MAIL_FROM,    (const char *)from_);
 
         recipients = curl_slist_append(recipients,   to.str().c_str());
-        // recipients = curl_slist_append(recipients,   cc.str().c_str());
         curl_easy_setopt(curl, CURLOPT_MAIL_RCPT,    recipients);
         
         curl_easy_setopt(curl, CURLOPT_READFUNCTION, PayloadSource);
@@ -108,30 +109,12 @@ size_t Email::PayloadSource(void *ptr, size_t size, size_t nmemb, void *userp)
     StringData  *text = reinterpret_cast<StringData *>(userp);
     size_t      len   = std::min(size * nmemb, text->bytes_left);
 
-    // if (size * nmemb < 1) {
-    //     return 0;
-    // }
-    // if (text->bytes_left > 0) {
-
     if (len > 0) {
         text->bytes_left -= len;
         text->msg.copy(reinterpret_cast<char *>(ptr), len);
         return len;
     }
     return 0;
-
-    // StringData *text = reinterpret_cast<StringData *>(userp);
-
-    // if ((size == 0) || (nmemb == 0) || ((size*nmemb) < 1) || (text->bytes_left == 0)) {
-    //     return 0;
-    // }
-
-    // if ((nmemb * size) >= text->msg.size()) {
-    //     text->bytes_left = 0;
-    //     return text->msg.copy(reinterpret_cast<char *>(ptr), text->msg.size());
-    // }
-
-    // return 0;
 }
 
 std::string Email::SetPayloadText()
@@ -141,12 +124,12 @@ std::string Email::SetPayloadText()
     oss << "Date: " << DateTimeNow() << "\r\n"
         << "To: "   << to_   << "\r\n"
         << "From: " << from_ << "\r\n";
-    // if (!cc_.empty())
-    //     oss << "Cc: "   << cc_   << "\r\n";
 
     oss << "Message-ID: <"  << GenerateMessageId() << "@" << from_.Domain()    << ">\r\n"
         << "Subject: "      << subject_                                         << "\r\n"
         << "\r\n"           << body_                                            << "\r\n\r\n";
 
     return oss.str();
+}
+
 }
