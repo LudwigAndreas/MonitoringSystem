@@ -83,7 +83,7 @@ double GetNetworkThroughput() {
     std::cerr << "Error getting network interface information." << std::endl;
     return 1;
   }
-
+  io = 0;
   for (struct ifaddrs* ifa = ifaddr; ifa != nullptr; ifa = ifa->ifa_next) {
     if (ifa->ifa_addr == nullptr || ifa->ifa_data == nullptr)
       continue;

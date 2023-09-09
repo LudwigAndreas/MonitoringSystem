@@ -148,6 +148,8 @@ SET (project_BIN ${PROJECT_NAME})
 
 #ADD_LINK_OPTIONS(-L${MAINFOLDER}/third_party/LogLite/lib -lLogLite)
 
+ADD_SUBDIRECTORY(modules)
+
 TARGET_LINK_OPTIONS(${project_BIN} PRIVATE -rdynamic)
 
 TARGET_INCLUDE_DIRECTORIES(${project_BIN} PRIVATE ../include/src
