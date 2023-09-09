@@ -12,7 +12,7 @@ class CriticalValueHandler {
 
 	CriticalValueHandler();
 
-	void sendMessage(FailedMetric fm);
+	void SendMessage(FailedMetric fm);
 };
 
 using CriticalValueHandlerPtr = std::shared_ptr<CriticalValueHandler>;

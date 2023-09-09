@@ -19,7 +19,7 @@ protected:
 public:
 	IMessageSender();
 
-	virtual void sendMessage(FailedMetric fm) = 0;
+	virtual void SendMessage(FailedMetric fm) = 0;
 };
 
 using IMessageSenderPtr = std::shared_ptr<IMessageSender>;

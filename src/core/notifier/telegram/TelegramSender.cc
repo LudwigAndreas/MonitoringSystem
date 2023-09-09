@@ -1,12 +1,17 @@
 #include "TelegramSender.h"
 
 TelegramSender::TelegramSender() : bot(__token) {
-  bot.getEvents().onAnyMessage([this](TgBot::Message::Ptr message) {
-    this->bot.getApi().sendMessage(
-      message->chat->id,
-      "idk lol"
-    );
-    if (message->text == "/start") {
+  ConfigPolling();
+  StartPolling();
+}
+
+TelegramSender::~TelegramSender() {
+  StopPolling();
+}
+
+void TelegramSender::ConfigPolling() {
+  bot.getEvents().onCommand("start",
+    [this](TgBot::Message::Ptr message) {
       this->users.addUser(
         message->from->username,
         message->chat->id
@@ -16,12 +21,15 @@ TelegramSender::TelegramSender() : bot(__token) {
         "You are now registered in MSBOT!"
       );
     }
-  });
+  );
+}
+
+void TelegramSender::StartPolling() {
   is_polling_running = true;
   polling_thread = std::thread(&TelegramSender::PollingFunction, this);
 }
 
-TelegramSender::~TelegramSender() {
+void TelegramSender::StopPolling() {
   if (is_polling_running) {
     is_polling_running = false;
   }
@@ -30,7 +38,7 @@ TelegramSender::~TelegramSender() {
   }
 }
 
-std::string TelegramSender::prepareMessage(FailedMetric fm) {
+std::string TelegramSender::PrepareMessage(FailedMetric fm) {
   std::ostringstream ss;
   ss  << "Metric: "         << "\"" << fm.metric_name << "\""     << "\n"
     << "Hostname: "       << "[" << this->hostname << "]"       << "\n"
@@ -40,24 +48,24 @@ std::string TelegramSender::prepareMessage(FailedMetric fm) {
   return ss.str();
 }
 
-void TelegramSender::sendMessage(FailedMetric fm) {
-  std::string message = prepareMessage(fm);
+void TelegramSender::SendMessage(FailedMetric fm) {
+  std::string message = PrepareMessage(fm);
   for (auto receiver: receivers) {
     int chat_id = users.getUser(receiver);
     if (chat_id != DEFAULT_USER) {
       bot.getApi().sendMessage(
-          chat_id,
-          message
+        chat_id,
+        message
       );
     }
   }
 }
 
-std::set<std::string> TelegramSender::getReceivers() {
+std::set<std::string> TelegramSender::GetRecievers() {
   return receivers;
 }
 
-void TelegramSender::addReceiver(std::string username, long chat_id) {
+void TelegramSender::AddReceiver(std::string username, long chat_id) {
   receivers.insert(username);
   if (chat_id != TelegramSender::DEFAULT_USER)
     users.addUser(username, chat_id);

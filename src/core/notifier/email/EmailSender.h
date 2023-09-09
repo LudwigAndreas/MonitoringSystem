@@ -21,16 +21,16 @@ class EmailSender : public IMessageSender {
   std::set<std::string> receivers;
 
   std::string prepareSubject(FailedMetric fm);
-  std::string prepareMessage(FailedMetric fm);
+  std::string PrepareMessage(FailedMetric fm);
 
  public:
   EmailSender();
   virtual ~EmailSender() = default;
 
-  virtual void sendMessage(FailedMetric fm);
+  virtual void SendMessage(FailedMetric fm);
 
-  std::set<std::string> getReceivers();
-  void addReceiver(std::string username);
+  std::set<std::string> GetRecievers();
+  void AddReceiver(std::string username);
   void removeReceiver(std::string username);
 };
 

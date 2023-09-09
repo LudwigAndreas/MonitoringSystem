@@ -1,6 +1,6 @@
 #include "Email.h"
 
-CURLcode Email::send(const std::string &url,
+CURLcode Email::SendMessage(const std::string &url,
                      const std::string &userName,
                      const std::string &password)
 {
@@ -10,11 +10,11 @@ CURLcode Email::send(const std::string &url,
 
     CURL *curl = curl_easy_init();
 
-    StringData textData { setPayloadText_() };
+    StringData textData { SetPayloadText() };
 
     if (curl) {
-        std::ostringstream cc;
-        cc << cc_;
+        std::ostringstream to;
+        to << to_;
 
         curl_easy_setopt(curl, CURLOPT_USERNAME,     userName.c_str());
         curl_easy_setopt(curl, CURLOPT_PASSWORD,     password.c_str());
@@ -24,11 +24,11 @@ CURLcode Email::send(const std::string &url,
 
         curl_easy_setopt(curl, CURLOPT_MAIL_FROM,    (const char *)from_);
 
-        recipients = curl_slist_append(recipients,   (const char *)to_);
-        recipients = curl_slist_append(recipients,   cc.str().c_str());
+        recipients = curl_slist_append(recipients,   to.str().c_str());
+        // recipients = curl_slist_append(recipients,   cc.str().c_str());
         curl_easy_setopt(curl, CURLOPT_MAIL_RCPT,    recipients);
         
-        curl_easy_setopt(curl, CURLOPT_READFUNCTION, payloadSource_);
+        curl_easy_setopt(curl, CURLOPT_READFUNCTION, PayloadSource);
         curl_easy_setopt(curl, CURLOPT_READDATA,     &textData);
         curl_easy_setopt(curl, CURLOPT_UPLOAD,       1L);
         curl_easy_setopt(curl, CURLOPT_VERBOSE,      0L);
@@ -48,7 +48,7 @@ CURLcode Email::send(const std::string &url,
     return ret;
 }
 
-std::string Email::dateTimeNow_()
+std::string Email::DateTimeNow()
 {
     const int RFC5322_TIME_LEN = 32;
 
@@ -71,7 +71,7 @@ std::string Email::dateTimeNow_()
     return ret;
 }
 
-std::string Email::generateMessageId_() const
+std::string Email::GenerateMessageId() const
 {
     const size_t MESSAGE_ID_LEN = 37;
 
@@ -103,7 +103,7 @@ std::string Email::generateMessageId_() const
     return ret;
 }
 
-size_t Email::payloadSource_(void *ptr, size_t size, size_t nmemb, void *userp)
+size_t Email::PayloadSource(void *ptr, size_t size, size_t nmemb, void *userp)
 {
     StringData  *text = reinterpret_cast<StringData *>(userp);
     size_t      len   = std::min(size * nmemb, text->bytes_left);
@@ -134,31 +134,19 @@ size_t Email::payloadSource_(void *ptr, size_t size, size_t nmemb, void *userp)
     // return 0;
 }
 
-std::string Email::setPayloadText_()
+std::string Email::SetPayloadText()
 {
 
     std::ostringstream oss;
-    oss << "Date: " << dateTimeNow_() << "\r\n"
+    oss << "Date: " << DateTimeNow() << "\r\n"
         << "To: "   << to_   << "\r\n"
         << "From: " << from_ << "\r\n";
-    if (!cc_.empty())
-        oss << "Cc: "   << cc_   << "\r\n";
+    // if (!cc_.empty())
+    //     oss << "Cc: "   << cc_   << "\r\n";
 
-    oss << "Message-ID: <"  << generateMessageId_() << "@" << from_.domain()    << ">\r\n"
+    oss << "Message-ID: <"  << GenerateMessageId() << "@" << from_.Domain()    << ">\r\n"
         << "Subject: "      << subject_                                         << "\r\n"
         << "\r\n"           << body_                                            << "\r\n\r\n";
 
     return oss.str();
-}
-
-std::ostream &operator<<(std::ostream &out, const EmailAddresses &emailAddresses)
-{
-    if (!emailAddresses.empty()) {
-        out << *emailAddresses.begin();
-		for (auto it = std::next(emailAddresses.cbegin()); it != emailAddresses.end(); it = std::next(it)) {
-            out << ", " << *it;
-		}
-    }
-
-    return out;
 }

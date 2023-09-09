@@ -21,16 +21,19 @@ class TelegramSender : public IMessageSender {
   std::set<std::string> receivers;
   bool is_polling_running = false;
 
-  std::string prepareMessage(FailedMetric fm);
+  void        ConfigPolling();
+  void        StartPolling();
+  void        StopPolling();
+  std::string PrepareMessage(FailedMetric fm);
 
  public:
   TelegramSender();
   virtual ~TelegramSender();
 
-  virtual void sendMessage(FailedMetric fm) override;
+  virtual void SendMessage(FailedMetric fm) override;
 
-  std::set<std::string> getReceivers();
-  void addReceiver(std::string username,
+  std::set<std::string> GetRecievers();
+  void AddReceiver(std::string username,
                    long chat_id = TelegramSender::DEFAULT_USER);
   void removeReceiver(std::string username);
   void PollingFunction();

@@ -24,7 +24,7 @@ void NotificationController::RemoveNotifier(IMessageSenderPtr sender) {
 
 void NotificationController::OnCriticalValueReached(MetricEvent event) {
   for (const auto& sender: senders_) {
-    sender->sendMessage(FailedMetric(event));
+    sender->SendMessage(FailedMetric(event));
   }
 }
 void NotificationController::OnLineLogged(const std::string &line) {

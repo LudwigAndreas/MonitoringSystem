@@ -13,7 +13,7 @@ std::string EmailSender::prepareSubject(FailedMetric fm) {
   return ss.str();
 }
 
-std::string EmailSender::prepareMessage(FailedMetric fm) {
+std::string EmailSender::PrepareMessage(FailedMetric fm) {
   std::ostringstream ss;
   ss  << "Metric: "         << "\"" << fm.metric_name << "\""     << "\n"
     << "Hostname: "       << "[" << this->hostname << "]"       << "\n"
@@ -23,16 +23,15 @@ std::string EmailSender::prepareMessage(FailedMetric fm) {
   return ss.str();
 }
 
-void EmailSender::sendMessage(FailedMetric fm) {
+void EmailSender::SendMessage(FailedMetric fm) {
   if (!receivers.empty()) {
     Email email(
       EmailAddress(__email, "kdancybot"),
-      EmailAddress(*receivers.begin()),
+      std::vector<EmailAddress>(std::next(receivers.begin()), receivers.end()),
       prepareSubject(fm),
-      prepareMessage(fm),
-      std::vector<EmailAddress>(std::next(receivers.begin()), receivers.end())
+      PrepareMessage(fm)
     );
-    email.send(
+    email.SendMessage(
       __server,
       __email,
       __password
@@ -40,11 +39,11 @@ void EmailSender::sendMessage(FailedMetric fm) {
   }
 }
 
-std::set<std::string> EmailSender::getReceivers() {
+std::set<std::string> EmailSender::GetRecievers() {
   return receivers;
 }
 
-void EmailSender::addReceiver(std::string username) {
+void EmailSender::AddReceiver(std::string username) {
   receivers.insert(username);
 }
 
