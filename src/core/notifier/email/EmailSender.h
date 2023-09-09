@@ -14,19 +14,19 @@
 
 namespace s21 {
 
-#define __email "andrew02541632@gmail.com"
-#define __password "mzgonnorlsctjzfn"
-#define __server "smtp://smtp.gmail.com:587"
 
 class EmailSender : public IMessageSender {
  private:
   std::set<std::string> receivers;
+  std::string           email_;
+  std::string           password_;
+  std::string           server_;
 
   std::string PrepareSubject(FailedMetric fm);
   std::string PrepareMessage(FailedMetric fm);
 
  public:
-  EmailSender();
+  EmailSender(std::string email, std::string password, std::string server);
   virtual ~EmailSender() = default;
 
   virtual void SendMessage(FailedMetric fm);

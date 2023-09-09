@@ -214,20 +214,15 @@ void App::ConfigureCore() {
   mainwindow_ = std::make_shared<MainWindow>(agents_folder);
   core_ = std::make_shared<monitor::Core>(agents_folder, logs_folder);
 
-  mainwindow_->SetController(maincontroller_);
-
-  core_->SubscribeAgentEvents(maincontroller_.get());
-  core_->SubscribeMetricEvents(maincontroller_.get());
-
-  TelegramSenderPtr telegram = std::make_shared<TelegramSender>();
-  telegram->AddReceiver("kdancy");
-  telegram->AddReceiver("Ludwig_Andreas");
-  EmailSenderPtr email = std::make_shared<EmailSender>();
+  TelegramSenderPtr telegram = std::make_shared<TelegramSender>("5426071766:AAG3rchPUG-V6gswM3-tPGVDjnG5hVgmBdw", "kdancy ludwig_Andreas");
+  // telegram->AddReceiver("kdancy");
+  // telegram->AddReceiver("Ludwig_Andreas");
+  EmailSenderPtr email = std::make_shared<EmailSender>("andrew02541632@gmail.com", "mzgonnorlsctjzfn", "smtp://smtp.gmail.com:587");
   email->AddReceiver("kalininandrey727@gmail.com");
   email->AddReceiver("andreyk2107@mail.ru");
   email->AddReceiver("ev.sand.raw@gmail.com");
   notification_controller_ = std::make_shared<NotificationController>();
-//  notification_controller_->AddNotifier(telegram);
+  notification_controller_->AddNotifier(telegram);
   notification_controller_->AddNotifier(email);
   core_->SubscribeMetricEvents(notification_controller_.get());
 }

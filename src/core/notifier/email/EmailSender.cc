@@ -4,7 +4,11 @@
 
 namespace s21 {
 
-EmailSender::EmailSender() {}
+EmailSender::EmailSender(std::string email, std::string password, std::string server) {
+  this->email_ = email;
+  this->password_ = password;
+  this->server_ = server;
+}
 
 std::string EmailSender::PrepareSubject(FailedMetric fm) {
   std::ostringstream ss;
@@ -28,15 +32,15 @@ std::string EmailSender::PrepareMessage(FailedMetric fm) {
 void EmailSender::SendMessage(FailedMetric fm) {
   if (!receivers.empty()) {
     Email email(
-      EmailAddress(__email, "kdancybot"),
+      EmailAddress(email_, "kdancybot"),
       std::vector<EmailAddress>(std::next(receivers.begin()), receivers.end()),
       PrepareSubject(fm),
       PrepareMessage(fm)
     );
     email.SendMessage(
-      __server,
-      __email,
-      __password
+      server_,
+      email_,
+      password_
     );
   }
 }
