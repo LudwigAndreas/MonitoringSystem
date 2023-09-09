@@ -8,6 +8,7 @@
 #include <chrono>
 #include <utility>
 #include <set>
+#include <filesystem>
 
 #include "AgentBundleLoader.h"
 
@@ -25,8 +26,8 @@ namespace s21 {
 
 namespace fs = std::filesystem;
 
-AgentManager::AgentManager(std::string agents_directory)
-    : agents_directory_(std::move(agents_directory)), is_monitoring_(false) {
+AgentManager::AgentManager(std::string agents_directory, size_t sleep_duration)
+    : sleep_duration_(sleep_duration), agents_directory_(std::move(agents_directory)), is_monitoring_(false) {
   app_logger_ = diagnostic::Logger::getRootLogger();
   agent_list_ = new std::map<std::string, AgentBundlePtr>();
 }
@@ -85,13 +86,20 @@ void AgentManager::MonitorAgentsDirectory() {
         }
       }
 
-//      TODO add update handling
-//      for (const auto &file: current_files) {
-//        if (new_files.find(file) == current_files.end()) {
-//          agent_list_->erase(file);
-//          agent_list_->insert()
-//        }
-//      }
+
+      for (const auto &agent: *agent_list_) {
+        time_t last_modif = agent.second->GetLastModified();
+        std::shared_ptr<AgentBundle> agent_bundle =
+            AgentBundleLoader::UpdateAgentBundle(agent.first, agent.second);
+        if (agent_bundle->GetLastModified() != last_modif) {
+          LOG_INFO(app_logger_, "Dynamic library updated: " << agent_bundle->GetAgentPath());
+          NotifyAgentUpdated(agent_bundle);
+        } else if (agent_bundle == nullptr) {
+          LOG_INFO(app_logger_, "Dynamic library removed: " << agent_bundle->GetAgentPath());
+          NotifyAgentRemoved(agent.second);
+          agent_list_->erase(agent.first);
+        }
+      }
 
       current_files = new_files;
     } catch (const std::filesystem::filesystem_error &ex) {
@@ -150,6 +158,13 @@ void AgentManager::NotifyAgentRemoved(AgentBundlePtr agent) {
 void AgentManager::NotifyAgentUpdated(AgentBundlePtr agent) {
   for (auto subscriber: subscribers_) {
     subscriber->OnAgentUpdated(agent);
+  }
+}
+
+void AgentManager::DeleteAgent(std::shared_ptr<AgentBundle> &agent) {
+  std::string agent_path = agent->GetAgentPath();
+  if (agent_list_->find(agent_path) != agent_list_->end()) {
+    std::filesystem::remove_all(agent_path);
   }
 }
 

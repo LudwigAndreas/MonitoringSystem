@@ -212,13 +212,14 @@ void App::ConfigureCore() {
   std::string logs_folder = properties_->GetProperty("app.agents_folder", "../logs/");
 
   mainwindow_ = std::make_shared<MainWindow>(agents_folder);
-  core_ = std::make_shared<monitor::Core>(agents_folder, logs_folder);
+  size_t update_time = std::stoll(properties_->GetProperty("app.monitor.update_interval_s", "30"));
+  core_ = std::make_shared<monitor::Core>(agents_folder, logs_folder, update_time);
 
 //  TelegramSenderPtr telegram = std::make_shared<TelegramSender>();
 //  telegram->addReceiver("kdancy");
 //  telegram->addReceiver("Ludwig_Andreas");
-  EmailSenderPtr email = std::make_shared<EmailSender>();
-  email->addReceiver("ev.sand.raw@gmail.com");
+//  EmailSenderPtr email = std::make_shared<EmailSender>();
+//  email->addReceiver("ev.sand.raw@gmail.com");
   notification_controller_ = std::make_shared<NotificationController>();
 //  notification_controller_->AddNotifier(telegram);
   notification_controller_->AddNotifier(email);

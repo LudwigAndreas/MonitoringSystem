@@ -11,7 +11,7 @@ namespace s21 {
     void cpu::update_values() {
         std::fstream	stat = std::fstream("/proc/stat", std::ios_base::in);
         std::string		name;
-        double          value;
+        double          cpu_value;
             // std::vector<double> cpu_usage_ = cpu_usage();
             // std::vector<double> last_usage_ = last_usage();
             // std::vector<double> current_usage_ = current_usage();
@@ -24,8 +24,8 @@ namespace s21 {
                 last_usage_ = std::move(current_usage_);
             current_usage_ = {};
             for (int i = 0; i < cpu_type::SIZE; ++i) {
-                stat >> value;
-                current_usage_.push_back(value);
+                stat >> cpu_value;
+                current_usage_.push_back(cpu_value);
             }
             if (cpu_usage_.empty())
                 cpu_usage_ = std::vector<double>(cpu_type::SIZE, 0.);

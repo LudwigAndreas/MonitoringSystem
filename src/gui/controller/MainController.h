@@ -27,6 +27,9 @@ class MainController : public IAgentSubscriber, public IMetricSubscriber {
   void OnLineLogged(const std::string &line) override;
   void OnNewFileOpened(const std::string &log_file) override;
 
+  void DeleteAgent(std::shared_ptr<AgentBundle> &agent);
+  void SaveConfiguration(std::shared_ptr<AgentBundle> &agent);
+
   void Quit();
   void Close();
 

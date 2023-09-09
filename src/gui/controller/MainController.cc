@@ -39,6 +39,14 @@ void MainController::OnNewFileOpened(const std::string &log_file) {
   mainwindow_->SetLogFile(log_file);
 }
 
+void MainController::DeleteAgent(std::shared_ptr<AgentBundle> &agent) {
+  core_->DeleteAgent(agent);
+}
+
+void MainController::SaveConfiguration(std::shared_ptr<AgentBundle> &agent) {
+  agent->SaveConfig();
+}
+
 void MainController::Quit() {
   core_->DisableMonitoring();
 }

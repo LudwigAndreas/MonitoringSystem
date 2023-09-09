@@ -1,5 +1,6 @@
 #include "memory.h"
 #include <iostream>
+#include <sstream>
 
 double GetTotalRAM() {
   long pages = sysconf(_SC_PHYS_PAGES);

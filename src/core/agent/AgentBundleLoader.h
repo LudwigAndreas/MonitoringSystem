@@ -24,6 +24,8 @@ class AgentBundleLoader {
    * */
   static std::shared_ptr<AgentBundle> LoadAgentBundle(const std::filesystem::path &agent_path);
 
+  static std::shared_ptr<AgentBundle> UpdateAgentBundle(const std::filesystem::path &agent_path, const std::shared_ptr<AgentBundle>& agent_bundle);
+
  private:
 
   /**

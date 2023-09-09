@@ -94,7 +94,7 @@
       </property>
       <widget class="QWidget" name="info_tab">
        <attribute name="title">
-        <string>Info</string>
+        <string>Configuration</string>
        </attribute>
        <layout class="QGridLayout" name="gridLayout_5">
         <item row="1" column="7">
@@ -108,12 +108,122 @@
           </item>
           <item>
            <layout class="QGridLayout" name="agent_info_grid">
-            <item row="2" column="1">
-             <widget class="QLabel" name="uptime_value_label">
+            <item row="1" column="1">
+             <widget class="QLineEdit" name="agent_type_value_line_edit">
+              <property name="sizePolicy">
+               <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
+                <horstretch>0</horstretch>
+                <verstretch>0</verstretch>
+               </sizepolicy>
+              </property>
+              <property name="minimumSize">
+               <size>
+                <width>0</width>
+                <height>0</height>
+               </size>
+              </property>
               <property name="maximumSize">
                <size>
                 <width>16777215</width>
-                <height>33</height>
+                <height>16777215</height>
+               </size>
+              </property>
+             </widget>
+            </item>
+            <item row="1" column="0">
+             <widget class="QLabel" name="type_label">
+              <property name="sizePolicy">
+               <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+                <horstretch>0</horstretch>
+                <verstretch>0</verstretch>
+               </sizepolicy>
+              </property>
+              <property name="minimumSize">
+               <size>
+                <width>0</width>
+                <height>25</height>
+               </size>
+              </property>
+              <property name="maximumSize">
+               <size>
+                <width>16777215</width>
+                <height>25</height>
+               </size>
+              </property>
+              <property name="text">
+               <string>Type:</string>
+              </property>
+             </widget>
+            </item>
+            <item row="2" column="1">
+             <widget class="QLabel" name="num_of_metrics_value_label">
+              <property name="minimumSize">
+               <size>
+                <width>0</width>
+                <height>25</height>
+               </size>
+              </property>
+              <property name="maximumSize">
+               <size>
+                <width>16777215</width>
+                <height>35</height>
+               </size>
+              </property>
+              <property name="text">
+               <string>3</string>
+              </property>
+             </widget>
+            </item>
+            <item row="4" column="0">
+             <widget class="QLabel" name="enabled_label">
+              <property name="minimumSize">
+               <size>
+                <width>0</width>
+                <height>25</height>
+               </size>
+              </property>
+              <property name="maximumSize">
+               <size>
+                <width>16777215</width>
+                <height>25</height>
+               </size>
+              </property>
+              <property name="text">
+               <string>Enabled:</string>
+              </property>
+             </widget>
+            </item>
+            <item row="3" column="0">
+             <widget class="QLabel" name="uptime_label">
+              <property name="minimumSize">
+               <size>
+                <width>0</width>
+                <height>25</height>
+               </size>
+              </property>
+              <property name="maximumSize">
+               <size>
+                <width>16777215</width>
+                <height>25</height>
+               </size>
+              </property>
+              <property name="text">
+               <string>Uptime:</string>
+              </property>
+             </widget>
+            </item>
+            <item row="3" column="1">
+             <widget class="QLabel" name="uptime_value_label">
+              <property name="minimumSize">
+               <size>
+                <width>0</width>
+                <height>25</height>
+               </size>
+              </property>
+              <property name="maximumSize">
+               <size>
+                <width>16777215</width>
+                <height>35</height>
                </size>
               </property>
               <property name="text">
@@ -121,7 +231,32 @@
               </property>
              </widget>
             </item>
-            <item row="3" column="1">
+            <item row="2" column="0">
+             <widget class="QLabel" name="num_of_metrics_label">
+              <property name="sizePolicy">
+               <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+                <horstretch>0</horstretch>
+                <verstretch>0</verstretch>
+               </sizepolicy>
+              </property>
+              <property name="minimumSize">
+               <size>
+                <width>0</width>
+                <height>25</height>
+               </size>
+              </property>
+              <property name="maximumSize">
+               <size>
+                <width>16777215</width>
+                <height>25</height>
+               </size>
+              </property>
+              <property name="text">
+               <string>Number of Metrics:</string>
+              </property>
+             </widget>
+            </item>
+            <item row="4" column="1">
              <widget class="QCheckBox" name="agent_enabled_checkbox">
               <property name="sizePolicy">
                <sizepolicy hsizetype="Minimum" vsizetype="Preferred">
@@ -138,7 +273,7 @@
               <property name="maximumSize">
                <size>
                 <width>16777215</width>
-                <height>33</height>
+                <height>35</height>
                </size>
               </property>
               <property name="text">
@@ -150,107 +285,31 @@
              </widget>
             </item>
             <item row="0" column="0">
-             <widget class="QLabel" name="type_label">
-              <property name="sizePolicy">
-               <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
-                <horstretch>0</horstretch>
-                <verstretch>0</verstretch>
-               </sizepolicy>
-              </property>
+             <widget class="QLabel" name="agent_name_label">
               <property name="minimumSize">
                <size>
                 <width>0</width>
-                <height>33</height>
+                <height>25</height>
                </size>
               </property>
               <property name="maximumSize">
                <size>
                 <width>16777215</width>
-                <height>33</height>
+                <height>25</height>
                </size>
               </property>
               <property name="text">
-               <string>Type:</string>
-              </property>
-             </widget>
-            </item>
-            <item row="1" column="0">
-             <widget class="QLabel" name="num_of_metrics_label">
-              <property name="sizePolicy">
-               <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
-                <horstretch>0</horstretch>
-                <verstretch>0</verstretch>
-               </sizepolicy>
-              </property>
-              <property name="maximumSize">
-               <size>
-                <width>16777215</width>
-                <height>33</height>
-               </size>
-              </property>
-              <property name="text">
-               <string>Number of Metrics:</string>
-              </property>
-             </widget>
-            </item>
-            <item row="1" column="1">
-             <widget class="QLabel" name="num_of_metrics_value_label">
-              <property name="maximumSize">
-               <size>
-                <width>16777215</width>
-                <height>33</height>
-               </size>
-              </property>
-              <property name="text">
-               <string>3</string>
-              </property>
-             </widget>
-            </item>
-            <item row="3" column="0">
-             <widget class="QLabel" name="enabled_label">
-              <property name="minimumSize">
-               <size>
-                <width>0</width>
-                <height>33</height>
-               </size>
-              </property>
-              <property name="maximumSize">
-               <size>
-                <width>16777215</width>
-                <height>33</height>
-               </size>
-              </property>
-              <property name="text">
-               <string>Enabled:</string>
-              </property>
-             </widget>
-            </item>
-            <item row="2" column="0">
-             <widget class="QLabel" name="uptime_label">
-              <property name="maximumSize">
-               <size>
-                <width>16777215</width>
-                <height>33</height>
-               </size>
-              </property>
-              <property name="text">
-               <string>Uptime:</string>
+               <string>Name:</string>
               </property>
              </widget>
             </item>
             <item row="0" column="1">
-             <widget class="QLineEdit" name="agent_type_value_line_edit">
+             <widget class="QLineEdit" name="agent_name_label_value">
               <property name="sizePolicy">
                <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
                 <horstretch>0</horstretch>
                 <verstretch>0</verstretch>
                </sizepolicy>
-              </property>
-              <property name="maximumSize">
-               <size>
-                <width>16777215</width>
-                <height>16777215</height>
-               </size>
               </property>
              </widget>
             </item>
@@ -287,29 +346,31 @@
           </item>
           <item>
            <layout class="QGridLayout" name="metric_info_grid">
-            <item row="0" column="0">
-             <widget class="QLabel" name="metric_name_label">
+            <item row="1" column="0">
+             <widget class="QLabel" name="metric_critical_label">
               <property name="minimumSize">
                <size>
                 <width>0</width>
-                <height>33</height>
+                <height>25</height>
                </size>
               </property>
               <property name="maximumSize">
                <size>
                 <width>16777215</width>
-                <height>33</height>
+                <height>25</height>
                </size>
               </property>
-              <property name="text">
-               <string>Name:</string>
+              <property name="statusTip">
+               <string comment="Specify a critical value for metric through the equality/non-equality symbol and the number. For example: &gt;=2, ==100, &lt;50, etc." extracomment="Specify a critical value for metric through the equality/non-equality symbol and the number. For example: &gt;=2, ==100, &lt;50, etc."/>
               </property>
-             </widget>
-            </item>
-            <item row="0" column="1">
-             <widget class="QLabel" name="metric_name_value_label">
+              <property name="whatsThis">
+               <string/>
+              </property>
+              <property name="accessibleDescription">
+               <string/>
+              </property>
               <property name="text">
-               <string>TextLabel</string>
+               <string>Critical value:</string>
               </property>
              </widget>
             </item>
@@ -318,7 +379,7 @@
               <property name="minimumSize">
                <size>
                 <width>0</width>
-                <height>33</height>
+                <height>25</height>
                </size>
               </property>
               <property name="maximumSize">
@@ -334,36 +395,11 @@
             </item>
             <item row="2" column="1">
              <widget class="QSpinBox" name="update_time_value_spin_box">
+              <property name="maximum">
+               <number>100000</number>
+              </property>
               <property name="value">
                <number>60</number>
-              </property>
-             </widget>
-            </item>
-            <item row="1" column="0">
-             <widget class="QLabel" name="metric_critical_label">
-              <property name="minimumSize">
-               <size>
-                <width>0</width>
-                <height>33</height>
-               </size>
-              </property>
-              <property name="maximumSize">
-               <size>
-                <width>16777215</width>
-                <height>33</height>
-               </size>
-              </property>
-              <property name="statusTip">
-               <string comment="Specify a critical value for metric through the equality/non-equality symbol and the number. For example: &gt;=2, ==100, &lt;50, etc." extracomment="Specify a critical value for metric through the equality/non-equality symbol and the number. For example: &gt;=2, ==100, &lt;50, etc."/>
-              </property>
-              <property name="whatsThis">
-               <string/>
-              </property>
-              <property name="accessibleDescription">
-               <string/>
-              </property>
-              <property name="text">
-               <string>Critical value:</string>
               </property>
              </widget>
             </item>
@@ -386,6 +422,54 @@
               </property>
               <property name="placeholderText">
                <string>&gt;=2, ==100, &lt;50, etc.</string>
+              </property>
+             </widget>
+            </item>
+            <item row="0" column="0">
+             <widget class="QLabel" name="metric_name_label">
+              <property name="minimumSize">
+               <size>
+                <width>0</width>
+                <height>25</height>
+               </size>
+              </property>
+              <property name="maximumSize">
+               <size>
+                <width>16777215</width>
+                <height>25</height>
+               </size>
+              </property>
+              <property name="text">
+               <string>Name:</string>
+              </property>
+             </widget>
+            </item>
+            <item row="0" column="1">
+             <widget class="QLabel" name="metric_name_value_label">
+              <property name="text">
+               <string>TextLabel</string>
+              </property>
+             </widget>
+            </item>
+            <item row="3" column="0" colspan="2" alignment="Qt::AlignHCenter">
+             <widget class="QPushButton" name="pushButton">
+              <property name="minimumSize">
+               <size>
+                <width>150</width>
+                <height>0</height>
+               </size>
+              </property>
+              <property name="maximumSize">
+               <size>
+                <width>150</width>
+                <height>16777215</height>
+               </size>
+              </property>
+              <property name="layoutDirection">
+               <enum>Qt::LeftToRight</enum>
+              </property>
+              <property name="text">
+               <string>Save</string>
               </property>
              </widget>
             </item>
@@ -438,14 +522,28 @@
         <item row="1" column="2">
          <layout class="QVBoxLayout" name="verticalLayout_4">
           <item>
-           <widget class="QListWidget" name="metric_list_widget"/>
+           <widget class="QListWidget" name="metric_list_widget">
+            <property name="focusPolicy">
+             <enum>Qt::TabFocus</enum>
+            </property>
+            <property name="horizontalScrollBarPolicy">
+             <enum>Qt::ScrollBarAlwaysOff</enum>
+            </property>
+           </widget>
           </item>
          </layout>
         </item>
         <item row="1" column="0">
          <layout class="QVBoxLayout" name="verticalLayout">
           <item>
-           <widget class="QListWidget" name="agent_list_widget"/>
+           <widget class="QListWidget" name="agent_list_widget">
+            <property name="focusPolicy">
+             <enum>Qt::TabFocus</enum>
+            </property>
+            <property name="horizontalScrollBarPolicy">
+             <enum>Qt::ScrollBarAlwaysOff</enum>
+            </property>
+           </widget>
           </item>
           <item>
            <layout class="QHBoxLayout" name="horizontalLayout_3">
@@ -545,7 +643,7 @@
       </widget>
       <widget class="QWidget" name="log_tab">
        <attribute name="title">
-        <string>Log</string>
+        <string>Logs</string>
        </attribute>
        <layout class="QGridLayout" name="gridLayout_6">
         <item row="0" column="0">
@@ -556,6 +654,217 @@
              <font>
               <family>SpaceMono Nerd Font Mono</family>
              </font>
+            </property>
+           </widget>
+          </item>
+         </layout>
+        </item>
+       </layout>
+      </widget>
+      <widget class="QWidget" name="notification_tab">
+       <property name="maximumSize">
+        <size>
+         <width>770</width>
+         <height>16777215</height>
+        </size>
+       </property>
+       <attribute name="title">
+        <string>Notifications</string>
+       </attribute>
+       <layout class="QGridLayout" name="gridLayout_2">
+        <item row="1" column="0">
+         <layout class="QGridLayout" name="gridLayout">
+          <property name="sizeConstraint">
+           <enum>QLayout::SetDefaultConstraint</enum>
+          </property>
+          <item row="1" column="1">
+           <layout class="QGridLayout" name="gridLayout_8">
+            <item row="4" column="1" colspan="2">
+             <widget class="QLabel" name="label_7">
+              <property name="minimumSize">
+               <size>
+                <width>0</width>
+                <height>25</height>
+               </size>
+              </property>
+              <property name="maximumSize">
+               <size>
+                <width>16777215</width>
+                <height>25</height>
+               </size>
+              </property>
+              <property name="text">
+               <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-weight:700;&quot;&gt;Email&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+              </property>
+              <property name="alignment">
+               <set>Qt::AlignCenter</set>
+              </property>
+             </widget>
+            </item>
+            <item row="1" column="1" colspan="2">
+             <widget class="Line" name="line_3">
+              <property name="orientation">
+               <enum>Qt::Horizontal</enum>
+              </property>
+             </widget>
+            </item>
+            <item row="2" column="2">
+             <widget class="QLineEdit" name="lineEdit">
+              <property name="sizePolicy">
+               <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
+                <horstretch>0</horstretch>
+                <verstretch>0</verstretch>
+               </sizepolicy>
+              </property>
+             </widget>
+            </item>
+            <item row="6" column="2">
+             <widget class="QLineEdit" name="lineEdit_2">
+              <property name="sizePolicy">
+               <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
+                <horstretch>0</horstretch>
+                <verstretch>0</verstretch>
+               </sizepolicy>
+              </property>
+             </widget>
+            </item>
+            <item row="0" column="1" colspan="2">
+             <widget class="QLabel" name="label_2">
+              <property name="minimumSize">
+               <size>
+                <width>0</width>
+                <height>25</height>
+               </size>
+              </property>
+              <property name="maximumSize">
+               <size>
+                <width>16777215</width>
+                <height>25</height>
+               </size>
+              </property>
+              <property name="text">
+               <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-weight:700;&quot;&gt;Telegram&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+              </property>
+              <property name="alignment">
+               <set>Qt::AlignCenter</set>
+              </property>
+             </widget>
+            </item>
+            <item row="6" column="1">
+             <widget class="QLabel" name="label_8">
+              <property name="text">
+               <string>Email address</string>
+              </property>
+             </widget>
+            </item>
+            <item row="7" column="1" colspan="2" alignment="Qt::AlignHCenter">
+             <widget class="QPushButton" name="pushButton_3">
+              <property name="minimumSize">
+               <size>
+                <width>150</width>
+                <height>0</height>
+               </size>
+              </property>
+              <property name="maximumSize">
+               <size>
+                <width>150</width>
+                <height>16777215</height>
+               </size>
+              </property>
+              <property name="text">
+               <string>Disable</string>
+              </property>
+              <property name="checkable">
+               <bool>true</bool>
+              </property>
+              <property name="checked">
+               <bool>true</bool>
+              </property>
+             </widget>
+            </item>
+            <item row="2" column="1">
+             <widget class="QLabel" name="label_3">
+              <property name="text">
+               <string>Username</string>
+              </property>
+             </widget>
+            </item>
+            <item row="3" column="1" colspan="2" alignment="Qt::AlignHCenter">
+             <widget class="QPushButton" name="pushButton_2">
+              <property name="minimumSize">
+               <size>
+                <width>150</width>
+                <height>0</height>
+               </size>
+              </property>
+              <property name="maximumSize">
+               <size>
+                <width>150</width>
+                <height>16777215</height>
+               </size>
+              </property>
+              <property name="text">
+               <string>Disable</string>
+              </property>
+              <property name="checkable">
+               <bool>true</bool>
+              </property>
+              <property name="checked">
+               <bool>true</bool>
+              </property>
+             </widget>
+            </item>
+            <item row="5" column="1" colspan="2">
+             <widget class="Line" name="line_4">
+              <property name="orientation">
+               <enum>Qt::Horizontal</enum>
+              </property>
+             </widget>
+            </item>
+           </layout>
+          </item>
+         </layout>
+        </item>
+        <item row="0" column="0">
+         <widget class="QLabel" name="label_6">
+          <property name="minimumSize">
+           <size>
+            <width>0</width>
+            <height>25</height>
+           </size>
+          </property>
+          <property name="maximumSize">
+           <size>
+            <width>16777215</width>
+            <height>25</height>
+           </size>
+          </property>
+          <property name="text">
+           <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-weight:700;&quot;&gt;Notifications configuration&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+          </property>
+          <property name="alignment">
+           <set>Qt::AlignCenter</set>
+          </property>
+         </widget>
+        </item>
+        <item row="1" column="1">
+         <layout class="QVBoxLayout" name="verticalLayout_5">
+          <item alignment="Qt::AlignHCenter">
+           <widget class="QLabel" name="label_9">
+            <property name="maximumSize">
+             <size>
+              <width>300</width>
+              <height>16777215</height>
+             </size>
+            </property>
+            <property name="text">
+             <string>Monitoring systems are maintenance systems for continuous surveillance. In a software environment, such a system is a metasystem, i.e. a superstructure over some system that describes it. Monitoring software systems involves logging and collecting specific metrics.</string>
+            </property>
+            <property name="scaledContents">
+             <bool>false</bool>
+            </property>
+            <property name="wordWrap">
+             <bool>true</bool>
             </property>
            </widget>
           </item>
