@@ -34,7 +34,7 @@ SET (CMAKE_VERBOSE_MAKEFILE 0) # Use 1 for debugging, 0 for release
 # Compilation Flags
 #
 SET(CMAKE_CXX_FLAGS "-Wall -Wextra -Werror -fPIC")
-SET(CMAKE_CXX_FLAGS_DEBUG "-g -Og")
+SET(CMAKE_CXX_FLAGS_DEBUG "-g -Og --coverage")
 SET(CMAKE_CXX_FLAGS_RELEASE "-Ofast -march=native")
 
 #

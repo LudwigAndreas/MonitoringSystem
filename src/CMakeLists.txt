@@ -45,8 +45,6 @@ set(PROJECT_SOURCES
     core/executor/AgentExecutor.cc
     core/executor/AgentExecutor.h
     core/metric/IMetricSubscriber.h
-    core/notifier/CriticalValueHandler.cc
-    core/notifier/CriticalValueHandler.h
     core/notifier/FailedMetric.h
     core/notifier/IMessageSender.h
     core/notifier/IMessageSender.cc
@@ -58,6 +56,10 @@ set(PROJECT_SOURCES
     core/notifier/telegram/TelegramSender.h
     core/notifier/telegram/TelegramUserRepository.cc
     core/notifier/telegram/TelegramUserRepository.h
+    core/notifier/email/EmailAddress.cc
+    core/notifier/email/EmailAddress.h
+    core/notifier/email/Email.h
+    core/notifier/email/Email.cc
     gui/view/mainwindow.cpp
     gui/view/mainwindow.h
     gui/view/mainwindow.ui

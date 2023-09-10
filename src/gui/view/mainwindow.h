@@ -42,6 +42,10 @@ class MainWindow : public QMainWindow {
   void on_pushButton_clicked();
   void UpdateAgentUptime();
 
+  void on_save_email_push_button_clicked();
+
+  void on_save_telegram_push_button_clicked();
+
   private:
   void closeEvent(QCloseEvent *event) override;
   void ShowAgentDetails(std::shared_ptr<s21::AgentBundle> &agent);

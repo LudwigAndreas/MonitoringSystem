@@ -329,3 +329,15 @@ void MainWindow::on_pushButton_clicked() {
   }
 }
 
+
+void MainWindow::on_save_email_push_button_clicked()
+{
+
+}
+
+
+void MainWindow::on_save_telegram_push_button_clicked()
+{
+
+}
+

@@ -90,7 +90,7 @@
     <item>
      <widget class="QTabWidget" name="main_tab_widget">
       <property name="currentIndex">
-       <number>0</number>
+       <number>2</number>
       </property>
       <widget class="QWidget" name="info_tab">
        <attribute name="title">
@@ -679,7 +679,21 @@
           </property>
           <item row="1" column="1">
            <layout class="QGridLayout" name="gridLayout_8">
-            <item row="4" column="1" colspan="2">
+            <item row="8" column="1">
+             <widget class="QLabel" name="label_11">
+              <property name="text">
+               <string>Enabled:</string>
+              </property>
+             </widget>
+            </item>
+            <item row="6" column="1" colspan="2">
+             <widget class="Line" name="line_4">
+              <property name="orientation">
+               <enum>Qt::Horizontal</enum>
+              </property>
+             </widget>
+            </item>
+            <item row="5" column="1" colspan="2">
              <widget class="QLabel" name="label_7">
               <property name="minimumSize">
                <size>
@@ -708,8 +722,15 @@
               </property>
              </widget>
             </item>
+            <item row="3" column="1">
+             <widget class="QLabel" name="label_10">
+              <property name="text">
+               <string>Enabled:</string>
+              </property>
+             </widget>
+            </item>
             <item row="2" column="2">
-             <widget class="QLineEdit" name="lineEdit">
+             <widget class="QLineEdit" name="telegram_username_value">
               <property name="sizePolicy">
                <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
                 <horstretch>0</horstretch>
@@ -718,13 +739,20 @@
               </property>
              </widget>
             </item>
-            <item row="6" column="2">
-             <widget class="QLineEdit" name="lineEdit_2">
+            <item row="7" column="2">
+             <widget class="QLineEdit" name="email_address_value">
               <property name="sizePolicy">
                <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
                 <horstretch>0</horstretch>
                 <verstretch>0</verstretch>
                </sizepolicy>
+              </property>
+             </widget>
+            </item>
+            <item row="8" column="2">
+             <widget class="QCheckBox" name="email_enabled_checkbox">
+              <property name="text">
+               <string/>
               </property>
              </widget>
             </item>
@@ -750,15 +778,8 @@
               </property>
              </widget>
             </item>
-            <item row="6" column="1">
-             <widget class="QLabel" name="label_8">
-              <property name="text">
-               <string>Email address</string>
-              </property>
-             </widget>
-            </item>
-            <item row="7" column="1" colspan="2" alignment="Qt::AlignHCenter">
-             <widget class="QPushButton" name="pushButton_3">
+            <item row="4" column="1" colspan="2" alignment="Qt::AlignHCenter">
+             <widget class="QPushButton" name="save_telegram_push_button">
               <property name="minimumSize">
                <size>
                 <width>150</width>
@@ -772,25 +793,33 @@
                </size>
               </property>
               <property name="text">
-               <string>Disable</string>
+               <string>Save</string>
               </property>
-              <property name="checkable">
-               <bool>true</bool>
+             </widget>
+            </item>
+            <item row="7" column="1">
+             <widget class="QLabel" name="label_8">
+              <property name="text">
+               <string>Email address:</string>
               </property>
-              <property name="checked">
-               <bool>true</bool>
+             </widget>
+            </item>
+            <item row="3" column="2">
+             <widget class="QCheckBox" name="telegram_enabled_checkbox">
+              <property name="text">
+               <string/>
               </property>
              </widget>
             </item>
             <item row="2" column="1">
              <widget class="QLabel" name="label_3">
               <property name="text">
-               <string>Username</string>
+               <string>Username:</string>
               </property>
              </widget>
             </item>
-            <item row="3" column="1" colspan="2" alignment="Qt::AlignHCenter">
-             <widget class="QPushButton" name="pushButton_2">
+            <item row="9" column="1" colspan="2" alignment="Qt::AlignHCenter">
+             <widget class="QPushButton" name="save_email_push_button">
               <property name="minimumSize">
                <size>
                 <width>150</width>
@@ -804,20 +833,7 @@
                </size>
               </property>
               <property name="text">
-               <string>Disable</string>
-              </property>
-              <property name="checkable">
-               <bool>true</bool>
-              </property>
-              <property name="checked">
-               <bool>true</bool>
-              </property>
-             </widget>
-            </item>
-            <item row="5" column="1" colspan="2">
-             <widget class="Line" name="line_4">
-              <property name="orientation">
-               <enum>Qt::Horizontal</enum>
+               <string>Save</string>
               </property>
              </widget>
             </item>
