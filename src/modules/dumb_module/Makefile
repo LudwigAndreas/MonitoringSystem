@@ -158,6 +158,7 @@ preinstall/fast:
 
 # clear depends
 depend:
+	cd /home/andref/Documents/s21/MonitoringSystem && $(CMAKE_COMMAND) -P /home/andref/Documents/s21/MonitoringSystem/CMakeFiles/VerifyGlobs.cmake
 	cd /home/andref/Documents/s21/MonitoringSystem && $(CMAKE_COMMAND) -S$(CMAKE_SOURCE_DIR) -B$(CMAKE_BINARY_DIR) --check-build-system CMakeFiles/Makefile.cmake 1
 .PHONY : depend
 
@@ -174,6 +175,20 @@ DumbModule: src/modules/dumb_module/CMakeFiles/DumbModule.dir/rule
 DumbModule/fast:
 	cd /home/andref/Documents/s21/MonitoringSystem && $(MAKE) $(MAKESILENT) -f src/modules/dumb_module/CMakeFiles/DumbModule.dir/build.make src/modules/dumb_module/CMakeFiles/DumbModule.dir/build
 .PHONY : DumbModule/fast
+
+# Convenience name for target.
+src/modules/dumb_module/CMakeFiles/DumbModule_autogen.dir/rule:
+	cd /home/andref/Documents/s21/MonitoringSystem && $(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 src/modules/dumb_module/CMakeFiles/DumbModule_autogen.dir/rule
+.PHONY : src/modules/dumb_module/CMakeFiles/DumbModule_autogen.dir/rule
+
+# Convenience name for target.
+DumbModule_autogen: src/modules/dumb_module/CMakeFiles/DumbModule_autogen.dir/rule
+.PHONY : DumbModule_autogen
+
+# fast build rule for target.
+DumbModule_autogen/fast:
+	cd /home/andref/Documents/s21/MonitoringSystem && $(MAKE) $(MAKESILENT) -f src/modules/dumb_module/CMakeFiles/DumbModule_autogen.dir/build.make src/modules/dumb_module/CMakeFiles/DumbModule_autogen.dir/build
+.PHONY : DumbModule_autogen/fast
 
 DumbAgent.o: DumbAgent.cc.o
 .PHONY : DumbAgent.o
@@ -198,6 +213,30 @@ DumbAgent.s: DumbAgent.cc.s
 DumbAgent.cc.s:
 	cd /home/andref/Documents/s21/MonitoringSystem && $(MAKE) $(MAKESILENT) -f src/modules/dumb_module/CMakeFiles/DumbModule.dir/build.make src/modules/dumb_module/CMakeFiles/DumbModule.dir/DumbAgent.cc.s
 .PHONY : DumbAgent.cc.s
+
+DumbModule_autogen/mocs_compilation.o: DumbModule_autogen/mocs_compilation.cpp.o
+.PHONY : DumbModule_autogen/mocs_compilation.o
+
+# target to build an object file
+DumbModule_autogen/mocs_compilation.cpp.o:
+	cd /home/andref/Documents/s21/MonitoringSystem && $(MAKE) $(MAKESILENT) -f src/modules/dumb_module/CMakeFiles/DumbModule.dir/build.make src/modules/dumb_module/CMakeFiles/DumbModule.dir/DumbModule_autogen/mocs_compilation.cpp.o
+.PHONY : DumbModule_autogen/mocs_compilation.cpp.o
+
+DumbModule_autogen/mocs_compilation.i: DumbModule_autogen/mocs_compilation.cpp.i
+.PHONY : DumbModule_autogen/mocs_compilation.i
+
+# target to preprocess a source file
+DumbModule_autogen/mocs_compilation.cpp.i:
+	cd /home/andref/Documents/s21/MonitoringSystem && $(MAKE) $(MAKESILENT) -f src/modules/dumb_module/CMakeFiles/DumbModule.dir/build.make src/modules/dumb_module/CMakeFiles/DumbModule.dir/DumbModule_autogen/mocs_compilation.cpp.i
+.PHONY : DumbModule_autogen/mocs_compilation.cpp.i
+
+DumbModule_autogen/mocs_compilation.s: DumbModule_autogen/mocs_compilation.cpp.s
+.PHONY : DumbModule_autogen/mocs_compilation.s
+
+# target to generate assembly for a file
+DumbModule_autogen/mocs_compilation.cpp.s:
+	cd /home/andref/Documents/s21/MonitoringSystem && $(MAKE) $(MAKESILENT) -f src/modules/dumb_module/CMakeFiles/DumbModule.dir/build.make src/modules/dumb_module/CMakeFiles/DumbModule.dir/DumbModule_autogen/mocs_compilation.cpp.s
+.PHONY : DumbModule_autogen/mocs_compilation.cpp.s
 
 __/include/Metric.o: __/include/Metric.cc.o
 .PHONY : __/include/Metric.o
@@ -283,10 +322,14 @@ help:
 	@echo "... install/strip"
 	@echo "... list_install_components"
 	@echo "... rebuild_cache"
+	@echo "... DumbModule_autogen"
 	@echo "... DumbModule"
 	@echo "... DumbAgent.o"
 	@echo "... DumbAgent.i"
 	@echo "... DumbAgent.s"
+	@echo "... DumbModule_autogen/mocs_compilation.o"
+	@echo "... DumbModule_autogen/mocs_compilation.i"
+	@echo "... DumbModule_autogen/mocs_compilation.s"
 	@echo "... __/include/Metric.o"
 	@echo "... __/include/Metric.i"
 	@echo "... __/include/Metric.s"
@@ -307,6 +350,7 @@ help:
 # No rule that depends on this can have commands that come from listfiles
 # because they might be regenerated.
 cmake_check_build_system:
+	cd /home/andref/Documents/s21/MonitoringSystem && $(CMAKE_COMMAND) -P /home/andref/Documents/s21/MonitoringSystem/CMakeFiles/VerifyGlobs.cmake
 	cd /home/andref/Documents/s21/MonitoringSystem && $(CMAKE_COMMAND) -S$(CMAKE_SOURCE_DIR) -B$(CMAKE_BINARY_DIR) --check-build-system CMakeFiles/Makefile.cmake 0
 .PHONY : cmake_check_build_system
 

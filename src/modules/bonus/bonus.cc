@@ -189,8 +189,15 @@ std::string inodes(){ // df -i /
     return ss.str();
 }
 
-std::string hard_read_time(){
-    return "Sudondese";
+std::string hard_read_time(){ 
+    double read, write;
+    std::stringstream ss;
+    redi::ipstream  command("iostat -d -x | tail -n 3 | head -n 1 | awk '{printf $3 \" \" $9}'");
+    
+    command >> read >> write;
+    ss << std::fixed << read + write << " KB/s";
+    return ss.str();
+
 }
 
 // grep is used to prevent systemd-coredump's stacktraces from altering error count

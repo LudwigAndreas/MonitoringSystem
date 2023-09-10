@@ -45,13 +45,12 @@ set(PROJECT_SOURCES
     core/executor/AgentExecutor.cc
     core/executor/AgentExecutor.h
     core/metric/IMetricSubscriber.h
-    core/notifier/CriticalValueHandler.cc
-    core/notifier/CriticalValueHandler.h
     core/notifier/FailedMetric.h
     core/notifier/IMessageSender.h
     core/notifier/IMessageSender.cc
     core/notifier/email/EmailSender.cc
     core/notifier/email/EmailSender.h
+    core/notifier/email/EmailAddress.cc
     core/notifier/email/Email.cc
     core/notifier/email/Email.h
     core/notifier/telegram/TelegramSender.cc
