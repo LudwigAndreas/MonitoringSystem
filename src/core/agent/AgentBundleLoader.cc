@@ -4,6 +4,9 @@
 
 #include "AgentBundleLoader.h"
 
+#include <sys/stat.h>
+#include <ctime>
+
 #if __linux__ || __APPLE__
 #include <dlfcn.h>
 #include <memory>
@@ -41,8 +44,10 @@ std::shared_ptr<Agent> AgentBundleLoader::Instantiate(DynamicLib lib) {
 
   typedef s21::Agent *(*fptr)();
   fptr func = reinterpret_cast<fptr>(reinterpret_cast<void *>(maker));
-
-  return std::shared_ptr<Agent>(func(), [](Agent *agent) {
+  auto *agent = reinterpret_cast<Agent*>(func());
+  if (!agent)
+    return nullptr;
+  return std::shared_ptr<Agent>(agent, [](Agent *agent) {
     delete agent;
   });
 }
@@ -78,6 +83,16 @@ std::shared_ptr<AgentBundle> AgentBundleLoader::LoadAgentBundle(const std::files
                    << "\" |Agent type \""
                    << agent->GetAgentType()
                    << "\"");
+      struct stat fileStat;
+      time_t last_modified;
+
+      if (stat(absolute_path.c_str(), &fileStat) == 0) {
+          last_modified = fileStat.st_mtime;
+      }
+      if (stat(properties_path.c_str(), &fileStat) == 0 && fileStat.st_mtime > last_modified) {
+          last_modified = fileStat.st_mtime;
+      }
+      agent_bundle->SetLastModified(last_modified);
       return agent_bundle;
     } else {
       LOG_ERROR(app_logger_, "Agent loading error."
@@ -89,6 +104,37 @@ std::shared_ptr<AgentBundle> AgentBundleLoader::LoadAgentBundle(const std::files
               "Failed to load the dynamic library: " << dlerror());
   }
   return nullptr;
+}
+
+std::shared_ptr<AgentBundle> AgentBundleLoader::UpdateAgentBundle(const std::filesystem::path &agent_path,
+                                          const std::shared_ptr<AgentBundle> &agent_bundle) {
+  diagnostic::LoggerPtr app_logger_ = diagnostic::Logger::getRootLogger();
+  std::string library_path = FindLibraryInBundle(agent_path);
+  std::string properties_path = agent_path / agent_properties_path_;
+
+  if (library_path.empty() || !fs::exists(properties_path)) {
+    LOG_WARN(app_logger_,
+             "Wrong content of AgentBundle: " << agent_path.filename()
+             << ": Check existence of the Agent library"
+             << " and the agent.properties file");
+    return nullptr;
+  }
+
+  struct stat fileStat;
+
+  if (stat(library_path.c_str(), &fileStat) == 0 && fileStat.st_mtime > agent_bundle->GetLastModified()) {
+    LOG_DEBUG(app_logger_, "Agent library (lib file) was updated: " << agent_path.filename())
+    return LoadAgentBundle(agent_path);
+  }
+  if (stat(properties_path.c_str(), &fileStat) == 0 && fileStat.st_mtime > agent_bundle->GetLastModified()) {
+    LOG_DEBUG(app_logger_, "Agent properties file was updated: " << agent_path.filename())
+    PropertiesPtr properties = LoadProperties(properties_path);
+    agent_bundle->UpdateBundle(properties, agent_path);
+    agent_bundle->SetLastModified(fileStat.st_mtime);
+    return agent_bundle;
+  }
+
+  return agent_bundle;
 }
 
 std::shared_ptr<s21::Properties> AgentBundleLoader::LoadProperties(const std::filesystem::path &properties_path) {

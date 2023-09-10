@@ -4,6 +4,8 @@
 
 #include "MetricCriticalValue.h"
 
+#include <string>
+
 #include "Logger.h"
 
 namespace s21 {
@@ -84,6 +86,11 @@ double MetricCriticalValue::GetCriticalValue() const {
 
 void MetricCriticalValue::SetCriticalValue(double critical_value) {
   critical_value_ = critical_value;
+}
+
+std::string MetricCriticalValue::ToString() const {
+  std::string critical_value = std::to_string(critical_value_);
+  return condition_operator_ + critical_value.substr(0, critical_value.find_last_not_of('0'));
 }
 
 }

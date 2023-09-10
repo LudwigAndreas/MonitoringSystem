@@ -1,5 +1,6 @@
 #include "memory.h"
 #include <iostream>
+#include <sstream>
 
 double GetTotalRAM() {
   long pages = sysconf(_SC_PHYS_PAGES);
@@ -64,7 +65,11 @@ int GetDiskIO() {
 }
 #elif __APPLE__
 int GetDiskIO() {
-  return 0;
+  int tps;
+  redi::ipstream
+      in("iostat | awk 'NR > 2 { print $2 + $5 }'");
+  in >> tps;
+  return tps;
 }
 #else
 int GetDiskIO() {

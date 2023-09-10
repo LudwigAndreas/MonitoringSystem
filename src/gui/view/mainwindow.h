@@ -39,9 +39,14 @@ class MainWindow : public QMainWindow {
   void AddAgentAction();
   void on_delete_agent_button_clicked();
   void on_add_agent_button_clicked();
+  void on_pushButton_clicked();
   void UpdateAgentUptime();
 
- private:
+  void on_save_email_push_button_clicked();
+
+  void on_save_telegram_push_button_clicked();
+
+  private:
   void closeEvent(QCloseEvent *event) override;
   void ShowAgentDetails(std::shared_ptr<s21::AgentBundle> &agent);
   void ShowMetricDetails(std::shared_ptr<s21::ConfiguredMetric> &metric);
@@ -53,7 +58,7 @@ class MainWindow : public QMainWindow {
   QTimer *uptime_timer_;
   qint64 last_read_pos_ = 0;
   QString log_file_path_;
-  std::map<QString, std::shared_ptr<s21::AgentBundle>> agents_;
+  std::vector<std::shared_ptr<s21::AgentBundle>> agents_;
   QFile *log_file_;
   std::shared_ptr<s21::MainController> controller_;
   QString agents_folder_;

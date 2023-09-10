@@ -45,6 +45,8 @@ class AgentBundle {
 
   ~AgentBundle();
 
+  void UpdateBundle(const PropertiesPtr& properties, const std::string &agent_path);
+
   /**
    * Returns configured metrics. Configuration loaded from Properties.
    *
@@ -74,6 +76,9 @@ class AgentBundle {
    * */
   std::string GetAgentType() const;
 
+  const std::string &GetAgentPath() const;
+  void SetAgentPath(const std::string &agent_path);
+
   std::chrono::system_clock::time_point GetUptimePoint() const;
 
   void SetUptimePoint(std::chrono::system_clock::time_point uptime_point);
@@ -81,6 +86,9 @@ class AgentBundle {
   bool IsEnabled() const;
 
   void SetIsEnabled(bool is_enabled);
+
+  time_t GetLastModified() const;
+  void SetLastModified(time_t last_modified);
 
   /**
    * Updates the agent's properties.
@@ -91,7 +99,11 @@ class AgentBundle {
    * */
   void Configure(const PropertiesPtr& properties);
 
-
+  void SaveConfig();
+  const std::string &GetName() const;
+  void SetName(const std::string &name);
+  const std::string &GetType() const;
+  void SetType(const std::string &type);
 
  protected:
 
@@ -110,6 +122,8 @@ class AgentBundle {
   size_t default_update_interval_ = 60;
   std::chrono::system_clock::time_point uptime_point_;
   std::string agent_path_;
+  time_t last_modified_;
+  PropertiesPtr properties_;
   bool is_enabled_ = true;
 };
 

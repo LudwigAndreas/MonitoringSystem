@@ -32,7 +32,7 @@ class Core {
    * @param metric_output_dir Directory where the metric logs are stored.
    *
    * */
-  Core(const std::string& agents_dir = "./agents/", const std::string& metric_output_dir = "./logs/");
+  Core(const std::string& agents_dir = "./agents/", const std::string& metric_output_dir = "./logs/", size_t update_time = 30);
 
   /**
    * Destructor.
@@ -61,6 +61,9 @@ class Core {
   void SubscribeMetricEvents(IMetricSubscriber* subscriber);
 
   void UnsubscribeMetricEvents(IMetricSubscriber* subscriber);
+
+  void DeleteAgent(std::shared_ptr<AgentBundle> &agent);
+
 
  private:
 

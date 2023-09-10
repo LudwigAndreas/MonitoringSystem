@@ -8,9 +8,9 @@
 
 namespace s21 {
 
-#if __linux
+#if __linux__
 #define hostname_command "cat /etc/hostname"
-#elif __MACOS
+#elif __APPLE__
 #define hostname_command "hostname"
 #endif
 

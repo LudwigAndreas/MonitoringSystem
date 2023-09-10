@@ -63,11 +63,11 @@ void Properties::Load(const std::string& file_name) {
 }
 
 std::string Properties::Get(std::string key) {
-  return properties_.at(key);
+  return properties_[key];
 }
 
 std::string Properties::GetProperty(std::string key) {
-  return properties_.at(key);
+  return properties_[key];
 }
 
 std::string Properties::GetProperty(std::string key, std::string default_value) {
@@ -79,7 +79,11 @@ std::string Properties::GetProperty(std::string key, std::string default_value) 
 }
 
 void Properties::SetProperty(const std::string& key, const std::string& value) {
-  properties_[key] = value;
+  try {
+    properties_.at(key) = value;
+  } catch (std::out_of_range& e) {
+    properties_.insert({key, value});
+  }
 }
 
 void Properties::Save() {

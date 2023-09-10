@@ -29,6 +29,8 @@ class MetricCriticalValue {
 
   void SetCriticalValue(double critical_value);
 
+  std::string ToString() const;
+
  private:
   std::string condition_operator_;
   double critical_value_;

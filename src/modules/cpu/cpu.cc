@@ -77,7 +77,13 @@ double GetCPULoad() {
 // I'm not sure if using ps aux is the correct way to get all working processes.
 int GetNumberOfProcesses() {
 	int nop;
+  #ifdef __linux__
 	redi::ipstream in("ps -e --format=\"pid cmd stat\" | wc -l");
+  #elif __APPLE__
+    redi::ipstream in("ps -e -o pid,command,state | wc -l");
+  #else
+    #error "Unsupported platform"
+  #endif
 	in >> nop;
 	return nop - 1;
 }

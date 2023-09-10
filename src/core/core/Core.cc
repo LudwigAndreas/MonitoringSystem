@@ -9,7 +9,7 @@
 
 namespace s21::monitor {
 
-Core::Core(const std::string &agents_dir, const std::string &metric_output_dir)
+Core::Core(const std::string &agents_dir, const std::string &metric_output_dir, size_t update_time)
     : log_dir_(metric_output_dir) {
   app_logger_ = diagnostic::Logger::getRootLogger();
   if (s_instance_) {
@@ -19,7 +19,7 @@ Core::Core(const std::string &agents_dir, const std::string &metric_output_dir)
   s_instance_ = this;
   ConfigureMetricLogger();
 
-  agent_manager_ = std::make_shared<AgentManager>(agents_dir);
+  agent_manager_ = std::make_shared<AgentManager>(agents_dir, update_time);
   metric_analyzer_ =
       std::make_shared<MetricAnalyzer>(metric_output_dir, metric_logger_);
   agent_executor_ = std::make_shared<AgentExecutor>(metric_analyzer_);
@@ -67,6 +67,10 @@ void Core::SubscribeMetricEvents(IMetricSubscriber *subscriber) {
 
 void Core::UnsubscribeMetricEvents(IMetricSubscriber *subscriber) {
   metric_analyzer_->Unsubscribe(subscriber);
+}
+
+void Core::DeleteAgent(std::shared_ptr<AgentBundle> &agent) {
+  agent_manager_->DeleteAgent(agent);
 }
 
 Core *Core::s_instance_ = nullptr;
