@@ -31,6 +31,7 @@ class TelegramSender : public IMessageSender {
   void        StartPolling();
   void        StopPolling();
   void        InitializeRepository();
+  void        UpdateRepository(const std::string &receiver);
   void        InitializeReceivers(std::string receivers);
   bool        PollingCheck();
   void        PollingFunctionCheck();

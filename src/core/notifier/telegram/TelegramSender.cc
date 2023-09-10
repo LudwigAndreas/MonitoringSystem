@@ -23,15 +23,19 @@ s21::TelegramSender::~TelegramSender() {
 
 void s21::TelegramSender::InitializeRepository() {
   for (auto & receiver : receivers) {
-    std::stringstream ss;
-    long              chat_id;
-    ss << properties.GetProperty(
-      receiver,
-      std::to_string(DEFAULT_USER)
-    );
-    ss >> chat_id;
-    users.AddUser(receiver, chat_id);
+    UpdateRepository(receiver);
   }
+}
+
+void s21::TelegramSender::UpdateRepository(const std::string &receiver) {
+  std::stringstream ss;
+  long              chat_id;
+  ss << properties.GetProperty(
+    receiver,
+    std::to_string(DEFAULT_USER)
+  );
+  ss >> chat_id;
+  users.AddUser(receiver, chat_id);
 }
 
 void s21::TelegramSender::InitializeReceivers(std::string receivers) {
@@ -126,9 +130,18 @@ std::set<std::string> s21::TelegramSender::GetRecievers() {
 }
 
 void s21::TelegramSender::AddReceiver(std::string username, long chat_id) {
+  std::transform(
+    username.begin(),
+    username.end(),
+    username.begin(),
+    [](unsigned char c) {
+      return std::tolower(c);
+    }
+  );
   receivers.insert(username);
   if (chat_id != s21::TelegramSender::DEFAULT_USER)
     users.AddUser(username, chat_id);
+  UpdateRepository(username);
   PollingFunctionCheck();
 }
 
