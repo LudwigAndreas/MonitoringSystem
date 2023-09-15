@@ -51,8 +51,46 @@ void MainController::Quit() {
   core_->DisableMonitoring();
 }
 
-void MainController::Close() {
+void MainController::SetTelegram(const TelegramSenderPtr &telegram) {
+  telegram_ = telegram;
+}
 
+void MainController::SetEmail(const EmailSenderPtr &email) {
+  email_ = email;
+}
+
+void MainController::SetTelegramSender(const std::string &sender) {
+  std::set<std::string> recievers = telegram_->GetRecievers();
+  if (recievers.empty()) {
+    telegram_->AddReceiver(sender);
+    return;
+  }
+  for (auto &reciever : recievers) {
+      telegram_->RemoveReceiver(reciever);
+  }
+  telegram_->AddReceiver(sender);
+}
+
+void MainController::SetEmailSender(const std::string &sender) {
+  std::set<std::string> recievers = email_->GetRecievers();
+  if (recievers.empty()) {
+    email_->AddReceiver(sender);
+    return;
+  }
+  for (auto &reciever : recievers) {
+    email_->RemoveReceiver(reciever);
+  }
+  email_->AddReceiver(sender);
+}
+
+std::string MainController::GetTelegramSender() {
+  std::set<std::string> recievers = telegram_->GetRecievers();
+  return recievers.empty() ? std::string() : *recievers.begin();
+}
+
+std::string MainController::GetEmailSender() {
+  std::set<std::string> recievers = email_->GetRecievers();
+  return recievers.empty() ? std::string() : *recievers.begin();
 }
 
 }

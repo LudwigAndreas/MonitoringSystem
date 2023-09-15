@@ -46,6 +46,8 @@ class MainWindow : public QMainWindow {
 
   void on_save_telegram_push_button_clicked();
 
+  void on_main_tab_widget_currentChanged(int index);
+
   private:
   void closeEvent(QCloseEvent *event) override;
   void ShowAgentDetails(std::shared_ptr<s21::AgentBundle> &agent);

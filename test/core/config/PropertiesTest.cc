@@ -22,8 +22,7 @@ class PropertiesTest : public ::testing::Test {
   }
 
   void TearDown() override {
-    std::filesystem::path path_to_file(file_name);
-    std::filesystem::remove(path_to_file);
+    std::filesystem::remove(file_name);
   }
 
   std::string file_name = "test.properties";

@@ -216,12 +216,12 @@ void App::ConfigureCore() {
   core_ = std::make_shared<monitor::Core>(agents_folder, logs_folder, update_time);
 
   TelegramSenderPtr telegram = std::make_shared<TelegramSender>("5426071766:AAG3rchPUG-V6gswM3-tPGVDjnG5hVgmBdw");
-  telegram->AddReceiver("kdancy");
-  telegram->AddReceiver("Ludwig_Andreas");
+//  telegram->AddReceiver("kdancy");
+//  telegram->AddReceiver("Ludwig_Andreas");
   EmailSenderPtr email = std::make_shared<EmailSender>("andrew02541632@gmail.com", "mzgonnorlsctjzfn", "smtp://smtp.gmail.com:587");
-  email->AddReceiver("kalininandrey727@gmail.com");
-  email->AddReceiver("andreyk2107@mail.ru");
-  email->AddReceiver("ev.sand.raw@gmail.com");
+//  email->AddReceiver("kalininandrey727@gmail.com");
+//  email->AddReceiver("andreyk2107@mail.ru");
+//  email->AddReceiver("ev.sand.raw@gmail.com");
   notification_controller_ = std::make_shared<NotificationController>();
   notification_controller_->AddNotifier(telegram);
   notification_controller_->AddNotifier(email);

@@ -19,6 +19,8 @@ class IMetricSubscriber {
 
   virtual void OnNewFileOpened(const std::string& log_file) = 0;
 
+  virtual ~IMetricSubscriber() = default;
+
 };
 
 }

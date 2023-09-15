@@ -8,6 +8,7 @@ EmailSender::EmailSender(std::string email, std::string password, std::string se
   this->email_ = email;
   this->password_ = password;
   this->server_ = server;
+  this->receivers = std::set<std::string>();
 }
 
 std::string EmailSender::PrepareSubject(FailedMetric fm) {

@@ -10,9 +10,9 @@
 
 class MockMetricSubscriber : public s21::IMetricSubscriber {
  public:
-  MOCK_METHOD1(OnCriticalValueReached, void(s21::MetricEvent event));
-  MOCK_METHOD1(OnLineLogged, void(const std::string& line));
-  MOCK_METHOD1(OnNewFileOpened, void(const std::string& log_file));
+  MOCK_METHOD(void, OnCriticalValueReached, (s21::MetricEvent));
+  MOCK_METHOD(void, OnLineLogged, (const std::string& line));
+  MOCK_METHOD(void, OnNewFileOpened, (const std::string& log_file));
 };
 
 #endif //MONITORINGSYSTEM_TEST_MOCK_CONFIG_MOCKMETRICSUBSCRIBER_H_

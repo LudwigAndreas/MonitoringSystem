@@ -28,7 +28,7 @@ MetricCriticalValue::MetricCriticalValue(std::string critical_value) {
         LOG_ERROR(diagnostic::Logger::getRootLogger(),
                   "Critical value is not a number: "
                       + critical_value.substr(critical_value.find(op) + strlen(op)));
-        critical_value = 0.;
+        critical_value_ = 0.;
       }
       is_set = true;
       break;
