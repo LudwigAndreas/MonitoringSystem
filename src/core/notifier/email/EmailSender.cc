@@ -8,6 +8,7 @@ EmailSender::EmailSender(std::string email, std::string password, std::string se
   this->email_ = email;
   this->password_ = password;
   this->server_ = server;
+  this->enabled_ = true;
 }
 
 std::string EmailSender::PrepareSubject(FailedMetric fm) {
@@ -30,19 +31,25 @@ std::string EmailSender::PrepareMessage(FailedMetric fm) {
 }
 
 void EmailSender::SendMessage(FailedMetric fm) {
-  if (!receivers.empty()) {
-    Email email(
-      EmailAddress(email_, "kdancybot"),
-      std::vector<EmailAddress>(std::next(receivers.begin()), receivers.end()),
-      PrepareSubject(fm),
-      PrepareMessage(fm)
-    );
-    email.SendMessage(
-      server_,
-      email_,
-      password_
-    );
+  if (enabled_) {
+    if (!receivers.empty()) {
+      Email email(
+        EmailAddress(email_, "kdancybot"),
+        std::vector<EmailAddress>(std::next(receivers.begin()), receivers.end()),
+        PrepareSubject(fm),
+        PrepareMessage(fm)
+      );
+      email.SendMessage(
+        server_,
+        email_,
+        password_
+      );
+    }
   }
+}
+
+void EmailSender::SetEnabled(bool enabled) {
+  enabled_ = enabled;
 }
 
 std::set<std::string> EmailSender::GetRecievers() {

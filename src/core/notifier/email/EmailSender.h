@@ -21,6 +21,7 @@ class EmailSender : public IMessageSender {
   std::string           email_;
   std::string           password_;
   std::string           server_;
+  bool                  enabled_;
 
   std::string PrepareSubject(FailedMetric fm);
   std::string PrepareMessage(FailedMetric fm);
@@ -29,7 +30,8 @@ class EmailSender : public IMessageSender {
   EmailSender(std::string email, std::string password, std::string server);
   virtual ~EmailSender() = default;
 
-  virtual void SendMessage(FailedMetric fm);
+  virtual void SendMessage(FailedMetric fm) override;
+  virtual void SetEnabled(bool enabled) override;
 
   std::set<std::string> GetRecievers();
   void AddReceiver(std::string username);

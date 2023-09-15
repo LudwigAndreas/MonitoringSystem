@@ -1,16 +1,21 @@
 #include "TelegramSender.h"
 
-s21::TelegramSender::TelegramSender(std::string token, std::string receivers) : 
-  properties(), bot(token) {
-  properties.Load(config_file);
+const std::string s21::TelegramSender::DEFAULT_USER = "";
+
+s21::TelegramSender::TelegramSender(const std::shared_ptr<ITelegramBot> &bot, const std::shared_ptr<IUserRepository> &users, std::string receivers) : 
+  properties(), bot(std::move(bot)), users(std::move(users)) {
+  properties.Load("config/telegram.properties");
+
   polling_thread = std::make_shared<std::thread>();
   polling_thread.reset();
+  
   InitializeReceivers(receivers);
   InitializeRepository();
+  
   ConfigPolling();
 
   for (auto &receiver : this->receivers) {
-    if (users.GetUser(receiver) == DEFAULT_USER) {
+    if (this->users->GetUser(receiver) == DEFAULT_USER) {
       StartPolling();
       break;
     }
@@ -28,14 +33,12 @@ void s21::TelegramSender::InitializeRepository() {
 }
 
 void s21::TelegramSender::UpdateRepository(const std::string &receiver) {
-  std::stringstream ss;
-  long              chat_id;
-  ss << properties.GetProperty(
-    receiver,
-    std::to_string(DEFAULT_USER)
+  users->AddUser(receiver,
+    properties.GetProperty(
+      receiver,
+      DEFAULT_USER
+    )
   );
-  ss >> chat_id;
-  users.AddUser(receiver, chat_id);
 }
 
 void s21::TelegramSender::InitializeReceivers(std::string receivers) {
@@ -56,8 +59,9 @@ void s21::TelegramSender::InitializeReceivers(std::string receivers) {
 }
 
 void s21::TelegramSender::ConfigPolling() {
-  bot.getEvents().onCommand("start",
+  bot->OnStart(
     [this](TgBot::Message::Ptr message) {
+      std::string chat_id = std::to_string(message->chat->id);
       std::string username;
       std::transform(
         message->from->username.begin(),
@@ -67,12 +71,12 @@ void s21::TelegramSender::ConfigPolling() {
           return std::tolower(c);
         }
       );
-      this->users.AddUser(
+      this->users->AddUser(
         username,
-        message->chat->id
+        chat_id
       );
-      this->bot.getApi().sendMessage(
-        message->chat->id,
+      this->bot->SendMessage(
+        chat_id,
         "You are now registered in MSBOT!"
       );
       this->properties.SetProperty(
@@ -113,23 +117,29 @@ std::string s21::TelegramSender::PrepareMessage(FailedMetric fm) {
 }
 
 void s21::TelegramSender::SendMessage(FailedMetric fm) {
-  std::string message = PrepareMessage(fm);
-  for (auto receiver: receivers) {
-    int chat_id = users.GetUser(receiver);
-    if (chat_id != DEFAULT_USER) {
-      bot.getApi().sendMessage(
-        chat_id,
-        message
-      );
+  if (enabled_) {
+    std::string message = PrepareMessage(fm);
+    for (auto receiver: receivers) {
+      std::string chat_id = users->GetUser(receiver);
+      if (chat_id != DEFAULT_USER) {
+        bot->SendMessage(
+          chat_id,
+          message
+        );
+      }
     }
   }
+}
+
+void s21::TelegramSender::SetEnabled(bool enabled) {
+  enabled_ = enabled;
 }
 
 std::set<std::string> s21::TelegramSender::GetRecievers() {
   return receivers;
 }
 
-void s21::TelegramSender::AddReceiver(std::string username, long chat_id) {
+void s21::TelegramSender::AddReceiver(std::string username, std::string chat_id) {
   std::transform(
     username.begin(),
     username.end(),
@@ -140,7 +150,7 @@ void s21::TelegramSender::AddReceiver(std::string username, long chat_id) {
   );
   receivers.insert(username);
   if (chat_id != s21::TelegramSender::DEFAULT_USER)
-    users.AddUser(username, chat_id);
+    users->AddUser(username, chat_id);
   UpdateRepository(username);
   PollingFunctionCheck();
 }
@@ -153,7 +163,7 @@ void s21::TelegramSender::RemoveReceiver(std::string username) {
 // TODO: Possible mangled data
 bool s21::TelegramSender::PollingCheck() {
   for (auto &receiver : receivers) {
-    if (users.GetUser(receiver) == DEFAULT_USER)
+    if (users->GetUser(receiver) == DEFAULT_USER)
       return true;
   }
   return false;
@@ -166,9 +176,8 @@ void s21::TelegramSender::PollingFunctionCheck() {
 }
 
 void s21::TelegramSender::PollingFunction() {
-  TgBot::TgLongPoll longPoll(bot);
   while (is_polling_running) {
-    longPoll.start();
+    bot->LongPoll();
     is_polling_running = PollingCheck();
   }
 }

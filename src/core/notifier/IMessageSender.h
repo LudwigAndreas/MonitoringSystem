@@ -22,6 +22,7 @@ public:
 	IMessageSender();
 
 	virtual void SendMessage(FailedMetric fm) = 0;
+	virtual void SetEnabled(bool enabled) = 0;
 };
 
 using IMessageSenderPtr = std::shared_ptr<IMessageSender>;
