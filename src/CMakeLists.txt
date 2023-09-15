@@ -53,6 +53,7 @@ set(PROJECT_SOURCES
     core/notifier/email/EmailAddress.cc
     core/notifier/email/Email.cc
     core/notifier/email/Email.h
+    core/notifier/telegram/TelegramBot.cc
     core/notifier/telegram/TelegramSender.cc
     core/notifier/telegram/TelegramSender.h
     core/notifier/telegram/TelegramUserRepository.cc
