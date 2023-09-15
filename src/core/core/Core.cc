@@ -14,7 +14,7 @@ Core::Core(const std::string &agents_dir, const std::string &metric_output_dir, 
   app_logger_ = diagnostic::Logger::getRootLogger();
   if (s_instance_) {
     LOG_FATAL(app_logger_, "Only one instance of Core allowed.");
-    std::exit(0);
+    std::exit(1);
   }
   s_instance_ = this;
   ConfigureMetricLogger();
@@ -30,14 +30,6 @@ Core::Core(const std::string &agents_dir, const std::string &metric_output_dir, 
 Core::~Core() {
   agent_manager_->StopMonitoring();
   LOG_INFO(app_logger_, "Agents monitoring finished.");
-}
-
-Core *Core::Instance() {
-  if (!s_instance_) {
-    LOG_FATAL(Core::s_instance_->app_logger_, "Core not initialized.");
-    std::exit(0);
-  }
-  return s_instance_;
 }
 
 void Core::ConfigureMetricLogger() {

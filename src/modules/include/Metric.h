@@ -46,7 +46,7 @@ class Metric {
 
   Metric(const Metric &metric);
 
-  Metric(Metric &&metric) = default;
+  Metric(Metric &metric) = default;
 
   Metric() = default;
   virtual ~Metric() = default;

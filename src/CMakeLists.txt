@@ -9,8 +9,6 @@ set(CMAKE_AUTORCC ON)
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
-find_package(QT NAMES Qt6 Qt5 REQUIRED COMPONENTS Widgets LinguistTools)
-find_package(Qt${QT_VERSION_MAJOR} REQUIRED COMPONENTS Widgets LinguistTools)
 
 set(TS_FILES gui/MonitoringSystem_en_US.ts)
 
@@ -127,19 +125,14 @@ if(QT_VERSION_MAJOR EQUAL 6)
 endif()
 
 
-INCLUDE_DIRECTORIES(${MAINFOLDER}/src/core
+INCLUDE_DIRECTORIES(${MAINFOLDER}/src/core/
+    ${MAINFOLDER}/src/
     ${MAINFOLDER}/third_party/LogLite/include
     ${MAINFOLDER}/third_party/libs21/include
     ${MAINFOLDER}/third_party/tgbot-cpp/include)
 
 SET (project_MOC_HEADERS ${MAINFOLDER}/include
     ${MAINFOLDER}/third_party/LogLite/include)
-
-
-ADD_LIBRARY(LogLite STATIC IMPORTED)
-
-SET_TARGET_PROPERTIES(LogLite PROPERTIES IMPORTED_LOCATION
-    ${MAINFOLDER}/third_party/LogLite/lib/libLogLite.a)
 
 #SET_TARGET_PROPERTIES(TgBot PROPERTIES IMPORTED_LOCATION
 #    ${MAINFOLDER}/third_party/tgbot-cpp/build/libTgBot.a)
@@ -165,6 +158,7 @@ TARGET_LINK_LIBRARIES(${project_BIN} PRIVATE ${project_LIBS}
     ${ZLIB_LIBRARIES}
     ${CURL_LIBRARIES}
     )
+
 SET_TARGET_PROPERTIES(${project_BIN} PROPERTIES VERSION "${APPLICATION_VERSION_MAJOR}.${APPLICATION_VERSION_MINOR}" OUTPUT_NAME ${project_BIN} CLEAN_DIRECT_OUTPUT 1)
 
 INSTALL(TARGETS ${project_BIN} DESTINATION bin)

@@ -9,6 +9,8 @@
 #include <sstream>
 #include <filesystem>
 
+#include "Logger.h"
+
 namespace s21 {
 
 Properties::Properties(std::string separator,
@@ -40,7 +42,7 @@ void Properties::Load(const std::string& file_name) {
         && comment_pos > equalPos) {
 
       std::string key = line.substr(0, equalPos);
-      std::string value = line.substr(equalPos + 1);
+      std::string value = line.substr(equalPos + separator.size());
 
       key.erase(0, first_sym);
       key.erase(key.find_last_not_of(' ') + 1);
@@ -51,7 +53,7 @@ void Properties::Load(const std::string& file_name) {
       if (value[0] == '\"') {
         value = value.substr(1, value.find_first_of('\"', 1) - 1);
       } else if (comment_pos != std::string::npos) {
-        value.erase(comment_pos - key.size() - 1);
+        value.erase(comment_pos - key.size() - comment_symb.size());
         value.erase(value.find_last_not_of(' ') + 1);
       }
       key_value_map[key] = value;
@@ -87,7 +89,10 @@ void Properties::SetProperty(const std::string& key, const std::string& value) {
 }
 
 void Properties::Save() {
-
+  if (file_name_.empty() || !std::filesystem::exists(file_name_)) {
+    LOG_TRACE(diagnostic::Logger::getRootLogger(), "Properties loading error: File name is empty or file does not exist");
+    return;
+  }
   std::string file_name = file_name_ + ".tmp";
 
 

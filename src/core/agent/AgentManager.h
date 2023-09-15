@@ -54,6 +54,8 @@ class AgentManager {
    * */
   void StopMonitoring();
 
+  bool IsMonitoring();
+
   /**
    * Returns the list of agents.
    * */

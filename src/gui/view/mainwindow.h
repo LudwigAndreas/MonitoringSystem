@@ -5,7 +5,7 @@
 #include <QListWidgetItem>
 #include <QtCore/qfile.h>
 
-#include "metric/MetricEvent.h"
+#include "core/metric/MetricEvent.h"
 
 namespace s21 {
 class MainController;

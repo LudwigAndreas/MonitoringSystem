@@ -8,7 +8,13 @@
 
 namespace s21 {
 
-AgentBundle::AgentBundle() = default;
+AgentBundle::AgentBundle() {
+  name_ = "";
+  type_ = "";
+  properties_ = nullptr;
+  agent_path_ = "";
+  configured_metrics_ = new std::vector<ConfiguredMetricPtr>();
+}
 
 AgentBundle::AgentBundle(const AgentPtr &agent,
                          const PropertiesPtr &properties,
@@ -69,7 +75,7 @@ void AgentBundle::Configure(const PropertiesPtr &properties) {
 void AgentBundle::ConfigureAgent(const PropertiesPtr &properties) {
   std::string agent_name = properties->GetProperty("agent.name", "");
   std::string agent_type = properties->GetProperty("agent.type", "");
-  bool is_enabled = properties->GetProperty("agent.enabled", "false") == "true";
+  bool is_enabled = properties->GetProperty("agent.enabled", "true") == "true";
 
   if (!agent_name.empty()) {
     name_ = agent_name;

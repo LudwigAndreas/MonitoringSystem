@@ -25,4 +25,7 @@ void AgentExecutor::OnAgentUpdated(std::shared_ptr<AgentBundle> &agent) {
   agent_schedulers_.insert({agent, std::make_shared<AgentScheduler>(agent, logger_)});
 }
 
+std::map<AgentBundlePtr, std::shared_ptr<AgentScheduler>> &AgentExecutor::GetAgentSchedulers() {
+  return agent_schedulers_;
+}
 }
