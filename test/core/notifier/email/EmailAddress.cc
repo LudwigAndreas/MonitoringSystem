@@ -1,8 +1,8 @@
-#include <gtest/gtest.h>
-#include "../../src/core/notifier/email/EmailAddress.h" // Include the header file for your EmailAddress class
+#include "test.h"
+#include "notifier/email/EmailAddress.h" // Include the header file for your EmailAddress class
 
 // Define a test fixture for EmailAddress
-class EmailAddressTest : public testing::Test {
+class EmailAddressTest : public ::testing::Test {
 protected:
     // Create an instance of EmailAddress for testing
     s21::EmailAddress email;
@@ -16,14 +16,14 @@ protected:
 };
 
 // Define test cases for EmailAddress
-TEST_F(EmailAddressTest, Domain) {
+TEST_F(EmailAddressTest, DomainTest) {
     // Test the Domain method
     EXPECT_EQ(email.Domain(), "example.com");
 }
 
 TEST_F(EmailAddressTest, ConversionOperator) {
     // Test the explicit conversion operator to const char *
-    const char *emailString = (const char *)email;
+    const char *emailString = (const char *) email;
     EXPECT_STREQ(emailString, "test@example.com");
 }
 

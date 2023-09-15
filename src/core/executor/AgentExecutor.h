@@ -28,6 +28,8 @@ class AgentExecutor : public IAgentSubscriber {
 
   void OnAgentUpdated(std::shared_ptr<AgentBundle> &agent) override;
 
+  std::map<AgentBundlePtr , std::shared_ptr<AgentScheduler>> &GetAgentSchedulers();
+
  private:
 
   MetricAnalyzerPtr logger_;

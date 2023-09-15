@@ -33,8 +33,10 @@ SET (CMAKE_VERBOSE_MAKEFILE 0) # Use 1 for debugging, 0 for release
 #
 # Compilation Flags
 #
+
+# Add these lines to enable code coverage flags
 SET(CMAKE_CXX_FLAGS "-Wall -Wextra -Werror -fPIC")
-SET(CMAKE_CXX_FLAGS_DEBUG "-g -Og --coverage")
+SET(CMAKE_CXX_FLAGS_DEBUG "-g -Og")
 SET(CMAKE_CXX_FLAGS_RELEASE "-Ofast -march=native")
 
 #
@@ -51,16 +53,27 @@ LIST (APPEND CMAKE_PREFIX_PATH "${MAINFOLDER}")
 LIST (APPEND CMAKE_PREFIX_PATH "${MAINFOLDER}/tools")
 LIST (APPEND CMAKE_PREFIX_PATH "${MAINFOLDER}/third_party")
 SET (CMAKE_MODULE_PATH "${MAINFOLDER}/tools/share/cmake")
-INCLUDE_DIRECTORIES("${MAINFOLDER}/include"
+INCLUDE_DIRECTORIES("${MAINFOLDER}/src/"
     ${Boost_INCLUDE_DIRS}
     ${OPENSSL_INCLUDE_DIR}
     ${ZLIB_INCLUDE_DIRS}
     ${CURL_INCLUDE_DIRS}
+    ${MAINFOLDER}/third_party/LogLite/include
+    ${MAINFOLDER}/third_party/libs21/include
+    ${MAINFOLDER}/third_party/tgbot-cpp/include
     )
 
 #
 # Locate Project Prerequisites
 #
+FIND_PACKAGE(QT NAMES Qt6 Qt5 REQUIRED COMPONENTS Widgets LinguistTools)
+FIND_PACKAGE(Qt${QT_VERSION_MAJOR} REQUIRED COMPONENTS Widgets LinguistTools)
+
+ADD_LIBRARY(LogLite STATIC IMPORTED)
+
+SET_TARGET_PROPERTIES(LogLite PROPERTIES IMPORTED_LOCATION
+    ${MAINFOLDER}/third_party/LogLite/lib/libLogLite.a)
+
 include(FetchContent)
 
 FetchContent_Declare(
@@ -68,6 +81,7 @@ FetchContent_Declare(
     GIT_REPOSITORY https://github.com/google/googletest.git
     GIT_TAG        release-1.11.0
 )
+
 FetchContent_MakeAvailable(googletest)
 add_library(GTest::GTest INTERFACE IMPORTED src/parse/converters/LiteralPatternConverter.cc include/logger/parse/converters/LiteralPatternConverter.h third_party/libs21/test/properties_reader_class_test.cc)
 target_link_libraries(GTest::GTest INTERFACE gtest_main)
@@ -104,6 +118,8 @@ ENDFOREACH (CONFIGINPUT ${CONFIGINPUTS})
 #
 
 ADD_SUBDIRECTORY(src)
+ADD_SUBDIRECTORY(test)
+
 
 #
 # Add Install Targets

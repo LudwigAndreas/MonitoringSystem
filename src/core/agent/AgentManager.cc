@@ -54,6 +54,10 @@ void AgentManager::StopMonitoring() {
   }
 }
 
+bool AgentManager::IsMonitoring() {
+  return is_monitoring_;
+}
+
 void AgentManager::MonitorAgentsDirectory() {
   std::set<fs::path> current_files;
 

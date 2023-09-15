@@ -9,7 +9,7 @@
 
 #include "metric/ConfiguredMetric.h"
 #include "config/Properties.h"
-#include "../../modules/include/Agent.h"
+#include "modules/include/Agent.h"
 
 namespace s21 {
 
@@ -31,6 +31,8 @@ typedef void *DynamicLib;
  * */
 class AgentBundle {
  public:
+
+  AgentBundle();
 
   /**
    * Constructor for AgentBundle.
@@ -107,11 +109,6 @@ class AgentBundle {
 
  protected:
 
-  /**
-   * Constructor for AgentBundle.
-   * */
-  AgentBundle();
-
   void ConfigureAgent(const PropertiesPtr& properties);
 
   void ConfigureMetric(const PropertiesPtr& properties, ConfiguredMetricPtr &metric) const;
@@ -124,7 +121,7 @@ class AgentBundle {
   std::string agent_path_;
   time_t last_modified_;
   PropertiesPtr properties_;
-  bool is_enabled_ = true;
+  bool is_enabled_ = false;
 };
 
 }

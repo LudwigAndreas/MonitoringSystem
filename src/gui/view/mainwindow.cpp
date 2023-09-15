@@ -15,7 +15,7 @@
 #include "metric/MetricCriticalValue.h"
 
 MainWindow::MainWindow(std::string &agents_folder, QWidget *parent)
-    : QMainWindow(parent), ui(new Ui::MainWindow) {
+    : QMainWindow(parent), ui(new Ui::MainWindow) , log_file_(nullptr) {
   ui->setupUi(this);
 
   connect(ui->actionAdd_Agent,

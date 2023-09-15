@@ -8,7 +8,24 @@
 
 namespace s21 {
 
+ConfiguredMetric::ConfiguredMetric() {
+  name_ = "";
+  args_ = "";
+  critical_value_ = MetricCriticalValue();
+  update_time_ = 60;
+}
+
 ConfiguredMetric::ConfiguredMetric(const Metric &metric) : Metric(metric), update_time_(60) {}
+
+ConfiguredMetric::ConfiguredMetric(const std::string name,
+                                   const std::string args,
+                                   const MetricCriticalValue &critical_value,
+                                   size_t update_time) {
+    name_ = name;
+    args_ = args;
+    critical_value_ = critical_value;
+    update_time_ = update_time;
+}
 
 std::string ConfiguredMetric::Run() {
   if (metric_func_) {

@@ -10,7 +10,7 @@
 #include <chrono>
 #include <thread>
 
-#include "../../modules/include/Agent.h"
+#include "modules/include/Agent.h"
 #include "analyzer/MetricAnalyzer.h"
 #include "agent/agent_bundle.h"
 

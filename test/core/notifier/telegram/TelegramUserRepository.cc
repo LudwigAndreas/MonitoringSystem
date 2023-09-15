@@ -1,5 +1,5 @@
 #include <gtest/gtest.h>
-#include "../../../src/core/notifier/telegram/TelegramUserRepository.h" // Include the header file for your TelegramUserRepository class
+#include "notifier/telegram/TelegramUserRepository.h" // Include the header file for your TelegramUserRepository class
 
 // Define a test fixture
 class TelegramUserRepositoryTest : public testing::Test {

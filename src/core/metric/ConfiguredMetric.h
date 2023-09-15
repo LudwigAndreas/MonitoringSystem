@@ -29,7 +29,11 @@ class ConfiguredMetric : public Metric {
    * @param metric The metric that will be configured.
    *
    * */
+  ConfiguredMetric();
+
   ConfiguredMetric(const Metric &metric);
+
+  ConfiguredMetric(const std::string name, const std::string args, const MetricCriticalValue &critical_value, size_t update_time);
 
   std::string GetName() const;
 

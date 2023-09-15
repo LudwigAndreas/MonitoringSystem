@@ -8,11 +8,11 @@
 #include <string>
 
 #include "Logger.h"
-#include "../../modules/include/Agent.h"
-#include "agent/AgentManager.h"
-#include "executor/AgentScheduler.h"
-#include "executor/AgentExecutor.h"
-#include "analyzer/MetricAnalyzer.h"
+#include "modules/include/Agent.h"
+#include "core/agent/AgentManager.h"
+#include "core/executor/AgentScheduler.h"
+#include "core/executor/AgentExecutor.h"
+#include "core/analyzer/MetricAnalyzer.h"
 
 namespace s21::monitor {
 
@@ -38,11 +38,6 @@ class Core {
    * Destructor.
    * */
   ~Core();
-
-  /**
-   * Returns the instance of the Core.
-   * */
-  Core* Instance();
 
   /**
    * Enables the monitoring of the agents.
