@@ -373,13 +373,14 @@ void MainWindow::on_pushButton_clicked() {
 }
 
 void MainWindow::on_save_email_push_button_clicked() {
-  controller_->SetEmailSender(ui->email_address_value->text().toStdString());
+  controller_->SetEmail(ui->email_address_value->text().toStdString(),
+                        ui->email_enabled_checkbox->isChecked());
 }
 
 void MainWindow::on_save_telegram_push_button_clicked() {
-//  ui->telegram_enabled_checkbox->isChecked()
-  controller_->SetTelegramSender(
-      ui->telegram_username_value->text().toStdString());
+  controller_->SetTelegram(
+      ui->telegram_username_value->text().toStdString(),
+      ui->telegram_enabled_checkbox->isChecked());
 }
 
 void MainWindow::on_main_tab_widget_currentChanged(int index) {
