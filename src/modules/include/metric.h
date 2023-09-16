@@ -5,10 +5,10 @@
 #ifndef MONITORINGSYSTEM_SRC_MODULES_DUMB_MODULE_METRICS_H_
 #define MONITORINGSYSTEM_SRC_MODULES_DUMB_MODULE_METRICS_H_
 
-#include <string>
 #include <functional>
-#include <vector>
 #include <map>
+#include <string>
+#include <vector>
 
 namespace s21 {
 
@@ -24,7 +24,7 @@ namespace s21 {
  **/
 class Metric {
  protected:
-/**
+  /**
    * The metric must have a unique name
    **/
   std::string name_;
@@ -42,7 +42,8 @@ class Metric {
    **/
   Metric(std::string name, std::function<std::string()> metric_func);
 
-  Metric(std::string name, std::function<std::string(std::string)> metric_func_args);
+  Metric(std::string name,
+         std::function<std::string(std::string)> metric_func_args);
 
   // Metric(const Metric &metric);
 
@@ -52,6 +53,6 @@ class Metric {
   virtual ~Metric() = default;
 };
 
-}
+}  // namespace s21
 
-#endif //MONITORINGSYSTEM_SRC_MODULES_DUMB_MODULE_METRICS_H_
+#endif

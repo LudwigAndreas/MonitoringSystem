@@ -31,12 +31,8 @@ std::vector<Metric> BonusAgent::GetMetrics() {
   return metrics;
 }
 
-std::string BonusAgent::GetAgentName() {
-  return "Bonus agent name";
-}
+std::string BonusAgent::GetAgentName() { return "Bonus agent name"; }
 
-std::string BonusAgent::GetAgentType() {
-  return "Bonus agent type";
-}
+std::string BonusAgent::GetAgentType() { return "Bonus agent type"; }
 
-}
+}  // namespace s21

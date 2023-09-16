@@ -11,4 +11,4 @@ std::string second_test_func();
 
 std::string third_test_func();
 
-#endif //MONITORINGSYSTEM_SRC_MODULES_TEST_MODULE_TEST_FUNCS_H_
+#endif

@@ -10,7 +10,6 @@
 
 namespace s21 {
 
-
 /**
  * Inherited class from Metric to add additional information to a metric
  * from the Properties configuration.
@@ -20,9 +19,7 @@ namespace s21 {
  *
  * */
 class ConfiguredMetric : public Metric {
-
  public:
-
   /**
    * Constructor for ConfiguredMetric.
    *
@@ -33,11 +30,13 @@ class ConfiguredMetric : public Metric {
 
   ConfiguredMetric(const Metric &metric);
 
-  ConfiguredMetric(const std::string name, const std::string args, const MetricCriticalValue &critical_value, size_t update_time);
+  ConfiguredMetric(const std::string name, const std::string args,
+                   const MetricCriticalValue &critical_value,
+                   size_t update_time);
 
   std::string GetName() const;
 
-  void SetName(const std::string& name);
+  void SetName(const std::string &name);
 
   const std::string &GetArgs() const;
 
@@ -51,16 +50,14 @@ class ConfiguredMetric : public Metric {
 
   void SetUpdateTime(size_t update_time);
 
-  std::string Run(); //TODO rename to Execute
+  std::string Run();  // TODO rename to Execute
 
  private:
-
-
   std::string args_;
   MetricCriticalValue critical_value_;
   size_t update_time_;
 };
 
-}
+}  // namespace s21
 
-#endif //MONITORINGSYSTEM_SRC_CORE_METRIC_CONFIGUREDMETRIC_H_
+#endif

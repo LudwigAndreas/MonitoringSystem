@@ -2,12 +2,13 @@
 // Created by Ludwig Andreas on 14.09.2023.
 //
 
-#include "test.h"
 #include "metric/metric_critical_value.h"
 
-TEST(MetricCriticalValueTest, Parsing) {
+#include "test.h"
 
-  std::shared_ptr<s21::MetricCriticalValue> critical_value = std::make_shared<s21::MetricCriticalValue>(">=30");
+TEST(MetricCriticalValueTest, Parsing) {
+  std::shared_ptr<s21::MetricCriticalValue> critical_value =
+      std::make_shared<s21::MetricCriticalValue>(">=30");
 
   EXPECT_EQ(critical_value->GetConditionOperator(), ">=");
   EXPECT_EQ(critical_value->GetCriticalValue(), 30);
@@ -15,14 +16,15 @@ TEST(MetricCriticalValueTest, Parsing) {
 }
 
 TEST(MetricCriticalValueTest, ParsingError) {
-
-  std::shared_ptr<s21::MetricCriticalValue> critical_value = std::make_shared<s21::MetricCriticalValue>(">=asdf");
+  std::shared_ptr<s21::MetricCriticalValue> critical_value =
+      std::make_shared<s21::MetricCriticalValue>(">=asdf");
 
   EXPECT_EQ(critical_value->GetConditionOperator(), ">=");
   EXPECT_EQ(critical_value->GetCriticalValue(), 0);
   EXPECT_EQ(critical_value->ToString(), ">=0");
 
-  std::shared_ptr<s21::MetricCriticalValue> critical_value2 = std::make_shared<s21::MetricCriticalValue>("a;dlnc");
+  std::shared_ptr<s21::MetricCriticalValue> critical_value2 =
+      std::make_shared<s21::MetricCriticalValue>("a;dlnc");
 
   EXPECT_EQ(critical_value2->GetConditionOperator(), "");
   EXPECT_EQ(critical_value2->GetCriticalValue(), 0);
@@ -30,8 +32,8 @@ TEST(MetricCriticalValueTest, ParsingError) {
 }
 
 TEST(MetricCriticalValueTest, IsCritical) {
-
-  std::shared_ptr<s21::MetricCriticalValue> critical_value = std::make_shared<s21::MetricCriticalValue>(">=30");
+  std::shared_ptr<s21::MetricCriticalValue> critical_value =
+      std::make_shared<s21::MetricCriticalValue>(">=30");
 
   EXPECT_TRUE(critical_value->IsCritical(30));
   EXPECT_TRUE(critical_value->IsCritical(31));
@@ -40,19 +42,18 @@ TEST(MetricCriticalValueTest, IsCritical) {
 }
 
 TEST(MetricCriticalValueTest, IsCriticalString) {
-
-  std::shared_ptr<s21::MetricCriticalValue> critical_value = std::make_shared<s21::MetricCriticalValue>(">=30");
+  std::shared_ptr<s21::MetricCriticalValue> critical_value =
+      std::make_shared<s21::MetricCriticalValue>(">=30");
 
   EXPECT_TRUE(critical_value->IsCritical("30"));
   EXPECT_TRUE(critical_value->IsCritical("31"));
   EXPECT_FALSE(critical_value->IsCritical("29"));
   EXPECT_FALSE(critical_value->IsCritical("0"));
-
 }
 
 TEST(MetricCriticalValueTest, IsCriticalStringError) {
-
-  std::shared_ptr<s21::MetricCriticalValue> critical_value = std::make_shared<s21::MetricCriticalValue>(">=30");
+  std::shared_ptr<s21::MetricCriticalValue> critical_value =
+      std::make_shared<s21::MetricCriticalValue>(">=30");
 
   EXPECT_FALSE(critical_value->IsCritical("asdf"));
   EXPECT_FALSE(critical_value->IsCritical("asdfasdf"));
@@ -61,13 +62,18 @@ TEST(MetricCriticalValueTest, IsCriticalStringError) {
 }
 
 TEST(MetricCriticalValueTest, Operators) {
-
-  std::shared_ptr<s21::MetricCriticalValue> critical_value_ge = std::make_shared<s21::MetricCriticalValue>(">=30");
-  std::shared_ptr<s21::MetricCriticalValue> critical_value_le = std::make_shared<s21::MetricCriticalValue>("<=30");
-  std::shared_ptr<s21::MetricCriticalValue> critical_value_e = std::make_shared<s21::MetricCriticalValue>("==30");
-  std::shared_ptr<s21::MetricCriticalValue> critical_value_g = std::make_shared<s21::MetricCriticalValue>(">30");
-  std::shared_ptr<s21::MetricCriticalValue> critical_value_l = std::make_shared<s21::MetricCriticalValue>("<30");
-  std::shared_ptr<s21::MetricCriticalValue> critical_value_ne = std::make_shared<s21::MetricCriticalValue>("!=30");
+  std::shared_ptr<s21::MetricCriticalValue> critical_value_ge =
+      std::make_shared<s21::MetricCriticalValue>(">=30");
+  std::shared_ptr<s21::MetricCriticalValue> critical_value_le =
+      std::make_shared<s21::MetricCriticalValue>("<=30");
+  std::shared_ptr<s21::MetricCriticalValue> critical_value_e =
+      std::make_shared<s21::MetricCriticalValue>("==30");
+  std::shared_ptr<s21::MetricCriticalValue> critical_value_g =
+      std::make_shared<s21::MetricCriticalValue>(">30");
+  std::shared_ptr<s21::MetricCriticalValue> critical_value_l =
+      std::make_shared<s21::MetricCriticalValue>("<30");
+  std::shared_ptr<s21::MetricCriticalValue> critical_value_ne =
+      std::make_shared<s21::MetricCriticalValue>("!=30");
 
   EXPECT_TRUE(critical_value_ge->IsCritical(30));
   EXPECT_TRUE(critical_value_ge->IsCritical(31));
@@ -94,10 +100,9 @@ TEST(MetricCriticalValueTest, Operators) {
   EXPECT_FALSE(critical_value_ne->IsCritical(30));
 }
 
-
 TEST(MetricCriticalValueTest, GetSet) {
-
-  std::shared_ptr<s21::MetricCriticalValue> critical_value = std::make_shared<s21::MetricCriticalValue>(">=30");
+  std::shared_ptr<s21::MetricCriticalValue> critical_value =
+      std::make_shared<s21::MetricCriticalValue>(">=30");
 
   critical_value->SetConditionOperator("==");
   critical_value->SetCriticalValue(20);
@@ -128,12 +133,11 @@ TEST(MetricCriticalValueTest, GetSet) {
 
   EXPECT_EQ(critical_value->GetConditionOperator(), "!=");
   EXPECT_EQ(critical_value->GetCriticalValue(), 10);
-
 }
 
 TEST(MetricCriticalValueTest, ToString) {
-
-  std::shared_ptr<s21::MetricCriticalValue> critical_value = std::make_shared<s21::MetricCriticalValue>(">=30");
+  std::shared_ptr<s21::MetricCriticalValue> critical_value =
+      std::make_shared<s21::MetricCriticalValue>(">=30");
 
   EXPECT_EQ(critical_value->ToString(), ">=30");
 
@@ -161,5 +165,4 @@ TEST(MetricCriticalValueTest, ToString) {
   critical_value->SetCriticalValue(10);
 
   EXPECT_EQ(critical_value->ToString(), "!=10");
-
 }

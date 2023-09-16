@@ -8,15 +8,14 @@
 
 namespace s21 {
 
-MainController::MainController(std::shared_ptr<MainWindow> &window, std::shared_ptr<s21::monitor::Core> &core)
+MainController::MainController(std::shared_ptr<MainWindow> &window,
+                               std::shared_ptr<s21::monitor::Core> &core)
     : mainwindow_(window), core_(core) {}
 
-MainController::~MainController() {
-
-}
+MainController::~MainController() {}
 
 void MainController::OnAgentAdded(std::shared_ptr<AgentBundle> &agent) {
- mainwindow_->AddAgent(agent);
+  mainwindow_->AddAgent(agent);
 }
 
 void MainController::OnAgentRemoved(std::shared_ptr<AgentBundle> &agent) {
@@ -47,17 +46,13 @@ void MainController::SaveConfiguration(std::shared_ptr<AgentBundle> &agent) {
   agent->SaveConfig();
 }
 
-void MainController::Quit() {
-  core_->DisableMonitoring();
-}
+void MainController::Quit() { core_->DisableMonitoring(); }
 
 void MainController::SetTelegram(const TelegramSenderPtr &telegram) {
   telegram_ = telegram;
 }
 
-void MainController::SetEmail(const EmailSenderPtr &email) {
-  email_ = email;
-}
+void MainController::SetEmail(const EmailSenderPtr &email) { email_ = email; }
 
 void MainController::SetTelegramSender(const std::string &sender) {
   std::set<std::string> recievers = telegram_->GetRecievers();
@@ -66,7 +61,7 @@ void MainController::SetTelegramSender(const std::string &sender) {
     return;
   }
   for (auto &reciever : recievers) {
-      telegram_->RemoveReceiver(reciever);
+    telegram_->RemoveReceiver(reciever);
   }
   telegram_->AddReceiver(sender);
 }
@@ -93,4 +88,4 @@ std::string MainController::GetEmailSender() {
   return recievers.empty() ? std::string() : *recievers.begin();
 }
 
-}
+}  // namespace s21

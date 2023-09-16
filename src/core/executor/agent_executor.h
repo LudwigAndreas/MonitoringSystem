@@ -7,19 +7,17 @@
 
 #include <queue>
 
-#include "analyzer/metric_analyzer.h"
 #include "agent/i_agent_subscriber.h"
-#include "metric/metric_event.h"
 #include "agent_scheduler.h"
+#include "analyzer/metric_analyzer.h"
+#include "metric/metric_event.h"
 
 namespace s21 {
 
 typedef std::shared_ptr<MetricAnalyzer> MetricAnalyzerPtr;
 
 class AgentExecutor : public IAgentSubscriber {
-
  public:
-
   AgentExecutor(MetricAnalyzerPtr &logger);
 
   void OnAgentAdded(std::shared_ptr<AgentBundle> &agent) override;
@@ -28,16 +26,16 @@ class AgentExecutor : public IAgentSubscriber {
 
   void OnAgentUpdated(std::shared_ptr<AgentBundle> &agent) override;
 
-  std::map<AgentBundlePtr , std::shared_ptr<AgentScheduler>> &GetAgentSchedulers();
+  std::map<AgentBundlePtr, std::shared_ptr<AgentScheduler>> &
+  GetAgentSchedulers();
 
  private:
-
   MetricAnalyzerPtr logger_;
   std::mutex metric_queue_mutex_;
   std::queue<MetricEvent> metric_queue_;
-  std::map<AgentBundlePtr , std::shared_ptr<AgentScheduler>> agent_schedulers_;
+  std::map<AgentBundlePtr, std::shared_ptr<AgentScheduler>> agent_schedulers_;
 };
 
-}
+}  // namespace s21
 
-#endif //MONITORINGSYSTEM_AGENTEXECUTOR_H_
+#endif

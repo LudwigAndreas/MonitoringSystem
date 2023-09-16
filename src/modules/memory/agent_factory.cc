@@ -9,11 +9,7 @@
 #include "memory_agent.h"
 
 extern "C" {
-s21::Agent* get_agent(void) {
-    return new s21::MemoryAgent();
-  }
+s21::Agent* get_agent(void) { return new s21::MemoryAgent(); }
 };
 
-
-
-#endif //MONITORINGSYSTEM_SRC_MODULES_DUMB_MODULE_AGENT_FACTORY_CC_
+#endif

@@ -9,11 +9,7 @@
 #include "network_agent.h"
 
 extern "C" {
-s21::Agent* get_agent(void) {
-    return new s21::NetworkAgent();
-  }
+s21::Agent *get_agent() { return new s21::NetworkAgent(); }
 };
 
-
-
-#endif //MONITORINGSYSTEM_SRC_MODULES_DUMB_MODULE_AGENT_FACTORY_CC_
+#endif

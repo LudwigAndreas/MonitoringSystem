@@ -1,27 +1,26 @@
 #pragma once
 
-#include <string>
-#include <sstream>
-#include <memory>
-#include <vector>
-#include <set>
-
-#include <string.h>
 #include <curl/curl.h>
+#include <string.h>
+
+#include <memory>
+#include <set>
+#include <sstream>
+#include <string>
+#include <vector>
 
 #include "email.h"
 #include "notifier/i_message_sender.h"
 
 namespace s21 {
 
-
 class EmailSender : public IMessageSender {
  private:
   std::set<std::string> receivers;
-  std::string           email_;
-  std::string           password_;
-  std::string           server_;
-  bool                  enabled_;
+  std::string email_;
+  std::string password_;
+  std::string server_;
+  bool enabled_;
 
   std::string PrepareSubject(FailedMetric fm);
   std::string PrepareMessage(FailedMetric fm);
@@ -40,4 +39,4 @@ class EmailSender : public IMessageSender {
 
 using EmailSenderPtr = std::shared_ptr<EmailSender>;
 
-}
+}  // namespace s21

@@ -1,11 +1,12 @@
 #include "memory.h"
+
 #include <iostream>
 #include <sstream>
 
 double GetTotalRAM() {
   long pages = sysconf(_SC_PHYS_PAGES);
   long page_size = sysconf(_SC_PAGE_SIZE);
-//  std::cerr << "total " << pages * page_size << std::endl;
+  //  std::cerr << "total " << pages * page_size << std::endl;
   return pages * page_size;
 }
 
@@ -21,13 +22,13 @@ double GetFreeRAM() {
   mach_msg_type_number_t count = HOST_VM_INFO_COUNT;
   vm_statistics_data_t vm_stats;
 
-  if (host_statistics(host_port, HOST_VM_INFO, (host_info_t) &vm_stats, &count)
-      != KERN_SUCCESS) {
+  if (host_statistics(host_port, HOST_VM_INFO, (host_info_t)&vm_stats,
+                      &count) != KERN_SUCCESS) {
     fprintf(stderr, "Error: Failed to fetch vm statistics.\n");
     return -1;
   }
 
-  return (double) vm_stats.free_count * (double) vm_page_size;
+  return (double)vm_stats.free_count * (double)vm_page_size;
 }
 #else
 double GetFreeRAM() {
@@ -38,7 +39,7 @@ double GetFreeRAM() {
 
 double GetUsedDisk() {
   const std::filesystem::space_info si = std::filesystem::space("/");
-  return (1 - (double) si.free / si.capacity) * 100;
+  return (1 - (double)si.free / si.capacity) * 100;
 }
 
 #if __linux__
@@ -52,10 +53,10 @@ int GetDiskIO() {
       weighted_ms_spent_on_ios;
   std::string partition_name;
 
-  file >> disk_id >> partition_id >> partition_name >> reads_completed
-       >> reads_merged >> sectors_read >> ms_spent_reading >> writes_completed
-       >> writes_merged >> sectors_written >> ms_spent_writing
-       >> ios_in_progress >> ms_spent_on_ios >> weighted_ms_spent_on_ios;
+  file >> disk_id >> partition_id >> partition_name >> reads_completed >>
+      reads_merged >> sectors_read >> ms_spent_reading >> writes_completed >>
+      writes_merged >> sectors_written >> ms_spent_writing >> ios_in_progress >>
+      ms_spent_on_ios >> weighted_ms_spent_on_ios;
   file.close();
   io = reads_completed + writes_completed;
   if (old_io)
@@ -66,15 +67,12 @@ int GetDiskIO() {
 #elif __APPLE__
 int GetDiskIO() {
   int tps;
-  redi::ipstream
-      in("iostat | awk 'NR > 2 { print $2 + $5 }'");
+  redi::ipstream in("iostat | awk 'NR > 2 { print $2 + $5 }'");
   in >> tps;
   return tps;
 }
 #else
-int GetDiskIO() {
-  return 0;
-}
+int GetDiskIO() { return 0; }
 #endif
 
 std::string ram_total() {
@@ -104,7 +102,10 @@ std::string hard_ops() {
 
 std::string hard_throughput() {
   std::string output;
-  redi::ipstream ip("part=$(lsblk | head -n 2 | tail -n 1 | awk '{printf $1}'); dd if=/dev/$part of=/dev/null bs=1M count=100 2>&1 >/dev/null | tail -n 1 | awk \'{printf $10\" \" $11}\'");
+  redi::ipstream ip(
+      "part=$(lsblk | head -n 2 | tail -n 1 | awk '{printf $1}'); dd "
+      "if=/dev/$part of=/dev/null bs=1M count=100 2>&1 >/dev/null | tail -n 1 "
+      "| awk \'{printf $10\" \" $11}\'");
   std::getline(ip, output);
   return output;
 }

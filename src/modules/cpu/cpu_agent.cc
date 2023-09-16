@@ -19,12 +19,8 @@ std::vector<Metric> CPUAgent::GetMetrics() {
   return metrics;
 }
 
-std::string CPUAgent::GetAgentName() {
-  return "CPU agent name";
-}
+std::string CPUAgent::GetAgentName() { return "CPU agent name"; }
 
-std::string CPUAgent::GetAgentType() {
-  return "CPU agent type";
-}
+std::string CPUAgent::GetAgentType() { return "CPU agent type"; }
 
-}
+}  // namespace s21

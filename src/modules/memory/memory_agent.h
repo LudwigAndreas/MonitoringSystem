@@ -7,9 +7,7 @@
 namespace s21 {
 
 class MemoryAgent : public Agent {
-
  public:
-
   MemoryAgent();
   ~MemoryAgent();
 
@@ -18,6 +16,6 @@ class MemoryAgent : public Agent {
   std::string GetAgentType() override;
 };
 
-}
+}  // namespace s21
 
-#endif //MONITORINGSYSTEM_SRC_MODULES_MEMORY_MODULE_MEMORYAGENT_H_
+#endif

@@ -15,4 +15,4 @@ class MockMetricSubscriber : public s21::IMetricSubscriber {
   MOCK_METHOD(void, OnNewFileOpened, (const std::string& log_file));
 };
 
-#endif //MONITORINGSYSTEM_TEST_MOCK_CONFIG_MOCKMETRICSUBSCRIBER_H_
+#endif

@@ -8,13 +8,10 @@
 
 namespace s21 {
 
-MetricAnalyzer::MetricAnalyzer() : last_log_day_(-1) {
+MetricAnalyzer::MetricAnalyzer() : last_log_day_(-1) {}
 
-}
-
-MetricAnalyzer::MetricAnalyzer(diagnostic::LoggerPtr logger) : MetricAnalyzer(
-    "./logs/",
-    std::move(logger)) {}
+MetricAnalyzer::MetricAnalyzer(diagnostic::LoggerPtr logger)
+    : MetricAnalyzer("./logs/", std::move(logger)) {}
 
 MetricAnalyzer::MetricAnalyzer(std::string metric_output_dir,
                                diagnostic::LoggerPtr logger) {
@@ -28,9 +25,7 @@ MetricAnalyzer::MetricAnalyzer(std::string metric_output_dir,
   last_log_line.str("");
 }
 
-MetricAnalyzer::~MetricAnalyzer() {
-
-}
+MetricAnalyzer::~MetricAnalyzer() {}
 
 void MetricAnalyzer::Log(const MetricEvent &event) {
   CheckForNewDay(event.GetTimestamp());
@@ -44,9 +39,9 @@ void MetricAnalyzer::Log(const MetricEvent &event) {
 
   std::time_t timestamp = event.GetTimestamp();
   if (last_log_time_ < timestamp) {
-//    LOG_FATAL(logger_, std::endl);
-//    NotifyLineLogged("\n");
-//    last_log_line << std::endl;
+    //    LOG_FATAL(logger_, std::endl);
+    //    NotifyLineLogged("\n");
+    //    last_log_line << std::endl;
     last_log_time_ = timestamp;
     last_log_line.str("");
   }
@@ -62,8 +57,8 @@ void MetricAnalyzer::Log(const MetricEvent &event) {
   if (event.GetMetric()->GetArgs().empty()) {
     out << event.GetMetric()->GetName() + " : " + event.GetValue() + " | ";
   } else {
-    out << event.GetMetric()->GetName() + "<" + event.GetMetric()->GetArgs()
-        + ">" + " : " + event.GetValue() + " | ";
+    out << event.GetMetric()->GetName() + "<" + event.GetMetric()->GetArgs() +
+               ">" + " : " + event.GetValue() + " | ";
   }
 
   last_log_line << out.str();
@@ -101,26 +96,26 @@ void MetricAnalyzer::Subscribe(IMetricSubscriber *notifier) {
 }
 
 void MetricAnalyzer::Unsubscribe(IMetricSubscriber *notifier) {
-  notifiers_.erase(std::remove(notifiers_.begin(), notifiers_.end(),
-                               notifier), notifiers_.end());
+  notifiers_.erase(std::remove(notifiers_.begin(), notifiers_.end(), notifier),
+                   notifiers_.end());
 }
 
 void MetricAnalyzer::NotifyCriticalValueReached(const MetricEvent &event) {
-  for (auto notifier: notifiers_) {
+  for (auto notifier : notifiers_) {
     notifier->OnCriticalValueReached(event);
   }
 }
 
 void MetricAnalyzer::NotifyLineLogged(const std::string &line) {
-  for (auto notifier: notifiers_) {
+  for (auto notifier : notifiers_) {
     notifier->OnLineLogged(line);
   }
 }
 
 void MetricAnalyzer::NotifyNewFileOpened(const std::string &log_file) {
-  for (auto notifier: notifiers_) {
+  for (auto notifier : notifiers_) {
     notifier->OnNewFileOpened(log_file);
   }
 }
 
-}
+}  // namespace s21

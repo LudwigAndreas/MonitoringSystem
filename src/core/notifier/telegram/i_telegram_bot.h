@@ -3,9 +3,8 @@
 
 #include <functional>
 
-#include "tgbot/types/Message.h"
-
 #include "notifier/failed_metric.h"
+#include "tgbot/types/Message.h"
 
 namespace s21 {
 
@@ -16,6 +15,6 @@ public:
 	virtual bool LongPoll() = 0;
 };
 
-}
+}  // namespace s21
 
 #endif

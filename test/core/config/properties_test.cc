@@ -1,13 +1,13 @@
 //
 // Created by Ludwig Andreas on 14.09.2023.
 //
-#include "test.h"
+#include "config/properties.h"
 
 #include <filesystem>
-#include <iostream>
 #include <fstream>
+#include <iostream>
 
-#include "config/properties.h"
+#include "test.h"
 
 class PropertiesTest : public ::testing::Test {
  protected:
@@ -16,21 +16,18 @@ class PropertiesTest : public ::testing::Test {
     std::filesystem::path path_to_file(file_name);
     std::filesystem::remove_all(path_to_file);
 
-    std::ofstream outfile (file_name);
+    std::ofstream outfile(file_name);
     outfile.close();
-
   }
 
-  void TearDown() override {
-    std::filesystem::remove_all(file_name);
-  }
+  void TearDown() override { std::filesystem::remove_all(file_name); }
 
   std::string file_name = "test.properties";
   std::shared_ptr<s21::Properties> properties_;
 };
 
 TEST_F(PropertiesTest, LoadProperties) {
-  std::ofstream outfile (file_name);
+  std::ofstream outfile(file_name);
   outfile << "test1=test1\n";
   outfile << "test2=test2\n";
   outfile << "test3=test3\n";
@@ -44,7 +41,7 @@ TEST_F(PropertiesTest, LoadProperties) {
 }
 
 TEST_F(PropertiesTest, GetProperty) {
-  std::ofstream outfile (file_name);
+  std::ofstream outfile(file_name);
   outfile << "test1=test1\n";
   outfile << "test2=test2\n";
   outfile << "test3=test3\n";
@@ -80,7 +77,7 @@ TEST_F(PropertiesTest, SaveProperties) {
 }
 
 TEST_F(PropertiesTest, SaveWithContentProperties) {
-  std::ofstream outfile (file_name);
+  std::ofstream outfile(file_name);
   outfile << "test1=test1\n";
   outfile << "test2= \"test2\"\n";
   outfile << "test3= \"test3\n";
@@ -112,7 +109,7 @@ TEST_F(PropertiesTest, SaveWithContentProperties) {
 }
 
 TEST_F(PropertiesTest, GetNames) {
-  std::ofstream outfile (file_name);
+  std::ofstream outfile(file_name);
   outfile << "test1=test1\n";
   outfile << "test2=test2\n";
   outfile << "test3=test3\n";
@@ -140,7 +137,7 @@ TEST_F(PropertiesTest, ErrorHandling) {
   properties_->Save();
   EXPECT_FALSE(std::filesystem::exists("NotExistingFile"));
 
-  std::ofstream outfile (file_name);
+  std::ofstream outfile(file_name);
   outfile << "\"test1=test1\n";
   outfile << "test2\"=test2\n";
   outfile << "test3=\"test3\n";
@@ -158,12 +155,13 @@ TEST_F(PropertiesTest, ErrorHandling) {
 }
 
 TEST(AllArgsPropertiesTest, AllArgsConstructor) {
-  auto properties_ = std::make_shared<s21::Properties>(":=", "//", std::map<std::string, std::string>());
+  auto properties_ = std::make_shared<s21::Properties>(
+      ":=", "//", std::map<std::string, std::string>());
   std::string filename = "test.properties";
   std::filesystem::path path_to_file(filename);
   std::filesystem::remove_all(path_to_file);
 
-  std::ofstream outfile (filename);
+  std::ofstream outfile(filename);
   outfile << "test0:=\"\"\n";
   outfile << "\"test1:=test1\n";
   outfile << "test2\":=test2\n";
@@ -188,5 +186,4 @@ TEST(AllArgsPropertiesTest, AllArgsConstructor) {
   EXPECT_EQ(properties_->GetProperty("test8"), "test8");
   EXPECT_EQ(properties_->GetProperty("test9"), "=test9");
   EXPECT_EQ(properties_->GetProperty("test10"), ":=:=:=:=test10");
-
 }

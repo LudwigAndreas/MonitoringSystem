@@ -8,7 +8,6 @@
 #include "agent/agent_manager.h"
 
 class MockAgentManager : public s21::AgentManager {
-
   void StartMonitoring();
 
   void StopMonitoring();
@@ -21,7 +20,7 @@ class MockAgentManager : public s21::AgentManager {
 
   void Unsubscribe(IAgentSubscriber* subscriber);
 
-  void DeleteAgent(std::shared_ptr<AgentBundle> &agent);
+  void DeleteAgent(std::shared_ptr<AgentBundle>& agent);
 };
 
-#endif //MONITORINGSYSTEM_MOCKAGENTMANAGER_H_
+#endif

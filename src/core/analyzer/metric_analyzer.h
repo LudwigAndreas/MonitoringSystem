@@ -5,24 +5,21 @@
 #ifndef MONITORINGSYSTEM_SRC_CORE_METRICLOGGER_H_
 #define MONITORINGSYSTEM_SRC_CORE_METRICLOGGER_H_
 
-#include <string>
-#include <iostream>
 #include <fstream>
-
-#include "logger.h"
+#include <iostream>
+#include <string>
 
 #include "agent/agent_bundle.h"
-#include "metric/metric_event.h"
+#include "logger.h"
 #include "metric/i_metric_subscriber.h"
+#include "metric/metric_event.h"
 
 namespace s21 {
 
 namespace fs = std::filesystem;
 
 class MetricAnalyzer {
-
  public:
-
   /**
    * Creates a MetricAnalyzer that logs to the given directory.
    *
@@ -73,5 +70,5 @@ class MetricAnalyzer {
   void NotifyNewFileOpened(const std::string& log_file);
 };
 
-}
-#endif //MONITORINGSYSTEM_SRC_CORE_METRICLOGGER_H_
+}  // namespace s21
+#endif

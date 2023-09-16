@@ -5,7 +5,8 @@ int streams = 0;
 int GetURLAvailability(std::string url) {
   int exit_status;
   std::stringstream ss;
-  ss << std::fixed << "ping " << url << " -W 0.3 -qc 1 >/dev/null 2>&1; echo $?";
+  ss << std::fixed << "ping " << url
+     << " -W 0.3 -qc 1 >/dev/null 2>&1; echo $?";
   redi::ipstream in(ss.str());
   in >> exit_status;
   return (exit_status == 0);
@@ -14,13 +15,15 @@ int GetURLAvailability(std::string url) {
 #if __linux__
 uint64_t ReadThroughputLine(std::istream &is) {
   std::string interface_name;
-  uint64_t ibytes, ipackets, ierr, idrop, ififo, iframe, icompressed, imulticast,
-      obytes, opackets, oerr, odrop, ofifo, oframe, ocompressed, omulticast;
-  is >> interface_name >> ibytes >> ipackets >> ierr >> idrop >> ififo >> iframe >> icompressed >> imulticast >>
-              obytes >> opackets >> oerr >> odrop >> ofifo >> oframe >> ocompressed >> omulticast;
-//    LOG_DEBUG(interface_name << " IN - " << ibytes << "B : OUT - " << obytes << "B");
-  if (!is)
-    return (std::numeric_limits<uint64_t>::max());
+  uint64_t ibytes, ipackets, ierr, idrop, ififo, iframe, icompressed,
+      imulticast, obytes, opackets, oerr, odrop, ofifo, oframe, ocompressed,
+      omulticast;
+  is >> interface_name >> ibytes >> ipackets >> ierr >> idrop >> ififo >>
+      iframe >> icompressed >> imulticast >> obytes >> opackets >> oerr >>
+      odrop >> ofifo >> oframe >> ocompressed >> omulticast;
+  //    LOG_DEBUG(interface_name << " IN - " << ibytes << "B : OUT - " << obytes
+  //    << "B");
+  if (!is) return (std::numeric_limits<uint64_t>::max());
   return ibytes + obytes;
 }
 
@@ -33,12 +36,11 @@ double GetNetworkThroughput() {
   std::string tmp;
 
   io = 0;
-  std::getline(file, tmp); // Header line
-  std::getline(file, tmp); // Header line
+  std::getline(file, tmp);  // Header line
+  std::getline(file, tmp);  // Header line
   while (true) {
     protocol_io = ReadThroughputLine(file);
-    if (protocol_io == std::numeric_limits<uint64_t>::max())
-      break;
+    if (protocol_io == std::numeric_limits<uint64_t>::max()) break;
     io += protocol_io;
   }
   file.close();
@@ -51,7 +53,8 @@ double GetNetworkThroughput() {
 
 #elif __APPLE__
 
-bool getNetworkTraffic(const char* interfaceName, unsigned long long& bytesIn, unsigned long long& bytesOut) {
+bool getNetworkTraffic(const char* interfaceName, unsigned long long& bytesIn,
+                       unsigned long long& bytesOut) {
   struct ifaddrs* ifaddr;
   if (getifaddrs(&ifaddr) == -1) {
     std::cerr << "Error getting network interface information." << std::endl;
@@ -59,10 +62,10 @@ bool getNetworkTraffic(const char* interfaceName, unsigned long long& bytesIn, u
   }
 
   for (struct ifaddrs* ifa = ifaddr; ifa != nullptr; ifa = ifa->ifa_next) {
-    if (ifa->ifa_addr == nullptr || ifa->ifa_data == nullptr)
-      continue;
+    if (ifa->ifa_addr == nullptr || ifa->ifa_data == nullptr) continue;
 
-    if (ifa->ifa_addr->sa_family == AF_LINK && strcmp(ifa->ifa_name, interfaceName) == 0) {
+    if (ifa->ifa_addr->sa_family == AF_LINK &&
+        strcmp(ifa->ifa_name, interfaceName) == 0) {
       struct if_data* if_data = static_cast<struct if_data*>(ifa->ifa_data);
       bytesIn = if_data->ifi_ibytes;
       bytesOut = if_data->ifi_obytes;
@@ -85,8 +88,7 @@ double GetNetworkThroughput() {
   }
   io = 0;
   for (struct ifaddrs* ifa = ifaddr; ifa != nullptr; ifa = ifa->ifa_next) {
-    if (ifa->ifa_addr == nullptr || ifa->ifa_data == nullptr)
-      continue;
+    if (ifa->ifa_addr == nullptr || ifa->ifa_data == nullptr) continue;
 
     if (ifa->ifa_addr->sa_family == AF_LINK) {
       unsigned long long bytesIn = 0;
@@ -94,12 +96,14 @@ double GetNetworkThroughput() {
 
       if (getNetworkTraffic(ifa->ifa_name, bytesIn, bytesOut)) {
         // std::cout << "Interface: " << ifa->ifa_name << std::endl;
-        // std::cout << "Traffic Bytes In: " << bytesIn << " bytes" << std::endl;
-        // std::cout << "Traffic Bytes Out: " << bytesOut << " bytes" << std::endl;
+        // std::cout << "Traffic Bytes In: " << bytesIn << " bytes" <<
+        // std::endl; std::cout << "Traffic Bytes Out: " << bytesOut << " bytes"
+        // << std::endl;
         io += bytesIn;
         io += bytesOut;
       } else {
-        std::cerr << "Unable to get network traffic data for interface " << ifa->ifa_name << std::endl;
+        std::cerr << "Unable to get network traffic data for interface "
+                  << ifa->ifa_name << std::endl;
       }
     }
   }

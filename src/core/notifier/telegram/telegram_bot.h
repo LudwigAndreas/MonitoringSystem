@@ -2,16 +2,13 @@
 #define TELEGRAMBOT_H
 
 #include "i_telegram_bot.h"
-
+#include "logger.h"
 #include "tgbot/Bot.h"
 #include "tgbot/net/TgLongPoll.h"
-
-#include "logger.h"
 
 namespace s21 {
 
 class TelegramBot : public ITelegramBot {
-
   TgBot::Bot bot;
   TgBot::TgLongPoll poll;
   bool is_valid;
@@ -25,6 +22,6 @@ class TelegramBot : public ITelegramBot {
 
 };
 
-}
+}  // namespace s21
 
 #endif

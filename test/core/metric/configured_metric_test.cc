@@ -1,6 +1,7 @@
-#include "test.h"
 #include "metric/configured_metric.h"
+
 #include "metric/metric_critical_value.h"
+#include "test.h"
 
 using namespace s21;
 
@@ -14,7 +15,8 @@ class ConfiguredMetricTest : public ::testing::Test {
   void SetUp() override {
     // Initialize the ConfiguredMetric instance for testing
     // You can provide appropriate initial values as needed
-    metric = ConfiguredMetric("TestMetric", "arg1 arg2", MetricCriticalValue("==", 0), 60);
+    metric = ConfiguredMetric("TestMetric", "arg1 arg2",
+                              MetricCriticalValue("==", 0), 60);
   }
 
   void TearDown() override {

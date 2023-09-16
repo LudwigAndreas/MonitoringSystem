@@ -10,9 +10,7 @@
 namespace s21 {
 
 class IMetricSubscriber {
-
  public:
-
   virtual void OnCriticalValueReached(MetricEvent event) = 0;
 
   virtual void OnLineLogged(const std::string& line) = 0;
@@ -20,9 +18,8 @@ class IMetricSubscriber {
   virtual void OnNewFileOpened(const std::string& log_file) = 0;
 
   virtual ~IMetricSubscriber() = default;
-
 };
 
-}
+}  // namespace s21
 
-#endif //MONITORINGSYSTEM_IMETRICSUBSCRIBER_H_
+#endif

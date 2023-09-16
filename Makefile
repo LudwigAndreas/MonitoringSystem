@@ -24,9 +24,10 @@ DIST_FILES := $(SOURCE_DIR) $(TEST_DIR) $(DOXYFILE) CMakeLists.txt Makefile READ
 
 # Style
 CLANG_FORMAT := clang-format
-CPP_EXTENSIONS := cc cpp cxx c++ h hpp hxx h++ inc inl
-SRC_DIRS := $(SOURCE_DIR) $(TEST_DIR) third_party/LogLite third_party/libs21
-CPP_FILES := $(shell find $(SRC_DIRS) -type f -name "*.cc" -o -name "*.cpp" -o -name "*.cxx" -o -name "*.c" -o -name "*.h" -o -name "*.hpp" -o -name "*.hxx")
+CPP_EXTENSIONS := cpp cc cxx c++ h hpp hxx h++ inc inl
+SRC_DIRS := $(SOURCE_DIR) $(TEST_DIR) third_party/LogLite/src third_party/LogLite/include third_party/libs21/src
+CPP_FILES := $(shell find $(SRC_DIRS) -type f \( $(foreach ext,$(CPP_EXTENSIONS),-name "*.$(ext)" -o) -false \))
+
 
 .PHONY: all build test install uninstall dvi dist clean fclean gcov re bonus
 
@@ -67,7 +68,7 @@ dist: clean $(BUILD_DIR)/CMakeCache.txt
 check-style:
 	@cp $(CURRENT_DIR)/materials/linters/.clang-format .
 	@for file in $(CPP_FILES); do \
-	    $(CLANG_FORMAT) -n "$$file"; \
+	    $(CLANG_FORMAT) --ferror-limit=10 -n "$$file"; \
 	done
 	@rm ./.clang-format
 	@echo "Code style check complete."

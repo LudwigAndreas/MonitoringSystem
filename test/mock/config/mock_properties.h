@@ -8,12 +8,11 @@
 #include "config/properties.h"
 
 class MockProperties : public s21::Properties {
-  public:
-
-  MockProperties()
-      : Properties() {}
+ public:
+  MockProperties() : Properties() {}
   // Constructor that takes the same parameters as the real Properties class
-  MockProperties(const std::string& separator, const std::string& comment_symb, const std::map<std::string, std::string>& properties)
+  MockProperties(const std::string& separator, const std::string& comment_symb,
+                 const std::map<std::string, std::string>& properties)
       : Properties(separator, comment_symb, properties) {}
 
   // Mock the Load method
@@ -32,4 +31,4 @@ class MockProperties : public s21::Properties {
   MOCK_METHOD(std::set<std::string>, StringPropertyNames, ());
 };
 
-#endif //MONITORINGSYSTEM_MOCKPROPERTIES_H_
+#endif

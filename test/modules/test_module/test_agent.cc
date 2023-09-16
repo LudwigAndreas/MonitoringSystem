@@ -20,12 +20,8 @@ std::vector<Metric> TestAgent::GetMetrics() {
   return metrics;
 }
 
-std::string TestAgent::GetAgentName() {
-  return "test agent name";
-}
+std::string TestAgent::GetAgentName() { return "test agent name"; }
 
-std::string TestAgent::GetAgentType() {
-  return "test agent type";
-}
+std::string TestAgent::GetAgentType() { return "test agent type"; }
 
-}
+}  // namespace s21

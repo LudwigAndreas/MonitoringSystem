@@ -19,4 +19,4 @@ class MockAgent : public s21::Agent {
   MOCK_METHOD(std::string, GetAgentType, (), (override));
 };
 
-#endif //MONITORINGSYSTEM_MOCKAGENT_H_
+#endif

@@ -4,8 +4,9 @@ namespace s21 {
 
 TelegramBot::TelegramBot(std::string token) : bot(token), poll(bot), is_valid(true) {}
 
-void TelegramBot::OnStart(const std::function<void(const TgBot::Message::Ptr)> &action) {
-	bot.getEvents().onCommand("start", action);
+void TelegramBot::OnStart(
+    const std::function<void(const TgBot::Message::Ptr)>& action) {
+  bot.getEvents().onCommand("start", action);
 }
 
 void TelegramBot::SendMessage(const std::string& chat_id, const std::string& message) {
@@ -31,4 +32,4 @@ bool TelegramBot::LongPoll() {
 	return is_valid;
 }
 
-}
+}  // namespace s21

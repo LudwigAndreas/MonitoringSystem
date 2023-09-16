@@ -5,8 +5,8 @@
 #ifndef MONITORINGSYSTEM_SRC_CORE_METRIC_METRICCRITICALVALUE_H_
 #define MONITORINGSYSTEM_SRC_CORE_METRIC_METRICCRITICALVALUE_H_
 
-#include <string>
 #include <cstring>
+#include <string>
 
 namespace s21 {
 
@@ -14,7 +14,8 @@ class MetricCriticalValue {
  public:
   MetricCriticalValue() = default;
 
-  MetricCriticalValue(const std::string &condition_operator, double critical_value);
+  MetricCriticalValue(const std::string &condition_operator,
+                      double critical_value);
 
   MetricCriticalValue(std::string critical_value);
   bool IsCritical(double value) const;
@@ -36,6 +37,6 @@ class MetricCriticalValue {
   double critical_value_;
 };
 
-}
+}  // namespace s21
 
-#endif //MONITORINGSYSTEM_SRC_CORE_METRIC_METRICCRITICALVALUE_H_
+#endif

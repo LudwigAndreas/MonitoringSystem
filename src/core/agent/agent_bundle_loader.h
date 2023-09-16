@@ -12,9 +12,7 @@ namespace s21 {
 namespace fs = std::filesystem;
 
 class AgentBundleLoader {
-
  public:
-
   /**
    * Loads an agent bundle from a given path.
    *
@@ -22,16 +20,19 @@ class AgentBundleLoader {
    *
    * @return std::shared_ptr of AgentBundle on success and nullptr on failure
    * */
-  static std::shared_ptr<AgentBundle> LoadAgentBundle(const std::filesystem::path &agent_path);
+  static std::shared_ptr<AgentBundle> LoadAgentBundle(
+      const std::filesystem::path& agent_path);
 
-  static std::shared_ptr<AgentBundle> UpdateAgentBundle(const std::filesystem::path &agent_path, const std::shared_ptr<AgentBundle>& agent_bundle);
+  static std::shared_ptr<AgentBundle> UpdateAgentBundle(
+      const std::filesystem::path& agent_path,
+      const std::shared_ptr<AgentBundle>& agent_bundle);
 
  private:
-
   /**
    * A helper method for getting an agent object from a dynamic library.
    *
-   * @param lib pointer to an open dynamic library that has a lib_entry_point method
+   * @param lib pointer to an open dynamic library that has a lib_entry_point
+   * method
    *
    * @return std::shared_ptr of Agent on success and nullptr on failure
    * */
@@ -44,8 +45,8 @@ class AgentBundleLoader {
    *
    * @return std::shared_ptr of Properties on success and nullptr on failure
    * */
-  static std::shared_ptr<s21::Properties> LoadProperties(const std::filesystem::path& properties_path);
-
+  static std::shared_ptr<s21::Properties> LoadProperties(
+      const std::filesystem::path& properties_path);
 
   /**
    * A helper method for finding the library in the bundle.
@@ -56,13 +57,12 @@ class AgentBundleLoader {
    * */
   static std::string FindLibraryInBundle(const fs::path& bundlePath);
 
-
   const std::string agent_extension_ = ".agent";
   static const std::string lib_extension_;
   static const std::string lib_entry_point_;
   static const std::string agent_properties_path_;
 };
 
-}
+}  // namespace s21
 
-#endif //MONITORINGSYSTEM_SRC_CORE_AGENT_AGENTBUNDLELOADER_H_
+#endif
