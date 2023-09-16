@@ -44,9 +44,9 @@ void MetricAnalyzer::Log(const MetricEvent &event) {
 
   std::time_t timestamp = event.GetTimestamp();
   if (last_log_time_ < timestamp) {
-    LOG_FATAL(logger_, std::endl);
-    NotifyLineLogged("\n");
-    last_log_line << std::endl;
+//    LOG_FATAL(logger_, std::endl);
+//    NotifyLineLogged("\n");
+//    last_log_line << std::endl;
     last_log_time_ = timestamp;
     last_log_line.str("");
   }
@@ -54,7 +54,7 @@ void MetricAnalyzer::Log(const MetricEvent &event) {
   std::stringstream out;
   if (last_log_line.str().empty()) {
     auto local_time = std::localtime(&timestamp);
-    last_log_line << "[";
+    last_log_line << std::endl << "[";
     last_log_line << std::put_time(local_time, "%H:%M:%S");
     last_log_line << "] | ";
     out << last_log_line.str();

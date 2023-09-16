@@ -45,8 +45,14 @@ MainWindow::~MainWindow() {
 }
 
 void MainWindow::update_monitor_log_view() {
-  if (log_file_path_.isEmpty() || !log_file_ || !log_file_->isOpen()) {
-    return;
+  if (!log_file_ || !log_file_->isOpen()) {
+    if (log_file_path_.isEmpty())
+      return;
+    log_file_ = new QFile(log_file_path_);
+    if (!log_file_->open(QIODevice::ReadOnly | QIODevice::Text)) {
+      log_file_ = nullptr;
+      return;
+    }
   }
 
   log_file_->seek(last_read_pos_);
@@ -54,11 +60,15 @@ void MainWindow::update_monitor_log_view() {
   QTextStream in = QTextStream(log_file_);
   QString new_text = in.readAll();
 
-  ui->monitor_log_view->moveCursor(QTextCursor::End);
+  if (!ui->monitor_log_view->textCursor().atEnd()) {
+    ui->monitor_log_view->moveCursor(QTextCursor::End);
+  }
   ui->monitor_log_view->insertPlainText(new_text);
 
   last_read_pos_ += new_text.size();
-  ui->monitor_log_view->moveCursor(QTextCursor::End);
+  if (!ui->monitor_log_view->textCursor().atEnd()) {
+    ui->monitor_log_view->moveCursor(QTextCursor::End);
+  }
 }
 
 void MainWindow::on_agent_list_widget_itemClicked(QListWidgetItem *item) {
@@ -330,14 +340,20 @@ void MainWindow::on_pushButton_clicked() {
 }
 
 
-void MainWindow::on_save_email_push_button_clicked()
-{
-
+void MainWindow::on_save_email_push_button_clicked() {
+  controller_->SetEmailSender(ui->email_address_value->text().toStdString());
 }
 
 
-void MainWindow::on_save_telegram_push_button_clicked()
-{
+void MainWindow::on_save_telegram_push_button_clicked() {
+  controller_->SetTelegramSender(ui->telegram_username_value->text().toStdString());
+}
 
+
+void MainWindow::on_main_tab_widget_currentChanged(int index) {
+  if (index == 3) {
+    ui->telegram_username_value->setText(QString::fromStdString(controller_->GetTelegramSender()));
+    ui->email_address_value->setText(QString::fromStdString(controller_->GetEmailSender()));
+  }
 }
 

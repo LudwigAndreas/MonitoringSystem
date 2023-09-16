@@ -218,15 +218,15 @@ void App::ConfigureCore() {
   auto telegram_users = Properties();
   telegram_users.Load("config/telegram.properties");
   TelegramSenderPtr telegram = std::make_shared<TelegramSender>(
-    std::make_shared<TelegramBot>("5426071766:AAG3rchPUG-V6gswM3-tPGVDjnG5hVgmBdw"),
+    std::make_shared<TelegramBot>(properties_->GetProperty("telegram.token")),
     std::make_shared<TelegramUserRepository>(telegram_users)
   );
   telegram->AddReceiver("kdancy");
   telegram->AddReceiver("Ludwig_Andreas");
   EmailSenderPtr email = std::make_shared<EmailSender>(
-    "andrew02541632@gmail.com",
-    "mzgonnorlsctjzfn",
-    "smtp://smtp.gmail.com:587"
+    properties_->GetProperty("email.mail"),
+    properties_->GetProperty("email.password"),
+    properties_->GetProperty("email.server")
   );
   email->AddReceiver("kalininandrey727@gmail.com");
   email->AddReceiver("andreyk2107@mail.ru");

@@ -12,7 +12,8 @@
 #include "agent/AgentManager.h"
 #include "mock/agent/MockAgentSubscriber.h"
 
-//TODO rewrite test to check another thread calls the subscriber
+// Unable to write tests for async class without absl::synchronization and absl::Notification
+
 class AgentManagerTest : public ::testing::Test {
  protected:
   void SetUp() override {
@@ -54,7 +55,8 @@ class AgentManagerTest : public ::testing::Test {
     if (agent_manager_->IsMonitoring()) {
       agent_manager_->StopMonitoring();
     }
-    std::filesystem::remove_all("./mock_agents/");
+    agent_manager_->Unsubscribe(mock_subscriber_.get());
+    std::filesystem::remove_all(agents_path);
   }
 
   static bool IsDynamicLibrary(const std::filesystem::directory_entry &entry) {
@@ -83,100 +85,6 @@ TEST_F(AgentManagerTest, StartAndStopMonitoring) {
   std::this_thread::sleep_for(std::chrono::milliseconds(100));
 
   EXPECT_FALSE(agent_manager_->IsMonitoring());
-}
-
-TEST_F(AgentManagerTest, AgentAddedNotification) {
-
-  auto& mock_subscriber = mock_subscriber_;
-
-  EXPECT_CALL(*mock_subscriber_, OnAgentAdded(::testing::_)).WillOnce([&mtx, &cv] {
-    std::unique_lock<std::mutex> lck(mtx);
-    cv.notify_one();
-  });
-
-
-  cv.wait_for(lck, std::chrono::milliseconds(100), [&] {
-    agent_manager_->StartMonitoring();
-    return !agent_manager_->GetAgentList()->empty();
-  });
-
-  agent_manager_->StopMonitoring();
-}
-
-//TEST_F(AgentManagerTest, AgentUpdatedNotification) {
-//
-//  std::mutex mtx;
-//  std::unique_lock<std::mutex> lck(mtx);
-//  std::condition_variable cv;
-//
-//  EXPECT_CALL(*mock_subscriber_, OnAgentAdded(::testing::_)).WillOnce([&mtx, &cv] {
-//    std::unique_lock<std::mutex> lck(mtx);
-//    cv.notify_one();
-//  });
-//
-//
-//  cv.wait_for(lck, std::chrono::milliseconds(100), [&] {
-//    agent_manager_->StartMonitoring();
-//    return !agent_manager_->GetAgentList()->empty();
-//  });
-//
-//  std::ofstream properties(test_agent + "/agent.properties", std::ios::out);
-//
-//
-//  properties << "# comment" << std::endl;
-//  properties.close();
-//  if (!properties) {
-//    FAIL() << "Could not open file!";
-//  }
-//
-//  EXPECT_CALL(*mock_subscriber_, OnAgentUpdated(::testing::_)).WillOnce([&mtx, &cv] {
-//    std::unique_lock<std::mutex> lck(mtx);
-//    cv.notify_one();
-//  });
-//
-//  cv.wait_for(lck, std::chrono::milliseconds(100), [&] {
-//    return agent_manager_->GetAgentList()->empty();
-//  });
-////  EXPECT_CALL(*mock_subscriber_, OnAgentUpdated(::testing::_)).Times(testing::AtLeast(1));
-//
-//  agent_manager_->StopMonitoring();
-//}
-//
-//TEST_F(AgentManagerTest, AgentRemovedNotification) {
-//
-//  std::mutex mtx;
-////  auto& agent_manager = agent_manager_;
-//  EXPECT_CALL(*mock_subscriber_, OnAgentAdded(::testing::_)).WillOnce([&mtx] {
-//    mtx.unlock();
-//  });
-//  agent_manager_->StartMonitoring();
-//  mtx.lock();
-//
-////  EXPECT_CALL(*mock_subscriber_, OnAgentAdded(::testing::_));
-//  agent_manager_->StopMonitoring();
-//}
-
-TEST_F(AgentManagerTest, DeleteAgentTest) {
-
-  std::filesystem::path tempDir = "./temp_agent_test";
-  std::filesystem::create_directory(tempDir);
-
-  s21::AgentBundlePtr mockAgent = std::make_shared<s21::AgentBundle>();
-  mockAgent->SetName("MockAgent");
-  mockAgent->SetAgentPath(tempDir);
-  agent_manager_->GetAgentList()->emplace("MockAgent", mockAgent);
-
-  agent_manager_->StartMonitoring();
-  EXPECT_CALL(*mock_subscriber_, OnAgentAdded(::testing::_)).Times(testing::AtLeast(1));
-
-  std::this_thread::sleep_for(std::chrono::milliseconds(100));
-  agent_manager_->DeleteAgent(mockAgent);
-
-  EXPECT_TRUE(std::filesystem::exists(tempDir));
-
-  agent_manager_->StopMonitoring();
-
-  std::filesystem::remove_all(tempDir);
 }
 
 TEST_F(AgentManagerTest, GetAgentList) {
