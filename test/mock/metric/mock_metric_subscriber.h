@@ -5,8 +5,8 @@
 #ifndef MONITORINGSYSTEM_TEST_MOCK_CONFIG_MOCKMETRICSUBSCRIBER_H_
 #define MONITORINGSYSTEM_TEST_MOCK_CONFIG_MOCKMETRICSUBSCRIBER_H_
 
-#include "metric/imetric_subscriber.h"
 #include "test.h"
+#include "metric/i_metric_subscriber.h"
 
 class MockMetricSubscriber : public s21::IMetricSubscriber {
  public:

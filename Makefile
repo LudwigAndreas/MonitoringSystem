@@ -36,6 +36,7 @@ all: build
 
 build: $(BUILD_DIR)/CMakeCache.txt
 	@$(MAKE) -C $(BUILD_DIR) $(TARGET)
+	@cd bin
 	@echo "Build complete. Run './$(BIN_DIR)/$(TARGET)' to execute."
 
 $(BUILD_DIR)/CMakeCache.txt:
@@ -55,13 +56,14 @@ uninstall: $(BUILD_DIR)/CMakeCache.txt
 
 dvi: $(BUILD_DIR)/CMakeCache.txt
 	@$(DOXYGEN) $(DOXYFILE)
+	@echo "Build complete. Open html/index.html to read documentation."
 
 dist: clean $(BUILD_DIR)/CMakeCache.txt
 	@mkdir -p $(DIST_DIR)
 	@cp -r $(DIST_FILES) $(DIST_DIR)/
 	@tar -czvf $(BUILD_DIR)/$(TARGET)-$(shell date +%Y%m%d).tar.gz $(DIST_DIR)
 	@rm -rf $(DIST_DIR)
-	@echo "Build complete. Run 'tar -xzvf $(BUILD_DIR)/$(TARGET)-$(shell date +%Y%m%d).tar.gz' to execute."
+	@echo "Build complete. Run 'tar -xzvf $(BUILD_DIR)/$(TARGET)-$(shell date +%Y%m%d).tar.gz' to unpack."
 
 check-style:
 	@cp $(CURRENT_DIR)/materials/linters/.clang-format .
@@ -99,6 +101,7 @@ gcov: test
 	genhtml coverage.info --output-directory $(COVERAGE_DIR)
 	open $(COVERAGE_DIR)/index.html
 
-leaks:
+leaks: all
+	valgrind --leak-check=full --show-leak-kinds=all --track-origins=yes --verbose --log-file=valgrind-out.txt $(BIN_DIR)/$(TARGET)-unittests --gui
 
 re: fclean all

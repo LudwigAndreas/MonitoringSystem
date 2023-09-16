@@ -124,15 +124,7 @@ App::App(int &argc, char **argv)
     std::exit(0);
   }
 
-  if (gui_) {
-    InitGui();
-  } else if (interactive_) {
-    InteractiveMain();
-    std::exit(0);
-  } else {
-    ConsoleMain();
-    std::exit(0);
-  }
+  InitGui();
 }
 
 App::~App() {}
@@ -165,7 +157,7 @@ void App::ConfigureCore() {
                 << properties_->GetProperty("email.server") << " ")
 
   auto telegram_users = Properties();
-  telegram_users.Load("config/telegram.properties");
+  telegram_users.Load(properties_->GetProperty("app.telegram_properties", "telegram.properties"));
   telegram_ = std::make_shared<TelegramSender>(
       std::make_shared<TelegramBot>(properties_->GetProperty("telegram.token")),
       std::make_shared<TelegramUserRepository>(telegram_users));

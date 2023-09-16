@@ -70,4 +70,4 @@ class App : public QApplication {
 
 }  // namespace s21
 
-#endifMONITORINGSYSTEM_SRC_CORE_APP_H_
+#endif

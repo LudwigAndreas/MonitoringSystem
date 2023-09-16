@@ -41,4 +41,4 @@ class Properties {
 
 }  // namespace s21
 
-#endifMONITORINGSYSTEM_SRC_CORE_CONFIG_PROPERTIES_H_
+#endif

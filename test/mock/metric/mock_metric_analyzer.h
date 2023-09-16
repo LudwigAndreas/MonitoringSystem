@@ -6,8 +6,8 @@
 #define MONITORINGSYSTEM_TEST_MOCK_METRIC_MOCKMETRICANALYZER_H_
 
 #include "analyzer/metric_analyzer.h"
-#include "metric/imetric_subscriber.h"
 #include "test.h"
+#include "metric/i_metric_subscriber.h"
 
 class MockMetricAnalyzer : public s21::MetricAnalyzer {
  public:

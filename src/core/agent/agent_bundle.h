@@ -126,4 +126,4 @@ class AgentBundle {
 
 }  // namespace s21
 
-#endifMONITORINGSYSTEM_SRC_CORE_AGENT_BUNDLE_H_
+#endif

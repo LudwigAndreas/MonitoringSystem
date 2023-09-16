@@ -45,9 +45,9 @@ class Metric {
   Metric(std::string name,
          std::function<std::string(std::string)> metric_func_args);
 
-  Metric(const Metric &metric);
+  // Metric(const Metric &metric);
 
-  Metric(Metric &metric) = default;
+  Metric(const Metric &metric) = default;
 
   Metric() = default;
   virtual ~Metric() = default;
@@ -55,4 +55,4 @@ class Metric {
 
 }  // namespace s21
 
-#endifMONITORINGSYSTEM_SRC_MODULES_DUMB_MODULE_METRICS_H_
+#endif
