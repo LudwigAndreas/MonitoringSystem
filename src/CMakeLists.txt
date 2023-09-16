@@ -143,7 +143,11 @@ ADD_DEPENDENCIES(${project_BIN} LogLite)
 
 ADD_SUBDIRECTORY(modules)
 
-ADD_DEPENDENCIES(${project_BIN} BonusModule CpuModule MemoryModule NetworkModule)
+ADD_CUSTOM_TARGET(agents ALL
+#    COMMAND ${CMAKE_COMMAND} -E copy_directory
+#    $<TARGET_FILE_DIR:${project_BIN}>/agents ${CMAKE_CURRENT_SOURCE_DIR}/agents
+    DEPENDS BonusModule CpuModule MemoryModule NetworkModule
+    )
 
 TARGET_LINK_OPTIONS(${project_BIN} PRIVATE -rdynamic)
 
