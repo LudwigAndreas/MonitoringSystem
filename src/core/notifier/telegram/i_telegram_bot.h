@@ -13,7 +13,7 @@ class ITelegramBot {
 public:
 	virtual void OnStart(const std::function<void(const TgBot::Message::Ptr)> &) = 0;
 	virtual void SendMessage(const std::string& chat_id, const std::string& message) = 0;
-	virtual void LongPoll() = 0;
+	virtual bool LongPoll() = 0;
 };
 
 }

@@ -14,13 +14,14 @@ class TelegramBot : public ITelegramBot {
 
   TgBot::Bot bot;
   TgBot::TgLongPoll poll;
+  bool is_valid;
 
  public:
   TelegramBot(std::string token);
   virtual ~TelegramBot() = default;
   virtual void OnStart(const std::function<void(const TgBot::Message::Ptr)> &) override;
   virtual void SendMessage(const std::string &chat_id, const std::string &message) override;
-  virtual void LongPoll() override;
+  virtual bool LongPoll() override;
 
 };
 

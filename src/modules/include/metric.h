@@ -44,9 +44,9 @@ class Metric {
 
   Metric(std::string name, std::function<std::string(std::string)> metric_func_args);
 
-  Metric(const Metric &metric);
+  // Metric(const Metric &metric);
 
-  Metric(Metric &metric) = default;
+  Metric(const Metric &metric) = default;
 
   Metric() = default;
   virtual ~Metric() = default;

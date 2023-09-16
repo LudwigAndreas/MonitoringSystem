@@ -20,10 +20,10 @@ Metric::Metric(std::string name,
     metric_func_ = nullptr;
 }
 
-Metric::Metric(const Metric &metric) {
-  name_ = metric.name_;
-  metric_func_ = metric.metric_func_;
-  metric_func_args_ = metric.metric_func_args_;
-}
+// Metric::Metric(const Metric &metric) {
+//   name_ = metric.name_;
+//   metric_func_ = metric.metric_func_;
+//   metric_func_args_ = metric.metric_func_args_;
+// }
 
 }

@@ -151,7 +151,7 @@ void App::ReadProperties() {
 void App::ConfigureCore() {
   ReadProperties();
   std::string agents_folder = properties_->GetProperty("app.agents_folder", "../agents/");
-  std::string logs_folder = properties_->GetProperty("app.agents_folder", "../logs/");
+  std::string logs_folder = properties_->GetProperty("app.log_folder", "../logs/");
 
   mainwindow_ = std::make_shared<MainWindow>(agents_folder);
   size_t update_time = std::stoll(properties_->GetProperty("app.monitor.update_interval_s", "30"));
@@ -164,7 +164,7 @@ void App::ConfigureCore() {
   )
 
   auto telegram_users = Properties();
-  telegram_users.Load("config/telegram.properties");
+  telegram_users.Load(properties_->GetProperty("app.telegram_properties", "telegram.properties"));
   telegram_ = std::make_shared<TelegramSender>(
       std::make_shared<TelegramBot>(properties_->GetProperty("telegram.token")),
       std::make_shared<TelegramUserRepository>(telegram_users)

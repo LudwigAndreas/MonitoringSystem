@@ -6,7 +6,7 @@
 #define MONITORINGSYSTEM_TEST_MOCK_CONFIG_MOCKMETRICSUBSCRIBER_H_
 
 #include "test.h"
-#include "metric/imetric_subscriber.h"
+#include "metric/i_metric_subscriber.h"
 
 class MockMetricSubscriber : public s21::IMetricSubscriber {
  public:

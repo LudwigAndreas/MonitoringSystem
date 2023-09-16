@@ -7,7 +7,7 @@
 
 #include "test.h"
 #include "analyzer/metric_analyzer.h"
-#include "metric/imetric_subscriber.h"
+#include "metric/i_metric_subscriber.h"
 
 class MockMetricAnalyzer : public s21::MetricAnalyzer {
   public:

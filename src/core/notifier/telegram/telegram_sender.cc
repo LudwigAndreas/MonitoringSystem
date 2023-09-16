@@ -71,9 +71,7 @@ void s21::TelegramSender::StartPolling() {
 }
 
 void s21::TelegramSender::StopPolling() {
-  if (is_polling_running) {
-    is_polling_running = false;
-  }
+  is_polling_running = false;
   if (polling_thread && polling_thread->joinable()) {
     polling_thread->join();
     polling_thread.reset();
@@ -158,7 +156,9 @@ void s21::TelegramSender::PollingFunctionCheck() {
 void s21::TelegramSender::PollingFunction() {
   while (is_polling_running) {
     LOG_DEBUG(s21::diagnostic::Logger::getRootLogger(), "Still polling");
-    bot->LongPoll();
-    is_polling_running = PollingCheck();
+    if (bot->LongPoll() && is_polling_running)
+      is_polling_running = PollingCheck();
+    else
+      is_polling_running = false;
   }
 }
