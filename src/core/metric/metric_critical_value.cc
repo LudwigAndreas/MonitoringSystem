@@ -25,7 +25,7 @@ MetricCriticalValue::MetricCriticalValue(std::string critical_value) {
         critical_value_ =
             std::stod(critical_value.substr(critical_value.find(op) + strlen(op)));
       } catch (std::exception &e) {
-        LOG_ERROR(diagnostic::Logger::getRootLogger(),
+        LOG_DEBUG(diagnostic::Logger::getRootLogger(),
                   "Critical value is not a number: "
                       + critical_value.substr(critical_value.find(op) + strlen(op)));
         critical_value_ = 0.;
@@ -35,7 +35,7 @@ MetricCriticalValue::MetricCriticalValue(std::string critical_value) {
     }
   }
   if (!is_set) {
-    LOG_ERROR(diagnostic::Logger::getRootLogger(),
+    LOG_DEBUG(diagnostic::Logger::getRootLogger(),
               "Critical value contains syntax error: " + critical_value);
     critical_value_ = 0.;
     condition_operator_ = "";

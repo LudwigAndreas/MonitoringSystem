@@ -92,16 +92,19 @@ void AgentManager::MonitorAgentsDirectory() {
 
 
       for (const auto &agent: *agent_list_) {
-        time_t last_modif = agent.second->GetLastModified();
-        std::shared_ptr<AgentBundle> agent_bundle =
-            AgentBundleLoader::UpdateAgentBundle(agent.first, agent.second);
-        if (agent_bundle->GetLastModified() != last_modif) {
-          LOG_INFO(app_logger_, "Dynamic library updated: " << agent_bundle->GetAgentPath());
-          NotifyAgentUpdated(agent_bundle);
-        } else if (agent_bundle == nullptr) {
-          LOG_INFO(app_logger_, "Dynamic library removed: " << agent_bundle->GetAgentPath());
-          NotifyAgentRemoved(agent.second);
-          agent_list_->erase(agent.first);
+        if (agent.second.get()) {
+          time_t last_modif = agent.second->GetLastModified();
+          std::shared_ptr<AgentBundle> agent_bundle =
+              AgentBundleLoader::UpdateAgentBundle(agent.first, agent.second);
+          
+          if (agent_bundle == nullptr) {
+            LOG_INFO(app_logger_, "Dynamic library removed: " << agent_bundle->GetAgentPath());
+            NotifyAgentRemoved(agent.second);
+            agent_list_->erase(agent.first);
+          } else if (agent_bundle.get() && agent_bundle->GetLastModified() != last_modif) {
+            LOG_INFO(app_logger_, "Dynamic library updated: " << agent_bundle->GetAgentPath());
+            NotifyAgentUpdated(agent_bundle);
+          }
         }
       }
 

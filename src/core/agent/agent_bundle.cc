@@ -14,6 +14,7 @@ AgentBundle::AgentBundle() {
   properties_ = nullptr;
   agent_path_ = "";
   configured_metrics_ = new std::vector<ConfiguredMetricPtr>();
+  last_modified_ = 0;
 }
 
 AgentBundle::AgentBundle(const AgentPtr &agent,
@@ -24,6 +25,7 @@ AgentBundle::AgentBundle(const AgentPtr &agent,
   properties_ = properties;
   agent_path_ = agent_path;
   configured_metrics_ = new std::vector<ConfiguredMetricPtr>();
+  last_modified_ = 0;
   for (const Metric &metric: agent->GetMetrics()) {
     configured_metrics_->emplace_back(std::make_shared<ConfiguredMetric>(metric));
   }

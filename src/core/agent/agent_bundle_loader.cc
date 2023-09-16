@@ -84,7 +84,7 @@ std::shared_ptr<AgentBundle> AgentBundleLoader::LoadAgentBundle(const std::files
                    << agent->GetAgentType()
                    << "\"");
       struct stat fileStat;
-      time_t last_modified;
+      time_t last_modified = 0;
 
       if (stat(absolute_path.c_str(), &fileStat) == 0) {
           last_modified = fileStat.st_mtime;

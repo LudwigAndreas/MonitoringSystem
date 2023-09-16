@@ -150,8 +150,8 @@ void App::ReadProperties() {
 
 void App::ConfigureCore() {
   ReadProperties();
-  std::string agents_folder = properties_->GetProperty("app.agents_folder", "../agents/");
-  std::string logs_folder = properties_->GetProperty("app.log_folder", "../logs/");
+  std::string agents_folder = properties_->GetProperty("app.agents_folder", "../agents");
+  std::string logs_folder = properties_->GetProperty("app.log_folder", "../logs");
 
   mainwindow_ = std::make_shared<MainWindow>(agents_folder);
   size_t update_time = std::stoll(properties_->GetProperty("app.monitor.update_interval_s", "30"));

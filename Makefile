@@ -100,7 +100,7 @@ gcov: test
 	genhtml coverage.info --output-directory $(COVERAGE_DIR)
 	open $(COVERAGE_DIR)/index.html
 
-leaks: all
+leaks: test
 	valgrind --leak-check=full --show-leak-kinds=all --track-origins=yes --verbose --log-file=valgrind-out.txt $(BIN_DIR)/$(TARGET)-unittests --gui
 
 re: fclean all
