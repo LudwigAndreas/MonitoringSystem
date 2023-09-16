@@ -24,9 +24,9 @@ DIST_FILES := $(SOURCE_DIR) $(TEST_DIR) $(DOXYFILE) CMakeLists.txt Makefile READ
 
 # Style
 CLANG_FORMAT := clang-format
-CPP_EXTENSIONS := cpp cc cxx c++ h hpp hxx h++ inc inl
+CPP_EXTENSIONS := cc cpp cxx c++ h hpp hxx h++ inc inl
 SRC_DIRS := $(SOURCE_DIR) $(TEST_DIR) third_party/LogLite third_party/libs21
-CPP_FILES := $(shell find $(SRC_DIRS) -type f -name "*.$(CPP_EXTENSIONS)")
+CPP_FILES := $(shell find $(SRC_DIRS) -type f -name "*.cc" -o -name "*.cpp" -o -name "*.cxx" -o -name "*.c" -o -name "*.h" -o -name "*.hpp" -o -name "*.hxx")
 
 .PHONY: all build test install uninstall dvi dist clean fclean gcov re bonus
 
@@ -35,6 +35,7 @@ all: build
 
 build: $(BUILD_DIR)/CMakeCache.txt
 	@$(MAKE) -C $(BUILD_DIR) $(TARGET)
+	@cd bin
 	@echo "Build complete. Run './$(BIN_DIR)/$(TARGET)' to execute."
 
 $(BUILD_DIR)/CMakeCache.txt:
@@ -54,16 +55,14 @@ uninstall: $(BUILD_DIR)/CMakeCache.txt
 
 dvi: $(BUILD_DIR)/CMakeCache.txt
 	@$(DOXYGEN) $(DOXYFILE)
-	@cd latex && $(MAKE) dvi
-	@cd latex && mv refman.dvi ../your_documentation.dvi
-	@echo "Build complete. Run 'xdvi $(BUILD_DIR)/doc/latex/refman.dvi' to execute."
+	@echo "Build complete. Open html/index.html to read documentation."
 
 dist: clean $(BUILD_DIR)/CMakeCache.txt
 	@mkdir -p $(DIST_DIR)
 	@cp -r $(DIST_FILES) $(DIST_DIR)/
 	@tar -czvf $(BUILD_DIR)/$(TARGET)-$(shell date +%Y%m%d).tar.gz $(DIST_DIR)
 	@rm -rf $(DIST_DIR)
-	@echo "Build complete. Run 'tar -xzvf $(BUILD_DIR)/$(TARGET)-$(shell date +%Y%m%d).tar.gz' to execute."
+	@echo "Build complete. Run 'tar -xzvf $(BUILD_DIR)/$(TARGET)-$(shell date +%Y%m%d).tar.gz' to unpack."
 
 check-style:
 	@cp $(CURRENT_DIR)/materials/linters/.clang-format .
@@ -101,6 +100,7 @@ gcov: test
 	genhtml coverage.info --output-directory $(COVERAGE_DIR)
 	open $(COVERAGE_DIR)/index.html
 
-leaks:
+leaks: all
+	valgrind --leak-check=full --show-leak-kinds=all --track-origins=yes --verbose --log-file=valgrind-out.txt $(BIN_DIR)/$(TARGET)-unittests --gui
 
 re: fclean all
