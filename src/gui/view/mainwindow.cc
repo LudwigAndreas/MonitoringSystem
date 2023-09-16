@@ -15,7 +15,7 @@
 #include "metric/metric_critical_value.h"
 
 MainWindow::MainWindow(std::string &agents_folder, QWidget *parent)
-    : QMainWindow(parent), ui(new Ui::MainWindow) , log_file_(nullptr) {
+    : QMainWindow(parent), ui(new Ui::MainWindow), log_file_(nullptr) {
   ui->setupUi(this);
 
   connect(ui->actionAdd_Agent,
@@ -264,11 +264,11 @@ void MainWindow::SetController(std::shared_ptr<s21::MainController> &controller)
 }
 
 void MainWindow::AddAgentAction() {
-    QString agent_folder_path = QFileDialog::getExistingDirectory(this,
-                                                             tr("Select agent folder"),
-                                                             agents_folder_,
-                                                             QFileDialog::ShowDirsOnly
-                                                                 | QFileDialog::DontResolveSymlinks);
+  QString agent_folder_path = QFileDialog::getExistingDirectory(this,
+                                                                tr("Select agent folder"),
+                                                                agents_folder_,
+                                                                QFileDialog::ShowDirsOnly
+                                                                    | QFileDialog::DontResolveSymlinks);
 
   if (!agent_folder_path.isEmpty()) {
     QString target_folder = agents_folder_;
@@ -284,7 +284,7 @@ void MainWindow::AddAgentAction() {
     QString agent_folder_name = QFileInfo(agent_folder_path).fileName();
     QString destination_path = target_folder + "/" + agent_folder_name;
 
-    if (QFile::copy(agent_folder_path, destination_path)) {
+    if (CopyDirecory(agent_folder_path, destination_path)) {
       QMessageBox::information(this,
                                "Success",
                                "Agent folder added successfully.");
@@ -293,6 +293,33 @@ void MainWindow::AddAgentAction() {
     }
   }
 
+}
+
+bool MainWindow::CopyDirecory(const QString &from, const QString &to) {
+  QDir sourceDir(from);
+  QDir destinationDir(to);
+
+  if (!destinationDir.exists()) {
+    destinationDir.mkpath(".");
+  }
+  bool result = true;
+
+  QStringList fileList = sourceDir.entryList(QDir::Files | QDir::Dirs | QDir::NoDotAndDotDot | QDir::Hidden);
+  for (const QString &fileName: fileList) {
+    QString srcFilePath = from + QDir::separator() + fileName;
+    QString destFilePath = to + QDir::separator() + fileName;
+
+    if (QFileInfo(srcFilePath).isDir()) {
+      result += CopyDirecory(srcFilePath, destFilePath);
+    } else {
+      if (QFile::copy(srcFilePath, destFilePath)) {
+        result += true;
+      } else {
+        result += false;
+      }
+    }
+  }
+  return result;
 }
 
 void MainWindow::on_add_agent_button_clicked() {
@@ -341,16 +368,13 @@ void MainWindow::on_pushButton_clicked() {
   }
 }
 
-
 void MainWindow::on_save_email_push_button_clicked() {
   controller_->SetEmailSender(ui->email_address_value->text().toStdString());
 }
 
-
 void MainWindow::on_save_telegram_push_button_clicked() {
   controller_->SetTelegramSender(ui->telegram_username_value->text().toStdString());
 }
-
 
 void MainWindow::on_main_tab_widget_currentChanged(int index) {
   if (index == 3) {

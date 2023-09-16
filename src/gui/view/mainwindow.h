@@ -54,6 +54,7 @@ class MainWindow : public QMainWindow {
   void ShowMetricDetails(std::shared_ptr<s21::ConfiguredMetric> &metric);
   void ClearAgentDetails();
   void ClearMetricDetails();
+  bool CopyDirecory(const QString &from, const QString &to);
 
   Ui::MainWindow *ui;
   QTimer *log_timer_;
