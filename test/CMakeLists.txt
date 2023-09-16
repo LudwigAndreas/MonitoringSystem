@@ -13,76 +13,81 @@ SET(OBJECT_DIR ${CMAKE_BINARY_DIR}/CMakeFiles/${test_BIN}.dir/src)
 MESSAGE("-- Object directory: ${OBJECT_DIR}")
 
 set(PROJECT_SOURCES
-    ../src/modules/include/Metric.cc
-    ../src/modules/include/Metric.h
-    ../src/modules/include/Agent.h
-    ../src/core/config/Properties.cc
-    ../src/core/config/Properties.h
-    ../src/core/agent/AgentManager.cc
-    ../src/core/agent/AgentManager.h
+    ../src/modules/include/metric.cc
+    ../src/modules/include/metric.h
+    ../src/modules/include/agent.h
+    ../src/core/config/properties.cc
+    ../src/core/config/properties.h
+    ../src/core/agent/agent_manager.cc
+    ../src/core/agent/agent_manager.h
     ../src/core/agent/agent_bundle.cc
     ../src/core/agent/agent_bundle.h
-    ../src/core/agent/AgentBundleLoader.cc
-    ../src/core/agent/AgentBundleLoader.h
-    ../src/core/metric/ConfiguredMetric.cc
-    ../src/core/metric/ConfiguredMetric.h
-    ../src/core/metric/MetricCriticalValue.cc
-    ../src/core/metric/MetricCriticalValue.h
-    ../src/core/metric/MetricEvent.cc
-    ../src/core/metric/MetricEvent.h
-    ../src/core/core/Core.h
-    ../src/core/core/Core.cc
-    ../src/core/executor/AgentScheduler.cc
-    ../src/core/executor/AgentScheduler.h
-    ../src/core/analyzer/MetricAnalyzer.cc
-    ../src/core/analyzer/MetricAnalyzer.h
-    ../src/core/agent/IAgentSubscriber.h
-    ../src/core/executor/AgentExecutor.cc
-    ../src/core/executor/AgentExecutor.h
-    ../src/core/metric/IMetricSubscriber.h
-#    ../src/core/notifier/FailedMetric.h
-#    ../src/core/notifier/IMessageSender.h
-#    ../src/core/notifier/IMessageSender.cc
-#    ../src/core/notifier/email/EmailSender.cc
-#    ../src/core/notifier/email/EmailSender.h
-#    ../src/core/notifier/email/Email.cc
-#    ../src/core/notifier/email/Email.h
-#    ../src/core/notifier/telegram/TelegramSender.cc
-#    ../src/core/notifier/telegram/TelegramSender.h
-#    ../src/core/notifier/telegram/TelegramUserRepository.cc
-#    ../src/core/notifier/telegram/TelegramUserRepository.h
-#    ../src/core/notifier/email/EmailAddress.cc
-#    ../src/core/notifier/email/EmailAddress.h
-#    ../src/core/notifier/email/Email.h
-#    ../src/core/notifier/email/Email.cc
-#    ../src/core/notifier/NotificationController.cc
-#    ../src/core/notifier/NotificationController.h
-    core/agent/AgentManagerTest.cc mock/agent/MockAgentSubscriber.h mock/agent/MockAgentManager.h core/agent/AgentBundleTest.cc mock/agent/MockAgent.h mock/config/MockProperties.h
-    core/agent/AgentBundleLoaderTest.cc
-    core/analyzer/MetricAnalyzerTest.cc
-    core/config/PropertiesTest.cc
-    core/core/CoreTest.cc
-    core/executor/AgentExecutorTest.cc
-    core/executor/AgentSchedulerTest.cc
-    core/metric/MetricCriticalValueTest.cc
-    core/metric/MetricEventTest.cc
+    ../src/core/agent/agent_bundle_loader.cc
+    ../src/core/agent/agent_bundle_loader.h
+    ../src/core/metric/configured_metric.cc
+    ../src/core/metric/configured_metric.h
+    ../src/core/metric/metric_critical_value.cc
+    ../src/core/metric/metric_critical_value.h
+    ../src/core/metric/metric_event.cc
+    ../src/core/metric/metric_event.h
+    ../src/core/core/core.h
+    ../src/core/core/core.cc
+    ../src/core/executor/agent_scheduler.cc
+    ../src/core/executor/agent_scheduler.h
+    ../src/core/analyzer/metric_analyzer.cc
+    ../src/core/analyzer/metric_analyzer.h
+    ../src/core/agent/i_agent_subscriber.h
+    ../src/core/executor/agent_executor.cc
+    ../src/core/executor/agent_executor.h
+    ../src/core/metric/i_metric_subscriber.h
+#    ../src/core/notifier/failed_metric.h
+#    ../src/core/notifier/imessage_sender.h
+#    ../src/core/notifier/imessage_sender.cc
+#    ../src/core/notifier/email/email_sender.cc
+#    ../src/core/notifier/email/email_sender.h
+#    ../src/core/notifier/email/email.cc
+#    ../src/core/notifier/email/email.h
+#    ../src/core/notifier/telegram/telegram_sender.cc
+#    ../src/core/notifier/telegram/telegram_sender.h
+#    ../src/core/notifier/telegram/telegram_user_repository.cc
+#    ../src/core/notifier/telegram/telegram_user_repository.h
+#    ../src/core/notifier/email/email_address.cc
+#    ../src/core/notifier/email/email_address.h
+#    ../src/core/notifier/email/email.h
+#    ../src/core/notifier/email/email.cc
+#    ../src/core/notifier/notification_controller.cc
+#    ../src/core/notifier/notification_controller.h
+    core/agent/agent_manager_test.cc
+    mock/agent/mock_agent_subscriber.h
+    mock/agent/mock_agent_manager.h
+    core/agent/agent_bundle_test.cc
+    mock/agent/mock_agent.h
+    mock/config/mock_properties.h
+    core/agent/agent_bundle_loader_test.cc
+    core/analyzer/metric_analyzer_test.cc
+    core/config/properties_test.cc
+    core/core/core_test.cc
+    core/executor/agent_executor_test.cc
+    core/executor/agent_scheduler_test.cc
+    core/metric/metric_critical_value_test.cc
+    core/metric/metric_event_test.cc
 
     modules/test_module/test_funcs.cc
     modules/test_module/test_funcs.h
-    modules/test_module/TestAgent.cc
-    modules/test_module/TestAgent.h
+    modules/test_module/test_agent.cc
+    modules/test_module/test_agent.h
     modules/test_module/agent_factory.cc
-    mock/metric/MockMetricSubscriber.h
-    mock/metric/MockMetricAnalyzer.h
+    mock/metric/mock_metric_subscriber.h
+    mock/metric/mock_metric_analyzer.h
 )
 
 ADD_EXECUTABLE(${test_BIN}
     main.cc
-#    core/notifier/email/EmailAddress.cc
-#    core/notifier/telegram/TelegramUserRepository.cc
-#    core/notifier/FailedMetric.cc
+#    core/notifier/email/email_address.cc
+#    core/notifier/telegram/telegram_user_repository.cc
+#    core/notifier/failed_metric.cc
 
-    core/metric/ConfiguredMetricTest.cc
+    core/metric/configured_metric_test.cc
     ${PROJECT_SOURCES}
     )
 
@@ -90,12 +95,12 @@ TARGET_LINK_LIBRARIES(${test_BIN} PRIVATE ${test_LIBS})
 
 TARGET_INCLUDE_DIRECTORIES(${test_BIN} PRIVATE . ${GTest_INCLUDE_DIRS} )
 
-ADD_SUBDIRECTORY(modules/test_module)
-
 ADD_CUSTOM_COMMAND(TARGET ${test_BIN} PRE_BUILD
     COMMAND rm -f ${OBJECT_DIR}/*.gcno
     COMMAND rm -f ${OBJECT_DIR}/*.gcda
 )
+
+ADD_SUBDIRECTORY(modules/test_module)
 
 ADD_CUSTOM_TARGET(init
     COMMAND ${CMAKE_MAKE_PROGRAM} clean
@@ -104,4 +109,5 @@ ADD_CUSTOM_TARGET(init
     WORKING_DIRECTORY ${CMAKE_BINARY_DIR}
 )
 
+ADD_DEPENDENCIES(${test_BIN} TestModule)
 ADD_CUSTOM_TARGET(test "${MAINFOLDER}/bin/${test_BIN}" DEPENDS ${test_BIN} COMMENT "Executing unit tests..." VERBATIM SOURCES ${test_SRCS} ${PROJECT_SOURCES})

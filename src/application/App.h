@@ -9,12 +9,12 @@
 #include <QApplication>
 #include <QMainWindow>
 
-#include "Logger.h"
+#include "logger.h"
 
 #include "../gui/view/mainwindow.h"
-#include "core/Core.h"
-#include "../gui/controller/MainController.h"
-#include "notifier/NotificationController.h"
+#include "core/core.h"
+#include "../gui/controller/main_controller.h"
+#include "notifier/notification_controller.h"
 
 namespace s21 {
 
@@ -49,14 +49,9 @@ class App : public QApplication {
   void printVersionMessage();
   void printVersionTripletMessage();
   void printApplicationIdentifier();
-  void setPreference(const std::string& key, const std::string& val);
-  void unsetPreference(const std::string& key);
-  void printPreference(const std::string& key)const;
-  void printAllPreferences()const;
   void setLogLevel(const std::string& logger, const std::string& level);
   std::string getKeyName(const std::string& key)const;
   std::string getKeyRepr(const std::string& key)const;
-  std::string convert(const std::string& str)const;
   static diagnostic::LoggerPtr getLogger();
 
 

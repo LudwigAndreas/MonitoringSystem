@@ -5,8 +5,8 @@
 #ifndef MONITORINGSYSTEM_SRC_MODULES_TEST_MODULE_AGENT_FACTORY_CC_
 #define MONITORINGSYSTEM_SRC_MODULES_TEST_MODULE_AGENT_FACTORY_CC_
 
-#include "modules/include/Agent.h"
-#include "TestAgent.h"
+#include "modules/include/agent.h"
+#include "test_agent.h"
 
 extern "C" {
 s21::Agent* get_agent(void) {

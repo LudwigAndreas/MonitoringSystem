@@ -8,7 +8,7 @@
 #include <vector>
 #include <string>
 
-#include "Metric.h"
+#include "metric.h"
 
 namespace s21 {
 

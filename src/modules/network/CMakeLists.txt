@@ -7,14 +7,14 @@ SET (project_BIN NetworkModule)
 INCLUDE_DIRECTORIES(${MAINFOLDER}/include)
 
 ADD_LIBRARY(${project_BIN} SHARED
-    ../include/Agent.h
-    ../include/Metric.h
-    NetworkAgent.cc
-    NetworkAgent.h
+    ../include/agent.h
+    ../include/metric.h
+    network_agent.cc
+    network_agent.h
     agent_factory.cc
     network.cc
     network.h
-    ../include/Metric.cc)
+    ../include/metric.cc)
 
 TARGET_LINK_OPTIONS(${project_BIN} PRIVATE
     --std=c++17 -fPIC -rdynamic -shared)

@@ -8,7 +8,8 @@
 #include <random>
 #include <curl/curl.h>
 
-#include "EmailAddress.h"
+#include "email_address.h"
+#include "logger.h"
 
 namespace s21 {
 

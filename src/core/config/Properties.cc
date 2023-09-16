@@ -2,14 +2,14 @@
 // Created by Ludwig Andreas on 23.08.2023.
 //
 
-#include "Properties.h"
+#include "properties.h"
 
 #include <utility>
 #include <fstream>
 #include <sstream>
 #include <filesystem>
 
-#include "Logger.h"
+#include "logger.h"
 
 namespace s21 {
 

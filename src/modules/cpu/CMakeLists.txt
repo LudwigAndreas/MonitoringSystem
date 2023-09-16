@@ -2,19 +2,19 @@
 SET (project_MOC_HEADERS ${MAINFOLDER}/include)
 
 SET (project_LIBS)
-SET (project_BIN CPUModule)
+SET (project_BIN CpuModule)
 
 INCLUDE_DIRECTORIES(${MAINFOLDER}/include)
 
 ADD_LIBRARY(${project_BIN} SHARED
-    ../include/Agent.h
-    ../include/Metric.h
-    CPUAgent.cc
-    CPUAgent.h
+    ../include/agent.h
+    ../include/metric.h
+    cpu_agent.cc
+    cpu_agent.h
     agent_factory.cc
     cpu.cc
     cpu.h
-    ../include/Metric.cc)
+    ../include/metric.cc)
 
 TARGET_LINK_OPTIONS(${project_BIN} PRIVATE
     --std=c++17 -fPIC -rdynamic -shared)

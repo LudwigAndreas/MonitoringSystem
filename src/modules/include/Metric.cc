@@ -2,7 +2,7 @@
 // Created by Ludwig Andreas on 31.07.2023.
 //
 
-#include "Metric.h"
+#include "metric.h"
 
 namespace s21 {
 

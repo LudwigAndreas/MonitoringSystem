@@ -7,12 +7,12 @@
 
 #include <string>
 
-#include "Logger.h"
-#include "modules/include/Agent.h"
-#include "core/agent/AgentManager.h"
-#include "core/executor/AgentScheduler.h"
-#include "core/executor/AgentExecutor.h"
-#include "core/analyzer/MetricAnalyzer.h"
+#include "logger.h"
+#include "modules/include/agent.h"
+#include "core/agent/agent_manager.h"
+#include "core/executor/agent_scheduler.h"
+#include "core/executor/agent_executor.h"
+#include "core/analyzer/metric_analyzer.h"
 
 namespace s21::monitor {
 

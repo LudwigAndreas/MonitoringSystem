@@ -6,57 +6,61 @@ set(TS_FILES gui/MonitoringSystem_en_US.ts)
 
 set(PROJECT_SOURCES
     application/main.cc
-    application/App.h
-    application/App.cc
-    modules/include/Metric.cc
-    modules/include/Metric.h
-    modules/include/Agent.h
-    core/config/Properties.cc
-    core/config/Properties.h
-    core/agent/AgentManager.cc
-    core/agent/AgentManager.h
+    application/app.h
+    application/app.cc
+    modules/include/metric.cc
+    modules/include/metric.h
+    modules/include/agent.h
+    core/config/properties.cc
+    core/config/properties.h
+    core/agent/agent_manager.cc
+    core/agent/agent_manager.h
     core/agent/agent_bundle.cc
     core/agent/agent_bundle.h
-    core/agent/AgentBundleLoader.cc
-    core/agent/AgentBundleLoader.h
-    core/metric/ConfiguredMetric.cc
-    core/metric/ConfiguredMetric.h
-    core/metric/MetricCriticalValue.cc
-    core/metric/MetricCriticalValue.h
-    core/metric/MetricEvent.cc
-    core/metric/MetricEvent.h
-    core/core/Core.h
-    core/core/Core.cc
-    core/executor/AgentScheduler.cc
-    core/executor/AgentScheduler.h
-    core/analyzer/MetricAnalyzer.cc
-    core/analyzer/MetricAnalyzer.h
-    core/agent/IAgentSubscriber.h
-    core/executor/AgentExecutor.cc
-    core/executor/AgentExecutor.h
-    core/metric/IMetricSubscriber.h
-    core/notifier/FailedMetric.h
-    core/notifier/IMessageSender.h
-    core/notifier/IMessageSender.cc
-    core/notifier/email/EmailSender.cc
-    core/notifier/email/EmailSender.h
-    core/notifier/email/Email.cc
-    core/notifier/email/Email.h
-    core/notifier/telegram/TelegramSender.cc
-    core/notifier/telegram/TelegramSender.h
-    core/notifier/telegram/TelegramUserRepository.cc
-    core/notifier/telegram/TelegramUserRepository.h
-    core/notifier/email/EmailAddress.cc
-    core/notifier/email/EmailAddress.h
-    core/notifier/email/Email.h
-    core/notifier/email/Email.cc
-    gui/view/mainwindow.cpp
+    core/agent/agent_bundle_loader.cc
+    core/agent/agent_bundle_loader.h
+    core/metric/configured_metric.cc
+    core/metric/configured_metric.h
+    core/metric/metric_critical_value.cc
+    core/metric/metric_critical_value.h
+    core/metric/metric_event.cc
+    core/metric/metric_event.h
+    core/core/core.h
+    core/core/core.cc
+    core/executor/agent_scheduler.cc
+    core/executor/agent_scheduler.h
+    core/analyzer/metric_analyzer.cc
+    core/analyzer/metric_analyzer.h
+    core/agent/i_agent_subscriber.h
+    core/executor/agent_executor.cc
+    core/executor/agent_executor.h
+    core/metric/i_metric_subscriber.h
+    core/notifier/failed_metric.h
+    core/notifier/i_message_sender.h
+    core/notifier/i_message_sender.cc
+    core/notifier/email/email_sender.cc
+    core/notifier/email/email_sender.h
+    core/notifier/email/email_address.cc
+    core/notifier/email/email.cc
+    core/notifier/email/email.h
+    core/notifier/telegram/telegram_bot.cc
+    core/notifier/telegram/telegram_sender.cc
+    core/notifier/telegram/telegram_sender.h
+    core/notifier/telegram/telegram_user_repository.cc
+    core/notifier/telegram/telegram_user_repository.h
+    core/notifier/email/email_address.cc
+    core/notifier/email/email_address.h
+    core/notifier/email/email.h
+    core/notifier/email/email.cc
+    gui/view/mainwindow.cc
     gui/view/mainwindow.h
     gui/view/mainwindow.ui
     ${TS_FILES}
-    gui/controller/MainController.cc
-    gui/controller/MainController.h
-    core/notifier/NotificationController.cc core/notifier/NotificationController.h)
+    gui/controller/main_controller.cc
+    gui/controller/main_controller.h
+    core/notifier/notification_controller.cc
+    core/notifier/notification_controller.h
+)
 
 if(${QT_VERSION_MAJOR} GREATER_EQUAL 6)
   qt_add_executable(${PROJECT_NAME}
@@ -138,6 +142,8 @@ SET (project_BIN ${PROJECT_NAME})
 ADD_DEPENDENCIES(${project_BIN} LogLite)
 
 ADD_SUBDIRECTORY(modules)
+
+ADD_DEPENDENCIES(${project_BIN} BonusModule CpuModule MemoryModule NetworkModule)
 
 TARGET_LINK_OPTIONS(${project_BIN} PRIVATE -rdynamic)
 

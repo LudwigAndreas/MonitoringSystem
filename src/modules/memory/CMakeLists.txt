@@ -7,14 +7,14 @@ SET (project_BIN MemoryModule)
 INCLUDE_DIRECTORIES(${MAINFOLDER}/include)
 
 ADD_LIBRARY(${project_BIN} SHARED
-    ../include/Agent.h
-    ../include/Metric.h
-    MemoryAgent.cc
-    MemoryAgent.h
+    ../include/agent.h
+    ../include/metric.h
+    memory_agent.cc
+    memory_agent.h
     agent_factory.cc
     memory.cc
     memory.h
-    ../include/Metric.cc)
+    ../include/metric.cc)
 
 TARGET_LINK_OPTIONS(${project_BIN} PRIVATE
     --std=c++17 -fPIC -rdynamic -shared)

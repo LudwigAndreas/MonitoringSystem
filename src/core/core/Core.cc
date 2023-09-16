@@ -2,7 +2,7 @@
 // Created by Ludwig Andreas on 30.07.2023.
 //
 
-#include "Core.h"
+#include "core.h"
 
 #include <utility>
 #include <fstream>

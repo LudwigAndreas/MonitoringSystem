@@ -2,16 +2,16 @@
 // Created by Ludwig Andreas on 31.07.2023.
 //
 
-#include "App.h"
+#include "app.h"
 
 #include <iostream>
 #include <string>
 #include <QTranslator>
 
 #include "appinfo.h"
-#include "notifier/email/EmailSender.h"
-#include "notifier/telegram/TelegramSender.h"
-#include "config/Properties.h"
+#include "notifier/email/email_sender.h"
+#include "notifier/telegram/telegram_sender.h"
+#include "config/properties.h"
 
 namespace s21 {
 
@@ -67,64 +67,6 @@ App::App(int &argc, char **argv) : QApplication(argc, argv),
     } else if (matches_option(arg, "version", 0)) {
       printVersionMessage();
       std::exit(0);
-    } else if (matches_option(arg, "version-triplet")) {
-      printVersionTripletMessage();
-      std::exit(0);
-    } else if (matches_option(arg, "prefset")) {
-      if ((idx + 1) >= argc) {
-        LOG_FATAL(getLogger(), "Option \"" << arg << "\" requires a parameter");
-        std::exit(1);
-      }
-
-      // Increment the index
-      idx++;
-
-      // Get the next parameter
-      std::string param(argv[idx]);
-
-      // Determine if there is an equals sign
-      // If there is, set the preference;
-      // Otherwise, remove the preference
-      size_t eqidx = param.find('=');
-      if (eqidx != std::string::npos) {
-        std::string key = param.substr(0, eqidx);
-        std::string value = param.substr(eqidx + 1);
-        setPreference(key, value);
-      } else {
-        unsetPreference(param);
-      }
-      done = true;
-    } else if (matches_option(arg, "prefdel")) {
-      // Verify that there another argument
-      if ((idx + 1) >= argc) {
-        LOG_FATAL(getLogger(), "Option \"" << arg << "\" requires a parameter");
-        std::exit(1);
-      }
-
-      // Increment the index
-      idx++;
-
-      // Get the next parameter
-      std::string param(argv[idx]);
-      unsetPreference(param);
-      done = true;
-    } else if (matches_option(arg, "preflist")) {
-      printAllPreferences();
-      done = true;
-    } else if (matches_option(arg, "prefget")) {
-      // Verify that there another argument
-      if ((idx + 1) >= argc) {
-        LOG_FATAL(getLogger(), "Option \"" << arg << "\" requires a parameter");
-        std::exit(1);
-      }
-
-      // Increment the index
-      idx++;
-
-      // Get the next parameter
-      std::string param(argv[idx]);
-      printPreference(param);
-      done = true;
     } else if (matches_option(arg, "loglevel")) {
       // Verify that there another argument
       if ((idx + 1) >= argc) {
@@ -132,11 +74,11 @@ App::App(int &argc, char **argv) : QApplication(argc, argv),
         std::exit(1);
       }
 
-      // Increment the index
-      idx++;
+        // Increment the index
+        idx++;
 
-      // Get the next parameter
-      std::string param(argv[idx]);
+        // Get the next parameter
+        std::string param(argv[idx]);
 
       size_t eqidx = param.find('=');
       if (eqidx != std::string::npos) {
@@ -215,8 +157,23 @@ void App::ConfigureCore() {
   size_t update_time = std::stoll(properties_->GetProperty("app.monitor.update_interval_s", "30"));
   core_ = std::make_shared<monitor::Core>(agents_folder, logs_folder, update_time);
 
-  telegram_ = std::make_shared<TelegramSender>("5426071766:AAG3rchPUG-V6gswM3-tPGVDjnG5hVgmBdw");
-  email_ = std::make_shared<EmailSender>("andrew02541632@gmail.com", "mzgonnorlsctjzfn", "smtp://smtp.gmail.com:587");
+  LOG_DEBUG(getLogger(), properties_->GetProperty("telegram.token") << " "
+                                                                    << properties_->GetProperty("email.mail") << " "
+                                                                    << properties_->GetProperty("email.password") << " "
+                                                                    << properties_->GetProperty("email.server") << " "
+  )
+
+  auto telegram_users = Properties();
+  telegram_users.Load("config/telegram.properties");
+  telegram_ = std::make_shared<TelegramSender>(
+      std::make_shared<TelegramBot>(properties_->GetProperty("telegram.token")),
+      std::make_shared<TelegramUserRepository>(telegram_users)
+  );
+  email_ = std::make_shared<EmailSender>(
+      properties_->GetProperty("email.mail"),
+      properties_->GetProperty("email.password"),
+      properties_->GetProperty("email.server")
+  );
   notification_controller_ = std::make_shared<NotificationController>();
   notification_controller_->AddNotifier(telegram_);
   notification_controller_->AddNotifier(email_);
@@ -225,7 +182,6 @@ void App::ConfigureCore() {
 
 void App::InitGui() {
   ConfigureCore();
-
 
   maincontroller_ = std::make_shared<MainController>(mainwindow_, core_);
   mainwindow_->SetController(maincontroller_);
@@ -296,14 +252,12 @@ App::printHelpMessage() {
       << "    --interactive                Run in interactive commandline mode."
       << std::endl;
   std::cout << "Log Levels:" << std::endl;
-//  std::cout << "    all" << std::endl;
   std::cout << "    trace" << std::endl;
   std::cout << "    debug" << std::endl;
   std::cout << "    info" << std::endl;
   std::cout << "    warn" << std::endl;
   std::cout << "    error" << std::endl;
   std::cout << "    fatal" << std::endl;
-//  std::cout << "    off" << std::endl;
 }
 
 void App::printVersionMessage() {
@@ -384,58 +338,6 @@ std::string App::getKeyRepr(const std::string &key) const {
   return result;
 }
 
-void App::setPreference(const std::string &key, const std::string &val) {
-  (void) key;
-  (void) val;
-//  QSettings settings;
-//  std::string keyrep(getKeyRepr(key));
-//  QString qkeyrep(keyrep.c_str());
-//  QString qval(keyrep.c_str());
-//  settings.setValue(qkeyrep, qval);
-//  settings.sync();
-}
-
-void App::unsetPreference(const std::string &key) {
-  (void) key;
-//  QSettings settings;
-//  std::string keyrep(getKeyRepr(key));
-//  QString qkeyrep(keyrep.c_str());
-//  settings.beginGroup(keyrep);
-//  if ((settings.childGroups.length() != 0) || (settings.childKeys().length() != 0)) {
-//    settings.setValue("", "");
-//  } else {
-//    settings.remove("");
-//  }
-//  settings.endGroup();
-//  settings.sync();
-}
-
-void App::printPreference(const std::string &key) const {
-  (void) key;
-//  QSettings settings;
-//  std::string keyrep(getKeyRepr(key));
-//  QString qkeyrep(keyrep.c_str());
-//  QString result = "undefined";
-//  if (settings.contains(qkeyrep)) {
-//    result = settings.value(qkeyrep, QString("undefined")).toString();
-//  }
-// std::cout << result << std::endl;
-}
-
-void App::printAllPreferences() const {
-//  QSettings settings;
-//  QStringList keys = settings.allKeys();
-//  for ( QStringList::const_iterator it = keys.begin(); it != keys.end(); ++it ){
-//    QString qkeystr = *it;
-//    QString qvalstr = settings.value(qkeystr).toString();
-//
-//    if ( ! qvalstr.isEmpty() ){
-//      std::string key=getKeyName(convert(qkeystr));
-//      std::cout << key << "=" << qvalstr << std::endl;
-//    }
-//  }
-}
-
 void
 App::setLogLevel(const std::string &logger, const std::string &level) {
   diagnostic::LoggerPtr loggerptr =
@@ -446,9 +348,6 @@ App::setLogLevel(const std::string &logger, const std::string &level) {
     lowercaselevel[i] = std::tolower(lowercaselevel[i]);
   }
 
-//  if ( lowercaselevel == "all" ){
-//    loggerptr->SetLevel(diagnostic::LogLevel::All);
-//  }else
   if (lowercaselevel == "trace") {
     loggerptr->SetLevel(diagnostic::LogLevel::Trace);
   } else if (lowercaselevel == "debug") {
@@ -461,8 +360,6 @@ App::setLogLevel(const std::string &logger, const std::string &level) {
     loggerptr->SetLevel(diagnostic::LogLevel::Error);
   } else if (lowercaselevel == "fatal") {
     loggerptr->SetLevel(diagnostic::LogLevel::Fatal);
-//  }else if ( (lowercaselevel == "off")  || (lowercaselevel == "none") ){
-//    loggerptr->SetLevel(diagnostic::LogLevel::Off);
   } else {
     LOG_FATAL(getLogger(), "Unrecognized logging level: \"" << level << "\".");
     std::exit(1);
@@ -471,7 +368,6 @@ App::setLogLevel(const std::string &logger, const std::string &level) {
 
 App *App::s_instance_ = nullptr;
 
-//auto App::s_logger_ = diagnostic::Logger::getLogger("myApp");
 diagnostic::LoggerPtr App::getLogger() {
   static diagnostic::LoggerPtr
       s_logger_ = diagnostic::Logger::getLogger("RootLogger");

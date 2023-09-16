@@ -103,5 +103,8 @@ std::string hard_ops() {
 }
 
 std::string hard_throughput() {
-  return "";
+  std::string output;
+  redi::ipstream ip("part=$(lsblk | head -n 2 | tail -n 1 | awk '{printf $1}'); dd if=/dev/$part of=/dev/null bs=1M count=100 2>&1 >/dev/null | tail -n 1 | awk \'{printf $10\" \" $11}\'");
+  std::getline(ip, output);
+  return output;
 }

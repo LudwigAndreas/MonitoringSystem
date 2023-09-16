@@ -19,6 +19,15 @@ TARGET := MonitoringSystem
 DOXYFILE = Doxyfile
 DOXYGEN := doxygen
 
+# Distribution files
+DIST_FILES := $(SOURCE_DIR) $(TEST_DIR) $(DOXYFILE) CMakeLists.txt Makefile README.md
+
+# Style
+CLANG_FORMAT := clang-format
+CPP_EXTENSIONS := cpp cc cxx c++ h hpp hxx h++ inc inl
+SRC_DIRS := $(SOURCE_DIR) $(TEST_DIR) third_party/LogLite third_party/libs21
+CPP_FILES := $(shell find $(SRC_DIRS) -type f -name "*.$(CPP_EXTENSIONS)")
+
 .PHONY: all build test install uninstall dvi dist clean fclean gcov re bonus
 
 # Build rules
@@ -33,6 +42,7 @@ $(BUILD_DIR)/CMakeCache.txt:
 	@cd $(BUILD_DIR) && $(CMAKE) $(CMAKE_FLAGS) $(CURRENT_DIR)
 
 test: $(BUILD_DIR)/CMakeCache.txt
+	@$(MAKE) -C $(BUILD_DIR) init
 	@$(MAKE) -C $(BUILD_DIR) $(TARGET)-unittests
 	@echo "Build complete. Run './$(BIN_DIR)/MonitoringSystem-unittests' to execute."
 
@@ -53,14 +63,21 @@ dist: clean $(BUILD_DIR)/CMakeCache.txt
 	@cp -r $(DIST_FILES) $(DIST_DIR)/
 	@tar -czvf $(BUILD_DIR)/$(TARGET)-$(shell date +%Y%m%d).tar.gz $(DIST_DIR)
 	@rm -rf $(DIST_DIR)
-	@echo "Build complete. Run 'tar -xvf $(BUILD_DIR)/$(TARGET)-$(shell date +%Y%m%d).tar.gz' to execute."
+	@echo "Build complete. Run 'tar -xzvf $(BUILD_DIR)/$(TARGET)-$(shell date +%Y%m%d).tar.gz' to execute."
+
+check-style:
+	@cp $(CURRENT_DIR)/materials/linters/.clang-format .
+	@for file in $(CPP_FILES); do \
+	    $(CLANG_FORMAT) -n "$$file"; \
+	done
+	@rm ./.clang-format
+	@echo "Code style check complete."
 
 clean:
 	@$(MAKE) -C $(BUILD_DIR) clean
 	@#rm -rf $(BUILD_DIR)
 
-fclean:
-	@rm -rf $(BIN_DIR)
+fclean: clean
 	@rm -rf $(BIN_DIR)
 	@rm -rf $(BUILD_DIR)
 	@rm -rf latex

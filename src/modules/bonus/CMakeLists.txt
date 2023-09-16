@@ -4,19 +4,19 @@ SET (project_MOC_HEADERS ${MAINFOLDER}/include)
 SET (project_LIBS ${MAINFOLDER}/third_party/libs21/lib/libs21.a)
 SET (project_BIN BonusModule)
 
-SET(CMAKE_CXX_FLAGS "-Wall -Wextra -Werror -fPIC -g -Og -no-pie")
+SET(CMAKE_CXX_FLAGS "-Wall -Wextra -Werror -fPIC -g -Og")
 
 INCLUDE_DIRECTORIES(${MAINFOLDER}/include ${MAINFOLDER}third_party/libs21/include)
 
 ADD_LIBRARY(${project_BIN} SHARED
-    ../include/Agent.h
-    ../include/Metric.h
-    BonusAgent.cc
-    BonusAgent.h
+    ../include/agent.h
+    ../include/metric.h
+    bonus_agent.cc
+    bonus_agent.h
     agent_factory.cc
     bonus.cc
     bonus.h
-    ../include/Metric.cc
+    ../include/metric.cc
     ../../../third_party/libs21/src/s21_file_map_reader.cc
     )
 

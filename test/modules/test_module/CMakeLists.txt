@@ -8,11 +8,11 @@ SET (LIBRARY_NAME ${project_BIN})
 INCLUDE_DIRECTORIES(${MAINFOLDER}/include)
 
 SET (SOURCES
-    ../../../src/modules/include/Agent.h
-    ../../../src/modules/include/Metric.h
-    ../../../src/modules/include/Metric.cc
-    TestAgent.cc
-    TestAgent.h
+    ../../../src/modules/include/agent.h
+    ../../../src/modules/include/metric.h
+    ../../../src/modules/include/metric.cc
+    test_agent.cc
+    test_agent.h
     agent_factory.cc
     test_funcs.cc
     test_funcs.h

@@ -7,9 +7,9 @@
 
 #include <filesystem>
 
-#include "metric/ConfiguredMetric.h"
-#include "config/Properties.h"
-#include "modules/include/Agent.h"
+#include "metric/configured_metric.h"
+#include "config/properties.h"
+#include "modules/include/agent.h"
 
 namespace s21 {
 
