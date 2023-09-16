@@ -10,9 +10,7 @@
 namespace s21 {
 
 class TestAgent : public Agent {
-
  public:
-
   TestAgent();
   ~TestAgent();
 
@@ -21,6 +19,6 @@ class TestAgent : public Agent {
   std::string GetAgentType() override;
 };
 
-}
+}  // namespace s21
 
-#endif //MONITORINGSYSTEM_SRC_MODULES_TEST_MODULE_TESTAGENT_H_
+#endif

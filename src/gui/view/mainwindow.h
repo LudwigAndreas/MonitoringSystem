@@ -1,9 +1,10 @@
 #ifndef MAINWINDOW_H
 #define MAINWINDOW_H
 
-#include <QMainWindow>
-#include <QListWidgetItem>
 #include <QtCore/qfile.h>
+
+#include <QListWidgetItem>
+#include <QMainWindow>
 
 #include "core/metric/metric_event.h"
 
@@ -12,11 +13,13 @@ class MainController;
 }
 
 QT_BEGIN_NAMESPACE
-namespace Ui { class MainWindow; }
+namespace Ui {
+class MainWindow;
+}
 QT_END_NAMESPACE
 
 class MainWindow : public QMainWindow {
- Q_OBJECT
+  Q_OBJECT
 
  public:
   MainWindow(std::string &agents_folder, QWidget *parent = nullptr);
@@ -48,7 +51,7 @@ class MainWindow : public QMainWindow {
 
   void on_main_tab_widget_currentChanged(int index);
 
-  private:
+ private:
   void closeEvent(QCloseEvent *event) override;
   void ShowAgentDetails(std::shared_ptr<s21::AgentBundle> &agent);
   void ShowMetricDetails(std::shared_ptr<s21::ConfiguredMetric> &metric);
@@ -66,4 +69,4 @@ class MainWindow : public QMainWindow {
   std::shared_ptr<s21::MainController> controller_;
   QString agents_folder_;
 };
-#endif // MAINWINDOW_H
+#endif  // MAINWINDOW_H

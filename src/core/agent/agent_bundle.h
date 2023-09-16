@@ -7,8 +7,8 @@
 
 #include <filesystem>
 
-#include "metric/configured_metric.h"
 #include "config/properties.h"
+#include "metric/configured_metric.h"
 #include "modules/include/agent.h"
 
 namespace s21 {
@@ -17,7 +17,6 @@ typedef std::shared_ptr<Agent> AgentPtr;
 typedef std::shared_ptr<Properties> PropertiesPtr;
 typedef std::shared_ptr<ConfiguredMetric> ConfiguredMetricPtr;
 typedef void *DynamicLib;
-
 
 /**
  * AgentBundle is a class that bundles an Agent with its Properties.
@@ -31,7 +30,6 @@ typedef void *DynamicLib;
  * */
 class AgentBundle {
  public:
-
   AgentBundle();
 
   /**
@@ -43,11 +41,13 @@ class AgentBundle {
    *
    * @param properties The properties of the agent.
    * */
-  AgentBundle(const AgentPtr& agent, const PropertiesPtr& properties, const std::string &agent_path);
+  AgentBundle(const AgentPtr &agent, const PropertiesPtr &properties,
+              const std::string &agent_path);
 
   ~AgentBundle();
 
-  void UpdateBundle(const PropertiesPtr& properties, const std::string &agent_path);
+  void UpdateBundle(const PropertiesPtr &properties,
+                    const std::string &agent_path);
 
   /**
    * Returns configured metrics. Configuration loaded from Properties.
@@ -57,7 +57,7 @@ class AgentBundle {
    * @see Agent::GetMetrics()
    *
    * */
-  std::vector<ConfiguredMetricPtr>* GetMetrics() const;
+  std::vector<ConfiguredMetricPtr> *GetMetrics() const;
 
   /**
    * Returns the name of the agent.
@@ -99,7 +99,7 @@ class AgentBundle {
    *
    * @see Properties
    * */
-  void Configure(const PropertiesPtr& properties);
+  void Configure(const PropertiesPtr &properties);
 
   void SaveConfig();
   const std::string &GetName() const;
@@ -108,14 +108,14 @@ class AgentBundle {
   void SetType(const std::string &type);
 
  protected:
+  void ConfigureAgent(const PropertiesPtr &properties);
 
-  void ConfigureAgent(const PropertiesPtr& properties);
-
-  void ConfigureMetric(const PropertiesPtr& properties, ConfiguredMetricPtr &metric) const;
+  void ConfigureMetric(const PropertiesPtr &properties,
+                       ConfiguredMetricPtr &metric) const;
 
   std::string name_;
   std::string type_;
-  std::vector<ConfiguredMetricPtr>* configured_metrics_;
+  std::vector<ConfiguredMetricPtr> *configured_metrics_;
   size_t default_update_interval_ = 60;
   std::chrono::system_clock::time_point uptime_point_;
   std::string agent_path_;
@@ -124,6 +124,6 @@ class AgentBundle {
   bool is_enabled_ = false;
 };
 
-}
+}  // namespace s21
 
-#endif //MONITORINGSYSTEM_SRC_CORE_AGENT_BUNDLE_H_
+#endifMONITORINGSYSTEM_SRC_CORE_AGENT_BUNDLE_H_

@@ -25,8 +25,9 @@ DIST_FILES := $(SOURCE_DIR) $(TEST_DIR) $(DOXYFILE) CMakeLists.txt Makefile READ
 # Style
 CLANG_FORMAT := clang-format
 CPP_EXTENSIONS := cpp cc cxx c++ h hpp hxx h++ inc inl
-SRC_DIRS := $(SOURCE_DIR) $(TEST_DIR) third_party/LogLite third_party/libs21
-CPP_FILES := $(shell find $(SRC_DIRS) -type f -name "*.$(CPP_EXTENSIONS)")
+SRC_DIRS := $(SOURCE_DIR) $(TEST_DIR) third_party/LogLite/src third_party/LogLite/include third_party/libs21/src
+CPP_FILES := $(shell find $(SRC_DIRS) -type f \( $(foreach ext,$(CPP_EXTENSIONS),-name "*.$(ext)" -o) -false \))
+
 
 .PHONY: all build test install uninstall dvi dist clean fclean gcov re bonus
 
@@ -54,9 +55,6 @@ uninstall: $(BUILD_DIR)/CMakeCache.txt
 
 dvi: $(BUILD_DIR)/CMakeCache.txt
 	@$(DOXYGEN) $(DOXYFILE)
-	@cd latex && $(MAKE) dvi
-	@cd latex && mv refman.dvi ../your_documentation.dvi
-	@echo "Build complete. Run 'xdvi $(BUILD_DIR)/doc/latex/refman.dvi' to execute."
 
 dist: clean $(BUILD_DIR)/CMakeCache.txt
 	@mkdir -p $(DIST_DIR)
@@ -68,7 +66,7 @@ dist: clean $(BUILD_DIR)/CMakeCache.txt
 check-style:
 	@cp $(CURRENT_DIR)/materials/linters/.clang-format .
 	@for file in $(CPP_FILES); do \
-	    $(CLANG_FORMAT) -n "$$file"; \
+	    $(CLANG_FORMAT) --ferror-limit=10 -n "$$file"; \
 	done
 	@rm ./.clang-format
 	@echo "Code style check complete."

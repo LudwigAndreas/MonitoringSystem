@@ -2,17 +2,18 @@
 // Created by Ludwig Andreas on 10.09.2023.
 //
 
+#include "agent/agent_manager.h"
+
+#include <ctime>
+#include <fstream>
+#include <future>
+#include <iostream>
+
+#include "mock/agent/mock_agent_subscriber.h"
 #include "test.h"
 
-#include <iostream>
-#include <fstream>
-#include <ctime>
-#include <future>
-
-#include "agent/agent_manager.h"
-#include "mock/agent/mock_agent_subscriber.h"
-
-// Unable to write tests for async class without absl::synchronization and absl::Notification
+// Unable to write tests for async class without absl::synchronization and
+// absl::Notification
 
 class AgentManagerTest : public ::testing::Test {
  protected:
@@ -20,9 +21,11 @@ class AgentManagerTest : public ::testing::Test {
     std::string test_module_path = "bin/test-agents/TestModule.agent";
     try {
       ASSERT_TRUE(std::filesystem::exists(test_module_path));
-      ASSERT_TRUE(std::filesystem::exists(test_module_path + "/agent.properties"));
+      ASSERT_TRUE(
+          std::filesystem::exists(test_module_path + "/agent.properties"));
       bool found = false;
-      for (const auto &entry: std::filesystem::directory_iterator(test_module_path)) {
+      for (const auto &entry :
+           std::filesystem::directory_iterator(test_module_path)) {
         if (entry.is_regular_file() && IsDynamicLibrary(entry)) {
           found = true;
           break;
@@ -36,10 +39,9 @@ class AgentManagerTest : public ::testing::Test {
       agents_path = std::filesystem::absolute(parent_path).string() + "-tmp/";
       test_agent = agents_path + path_to_agent.filename().string();
       std::filesystem::create_directory(agents_path);
-      std::filesystem::copy(parent_path,
-                            agents_path,
-                            std::filesystem::copy_options::overwrite_existing
-                                | std::filesystem::copy_options::recursive);
+      std::filesystem::copy(parent_path, agents_path,
+                            std::filesystem::copy_options::overwrite_existing |
+                                std::filesystem::copy_options::recursive);
     } catch (const std::filesystem::filesystem_error &e) {
       FAIL() << e.what();
     }
@@ -61,7 +63,8 @@ class AgentManagerTest : public ::testing::Test {
 
   static bool IsDynamicLibrary(const std::filesystem::directory_entry &entry) {
     std::string extension = entry.path().extension().string();
-    std::transform(extension.begin(), extension.end(), extension.begin(), ::tolower);
+    std::transform(extension.begin(), extension.end(), extension.begin(),
+                   ::tolower);
     return (extension == ".dll" || extension == ".so" || extension == ".dylib");
   }
 
@@ -75,7 +78,8 @@ class AgentManagerTest : public ::testing::Test {
 TEST_F(AgentManagerTest, StartAndStopMonitoring) {
   agent_manager_->StartMonitoring();
 
-  EXPECT_CALL(*mock_subscriber_, OnAgentAdded(::testing::_)).Times(testing::AtLeast(1));
+  EXPECT_CALL(*mock_subscriber_, OnAgentAdded(::testing::_))
+      .Times(testing::AtLeast(1));
 
   std::this_thread::sleep_for(std::chrono::milliseconds(100));
   EXPECT_TRUE(agent_manager_->IsMonitoring());
@@ -88,30 +92,31 @@ TEST_F(AgentManagerTest, StartAndStopMonitoring) {
 }
 
 TEST_F(AgentManagerTest, GetAgentList) {
-
   agent_manager_->StartMonitoring();
 
-  EXPECT_CALL(*mock_subscriber_, OnAgentAdded(::testing::_)).Times(testing::AtLeast(1));
+  EXPECT_CALL(*mock_subscriber_, OnAgentAdded(::testing::_))
+      .Times(testing::AtLeast(1));
 
   std::this_thread::sleep_for(std::chrono::milliseconds(100));
-  std::map<std::string, s21::AgentBundlePtr> *agent_list = agent_manager_->GetAgentList();
+  std::map<std::string, s21::AgentBundlePtr> *agent_list =
+      agent_manager_->GetAgentList();
 
   EXPECT_FALSE(agent_list->empty());
 
   agent_manager_->StopMonitoring();
 }
 
-
 TEST_F(AgentManagerTest, UnsubscribedAgentAddedNotification) {
-
   agent_manager_->StartMonitoring();
 
   agent_manager_->Unsubscribe(mock_subscriber_.get());
 
-  EXPECT_CALL(*mock_subscriber_, OnAgentAdded(::testing::_)).Times(testing::AtLeast(0));
+  EXPECT_CALL(*mock_subscriber_, OnAgentAdded(::testing::_))
+      .Times(testing::AtLeast(0));
 
   std::this_thread::sleep_for(std::chrono::milliseconds(100));
-  std::map<std::string, s21::AgentBundlePtr> *agent_list = agent_manager_->GetAgentList();
+  std::map<std::string, s21::AgentBundlePtr> *agent_list =
+      agent_manager_->GetAgentList();
 
   EXPECT_FALSE(agent_list->empty());
 

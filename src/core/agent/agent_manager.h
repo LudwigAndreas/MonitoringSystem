@@ -5,18 +5,15 @@
 #ifndef MONITORINGSYSTEM_SRC_CORE_AGENTMANAGER_H_
 #define MONITORINGSYSTEM_SRC_CORE_AGENTMANAGER_H_
 
-#include <vector>
 #include <filesystem>
 #include <thread>
-
-#include "logger.h"
+#include <vector>
 
 #include "../../modules/include/agent.h"
 #include "agent_bundle.h"
 #include "executor/agent_scheduler.h"
 #include "i_agent_subscriber.h"
-
-
+#include "logger.h"
 
 namespace s21 {
 
@@ -29,18 +26,18 @@ typedef std::shared_ptr<AgentBundle> AgentBundlePtr;
  * */
 class AgentManager {
  public:
-
   /**
    * Main AgentManager constructor.
    *
    * @param agents_directory specifies the directory in which the appearance
    * of agents is traced
    * */
-  AgentManager(std::string agents_directory = "./agents/", size_t sleep_duration = 30);
+  AgentManager(std::string agents_directory = "./agents/",
+               size_t sleep_duration = 30);
 
-   /**
-    * Destructor.
-    * */
+  /**
+   * Destructor.
+   * */
   ~AgentManager();
 
   /**
@@ -65,21 +62,20 @@ class AgentManager {
 
   void Unsubscribe(IAgentSubscriber* subscriber);
 
-  void DeleteAgent(std::shared_ptr<AgentBundle> &agent);
+  void DeleteAgent(std::shared_ptr<AgentBundle>& agent);
 
  protected:
-
   /**
-  * The main method of monitoring operation.
-  * This method runs in a separate thread
-  * and scans the agents_directory_ directory with a sleep_duration_ interval
-  */
+   * The main method of monitoring operation.
+   * This method runs in a separate thread
+   * and scans the agents_directory_ directory with a sleep_duration_ interval
+   */
   void MonitorAgentsDirectory();
 
   /**
    * Checks the structure of the agent.
    * */
-  bool CheckAgentStructure(const std::filesystem::path &agent_path);
+  bool CheckAgentStructure(const std::filesystem::path& agent_path);
 
   void NotifyAgentAdded(AgentBundlePtr agent);
   void NotifyAgentRemoved(AgentBundlePtr agent);
@@ -97,6 +93,6 @@ class AgentManager {
   std::vector<IAgentSubscriber*> subscribers_;
 };
 
-}
+}  // namespace s21
 
-#endif //MONITORINGSYSTEM_SRC_CORE_AGENTMANAGER_H_
+#endif

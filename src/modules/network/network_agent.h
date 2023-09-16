@@ -7,9 +7,7 @@
 namespace s21 {
 
 class NetworkAgent : public Agent {
-
  public:
-
   NetworkAgent();
   ~NetworkAgent();
 
@@ -18,6 +16,6 @@ class NetworkAgent : public Agent {
   std::string GetAgentType() override;
 };
 
-}
+}  // namespace s21
 
-#endif //MONITORINGSYSTEM_SRC_MODULES_NETWORK_MODULE_NETWORKAGENT_H_
+#endif

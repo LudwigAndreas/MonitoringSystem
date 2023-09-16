@@ -5,16 +5,15 @@
 #ifndef MONITORINGSYSTEM_SRC_CORE_CONFIG_PROPERTIES_H_
 #define MONITORINGSYSTEM_SRC_CORE_CONFIG_PROPERTIES_H_
 
-#include <set>
-#include <map>
 #include <istream>
+#include <map>
+#include <set>
 
 namespace s21 {
 
 class Properties {
  public:
-  Properties(std::string separator,
-             std::string comment_symb,
+  Properties(std::string separator, std::string comment_symb,
              std::map<std::string, std::string> properties);
 
   Properties();
@@ -34,13 +33,12 @@ class Properties {
   std::set<std::string> StringPropertyNames();
 
  private:
-
   std::string separator = "=";
   std::string comment_symb = "#";
   std::map<std::string, std::string> properties_;
   std::string file_name_;
 };
 
-}
+}  // namespace s21
 
-#endif //MONITORINGSYSTEM_SRC_CORE_CONFIG_PROPERTIES_H_
+#endifMONITORINGSYSTEM_SRC_CORE_CONFIG_PROPERTIES_H_

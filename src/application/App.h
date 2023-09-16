@@ -5,23 +5,22 @@
 #ifndef MONITORINGSYSTEM_SRC_CORE_APP_H_
 #define MONITORINGSYSTEM_SRC_CORE_APP_H_
 
-#include <string>
 #include <QApplication>
 #include <QMainWindow>
+#include <string>
 
-#include "logger.h"
-
+#include "../gui/controller/main_controller.h"
 #include "../gui/view/mainwindow.h"
 #include "core/core.h"
-#include "../gui/controller/main_controller.h"
+#include "logger.h"
 #include "notifier/notification_controller.h"
 
 namespace s21 {
 
 class App : public QApplication {
-    Q_OBJECT
+  Q_OBJECT
  public:
-  App(int &argc, char** argv);
+  App(int& argc, char** argv);
   ~App();
 
   App* Instance();
@@ -50,14 +49,12 @@ class App : public QApplication {
   void printVersionTripletMessage();
   void printApplicationIdentifier();
   void setLogLevel(const std::string& logger, const std::string& level);
-  std::string getKeyName(const std::string& key)const;
-  std::string getKeyRepr(const std::string& key)const;
+  std::string getKeyName(const std::string& key) const;
+  std::string getKeyRepr(const std::string& key) const;
   static diagnostic::LoggerPtr getLogger();
 
-
-
   static App* s_instance_;
-//  static diagnostic::LoggerPtr s_logger_;
+  //  static diagnostic::LoggerPtr s_logger_;
   std::string invocation_;
   std::string properties_file_ = "application.properties";
   std::shared_ptr<Properties> properties_;
@@ -71,6 +68,6 @@ class App : public QApplication {
   std::shared_ptr<NotificationController> notification_controller_;
 };
 
-}
+}  // namespace s21
 
-#endif //MONITORINGSYSTEM_SRC_CORE_APP_H_
+#endifMONITORINGSYSTEM_SRC_CORE_APP_H_

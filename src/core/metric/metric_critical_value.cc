@@ -18,16 +18,17 @@ MetricCriticalValue::MetricCriticalValue(const std::string &condition_operator,
 
 MetricCriticalValue::MetricCriticalValue(std::string critical_value) {
   bool is_set = false;
-  for (const auto &op: {"!=", "==", ">=", "<=", ">", "<"}) {
+  for (const auto &op : {"!=", "==", ">=", "<=", ">", "<"}) {
     if (critical_value.find(op) != std::string::npos) {
       condition_operator_ = op;
       try {
-        critical_value_ =
-            std::stod(critical_value.substr(critical_value.find(op) + strlen(op)));
+        critical_value_ = std::stod(
+            critical_value.substr(critical_value.find(op) + strlen(op)));
       } catch (std::exception &e) {
-        LOG_ERROR(diagnostic::Logger::getRootLogger(),
-                  "Critical value is not a number: "
-                      + critical_value.substr(critical_value.find(op) + strlen(op)));
+        LOG_ERROR(
+            diagnostic::Logger::getRootLogger(),
+            "Critical value is not a number: " +
+                critical_value.substr(critical_value.find(op) + strlen(op)));
         critical_value_ = 0.;
       }
       is_set = true;
@@ -76,13 +77,12 @@ std::string MetricCriticalValue::GetConditionOperator() const {
   return condition_operator_;
 }
 
-void MetricCriticalValue::SetConditionOperator(const std::string &condition_operator) {
+void MetricCriticalValue::SetConditionOperator(
+    const std::string &condition_operator) {
   condition_operator_ = condition_operator;
 }
 
-double MetricCriticalValue::GetCriticalValue() const {
-  return critical_value_;
-}
+double MetricCriticalValue::GetCriticalValue() const { return critical_value_; }
 
 void MetricCriticalValue::SetCriticalValue(double critical_value) {
   critical_value_ = critical_value;
@@ -90,7 +90,8 @@ void MetricCriticalValue::SetCriticalValue(double critical_value) {
 
 std::string MetricCriticalValue::ToString() const {
   std::string critical_value = std::to_string(critical_value_);
-  return condition_operator_ + critical_value.substr(0, critical_value.find_last_not_of('0'));
+  return condition_operator_ +
+         critical_value.substr(0, critical_value.find_last_not_of('0'));
 }
 
-}
+}  // namespace s21

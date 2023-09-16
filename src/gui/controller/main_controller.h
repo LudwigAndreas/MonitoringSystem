@@ -5,21 +5,20 @@
 #ifndef MONITORINGSYSTEM_MAINCONTROLLER_H_
 #define MONITORINGSYSTEM_MAINCONTROLLER_H_
 
-#include "metric/metric_event.h"
-#include "core/core.h"
-#include "agent/i_agent_subscriber.h"
-#include "metric/i_metric_subscriber.h"
 #include "../view/mainwindow.h"
+#include "agent/i_agent_subscriber.h"
+#include "core/core.h"
+#include "metric/i_metric_subscriber.h"
+#include "metric/metric_event.h"
 #include "notifier/email/email_sender.h"
 #include "notifier/telegram/telegram_sender.h"
 
 namespace s21 {
 
 class MainController : public IAgentSubscriber, public IMetricSubscriber {
-
-  public:
-
-  MainController(std::shared_ptr<MainWindow> &window, std::shared_ptr<s21::monitor::Core> &core);
+ public:
+  MainController(std::shared_ptr<MainWindow> &window,
+                 std::shared_ptr<s21::monitor::Core> &core);
   ~MainController();
 
   void SetTelegram(const TelegramSenderPtr &telegram);
@@ -40,14 +39,13 @@ class MainController : public IAgentSubscriber, public IMetricSubscriber {
 
   void Quit();
 
-  private:
-
+ private:
   std::shared_ptr<MainWindow> &mainwindow_;
   std::shared_ptr<s21::monitor::Core> &core_;
   TelegramSenderPtr telegram_;
   EmailSenderPtr email_;
 };
 
-}
+}  // namespace s21
 
-#endif //MONITORINGSYSTEM_MAINCONTROLLER_H_
+#endif

@@ -15,9 +15,9 @@ s21::Metric::Metric(std::string name,
 
 Metric::Metric(std::string name,
                std::function<std::string(std::string)> metric_func_args) {
-    name_ = name;
-    metric_func_args_ = metric_func_args;
-    metric_func_ = nullptr;
+  name_ = name;
+  metric_func_args_ = metric_func_args;
+  metric_func_ = nullptr;
 }
 
 Metric::Metric(const Metric &metric) {
@@ -26,4 +26,4 @@ Metric::Metric(const Metric &metric) {
   metric_func_args_ = metric.metric_func_args_;
 }
 
-}
+}  // namespace s21

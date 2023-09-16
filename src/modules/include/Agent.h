@@ -5,8 +5,8 @@
 #ifndef MONITORINGSYSTEM_SRC_MODULES_DUMB_MODULE_AGENT_H_
 #define MONITORINGSYSTEM_SRC_MODULES_DUMB_MODULE_AGENT_H_
 
-#include <vector>
 #include <string>
+#include <vector>
 
 #include "metric.h"
 
@@ -21,38 +21,37 @@ namespace s21 {
  */
 class Agent {
  public:
-
   virtual ~Agent() = default;
 
-/**
- * The method should provide a list of objects of the metric class.
- *
- * @note The method is required to be implemented.
- *
- * @return a list of metric objects
- */
+  /**
+   * The method should provide a list of objects of the metric class.
+   *
+   * @note The method is required to be implemented.
+   *
+   * @return a list of metric objects
+   */
   virtual std::vector<Metric> GetMetrics() = 0;
 
-/**
- * The method should provide Agent's name.
- * The name can be changed during program execution.
- *
- * @note The method is required to be implemented.
- *
- * @return the name of the Agent
- */
+  /**
+   * The method should provide Agent's name.
+   * The name can be changed during program execution.
+   *
+   * @note The method is required to be implemented.
+   *
+   * @return the name of the Agent
+   */
   virtual std::string GetAgentName() = 0;
 
-/**
- * The method should provide Agent's type.
- * The type can be changed during program execution.
- *
- * @note The method is required to be implemented.
- *
- * @return the type of the Agent
- */
+  /**
+   * The method should provide Agent's type.
+   * The type can be changed during program execution.
+   *
+   * @note The method is required to be implemented.
+   *
+   * @return the type of the Agent
+   */
   virtual std::string GetAgentType() = 0;
 };
-}
+}  // namespace s21
 
-#endif //MONITORINGSYSTEM_SRC_MODULES_DUMB_MODULE_AGENT_H_
+#endif

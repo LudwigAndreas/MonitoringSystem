@@ -2,8 +2,8 @@
 
 #include <stdexcept>
 
-#include "i_user_repository.h"
 #include "config/properties.h"
+#include "i_user_repository.h"
 
 namespace s21 {
 
@@ -22,4 +22,4 @@ class TelegramUserRepository : public IUserRepository {
   // void RemoveUser(std::string username);
 };
 
-}
+}  // namespace s21

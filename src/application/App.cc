@@ -4,21 +4,20 @@
 
 #include "app.h"
 
+#include <QTranslator>
 #include <iostream>
 #include <string>
-#include <QTranslator>
 
 #include "appinfo.h"
+#include "config/properties.h"
 #include "notifier/email/email_sender.h"
 #include "notifier/telegram/telegram_sender.h"
-#include "config/properties.h"
 
 namespace s21 {
 
 namespace {
 bool matches_option(const std::string &givenoption,
-                    const std::string &expectedoption,
-                    int mindashes = 1,
+                    const std::string &expectedoption, int mindashes = 1,
                     int maxdashes = 2) {
   int dashes = 0;
   if (givenoption.length() > 0) {
@@ -32,15 +31,15 @@ bool matches_option(const std::string &givenoption,
   std::string substr = givenoption.substr(dashes, givenoption.length());
   return expectedoption == substr;
 }
-}
+}  // namespace
 
-App::App(int &argc, char **argv) : QApplication(argc, argv),
-                                   invocation_(argv[0]),
-                                   gui_(false),
-                                   interactive_(
-                                       false) {
+App::App(int &argc, char **argv)
+    : QApplication(argc, argv),
+      invocation_(argv[0]),
+      gui_(false),
+      interactive_(false) {
   if (s_instance_) {
-//    Only one instance of App allowed.
+    //    Only one instance of App allowed.
     std::exit(0);
   }
 
@@ -48,20 +47,20 @@ App::App(int &argc, char **argv) : QApplication(argc, argv),
 
   s_instance_ = this;
 
-//  setApplication
+  //  setApplication
   getLogger();
   diagnostic::LoggerPtr rootlogger = diagnostic::Logger::getRootLogger();
-  rootlogger->SetPatternLayout(diagnostic::PatternLayout(
-      "%d{%Y-%m-%d %X} %Y%5.5p%y \x1B[35m%-5P%y --- [%M] \x1B[36m%-25.40F%y : %m%n"));
+  rootlogger->SetPatternLayout(
+      diagnostic::PatternLayout("%d{%Y-%m-%d %X} %Y%5.5p%y \x1B[35m%-5P%y --- "
+                                "[%M] \x1B[36m%-25.40F%y : %m%n"));
   rootlogger->AddOutputStream(std::cout, false);
 
-
-//  Parse the commandline
+  //  Parse the commandline
   int idx = 1;
   while (idx < argc) {
     std::string arg(argv[idx]);
-    if (matches_option(arg, "help", 0) || matches_option(arg, "h")
-        || matches_option(arg, "?", 0)) {
+    if (matches_option(arg, "help", 0) || matches_option(arg, "h") ||
+        matches_option(arg, "?", 0)) {
       printHelpMessage();
       std::exit(0);
     } else if (matches_option(arg, "version", 0)) {
@@ -74,11 +73,11 @@ App::App(int &argc, char **argv) : QApplication(argc, argv),
         std::exit(1);
       }
 
-        // Increment the index
-        idx++;
+      // Increment the index
+      idx++;
 
-        // Get the next parameter
-        std::string param(argv[idx]);
+      // Get the next parameter
+      std::string param(argv[idx]);
 
       size_t eqidx = param.find('=');
       if (eqidx != std::string::npos) {
@@ -88,14 +87,15 @@ App::App(int &argc, char **argv) : QApplication(argc, argv),
       } else {
         setLogLevel("", param);
       }
-    } else if (matches_option(arg, "appid")
-        || matches_option(arg, "view-identifier")) {
+    } else if (matches_option(arg, "appid") ||
+               matches_option(arg, "view-identifier")) {
       printApplicationIdentifier();
       std::exit(0);
     } else if (matches_option(arg, "gui")) {
       if (interactive_) {
         LOG_FATAL(getLogger(),
-                  "Cannot specify both \"--gui\" and \"--interactive\" simultaneously.");
+                  "Cannot specify both \"--gui\" and \"--interactive\" "
+                  "simultaneously.");
         std::exit(1);
       }
       if (gui_) {
@@ -106,7 +106,8 @@ App::App(int &argc, char **argv) : QApplication(argc, argv),
     } else if (matches_option(arg, "interactive")) {
       if (gui_) {
         LOG_FATAL(getLogger(),
-                  "Cannot specify both \"--gui\" and \"--interactive\" simultaneously.");
+                  "Cannot specify both \"--gui\" and \"--interactive\" "
+                  "simultaneously.");
         std::exit(1);
       }
       if (interactive_) {
@@ -134,13 +135,9 @@ App::App(int &argc, char **argv) : QApplication(argc, argv),
   }
 }
 
-App::~App() {
+App::~App() {}
 
-}
-
-App *App::Instance() {
-  return s_instance_;
-}
+App *App::Instance() { return s_instance_; }
 
 void App::ReadProperties() {
   properties_ = std::make_shared<Properties>();
@@ -150,30 +147,32 @@ void App::ReadProperties() {
 
 void App::ConfigureCore() {
   ReadProperties();
-  std::string agents_folder = properties_->GetProperty("app.agents_folder", "../agents/");
-  std::string logs_folder = properties_->GetProperty("app.agents_folder", "../logs/");
+  std::string agents_folder =
+      properties_->GetProperty("app.agents_folder", "../agents/");
+  std::string logs_folder =
+      properties_->GetProperty("app.agents_folder", "../logs/");
 
   mainwindow_ = std::make_shared<MainWindow>(agents_folder);
-  size_t update_time = std::stoll(properties_->GetProperty("app.monitor.update_interval_s", "30"));
-  core_ = std::make_shared<monitor::Core>(agents_folder, logs_folder, update_time);
+  size_t update_time = std::stoll(
+      properties_->GetProperty("app.monitor.update_interval_s", "30"));
+  core_ =
+      std::make_shared<monitor::Core>(agents_folder, logs_folder, update_time);
 
-  LOG_DEBUG(getLogger(), properties_->GetProperty("telegram.token") << " "
-                                                                    << properties_->GetProperty("email.mail") << " "
-                                                                    << properties_->GetProperty("email.password") << " "
-                                                                    << properties_->GetProperty("email.server") << " "
-  )
+  LOG_DEBUG(getLogger(),
+            properties_->GetProperty("telegram.token")
+                << " " << properties_->GetProperty("email.mail") << " "
+                << properties_->GetProperty("email.password") << " "
+                << properties_->GetProperty("email.server") << " ")
 
   auto telegram_users = Properties();
   telegram_users.Load("config/telegram.properties");
   telegram_ = std::make_shared<TelegramSender>(
       std::make_shared<TelegramBot>(properties_->GetProperty("telegram.token")),
-      std::make_shared<TelegramUserRepository>(telegram_users)
-  );
-  email_ = std::make_shared<EmailSender>(
-      properties_->GetProperty("email.mail"),
-      properties_->GetProperty("email.password"),
-      properties_->GetProperty("email.server")
-  );
+      std::make_shared<TelegramUserRepository>(telegram_users));
+  email_ =
+      std::make_shared<EmailSender>(properties_->GetProperty("email.mail"),
+                                    properties_->GetProperty("email.password"),
+                                    properties_->GetProperty("email.server"));
   notification_controller_ = std::make_shared<NotificationController>();
   notification_controller_->AddNotifier(telegram_);
   notification_controller_->AddNotifier(email_);
@@ -193,7 +192,7 @@ void App::InitGui() {
 
   QTranslator translator;
   const QStringList uiLanguages = QLocale::system().uiLanguages();
-  for (const QString &locale: uiLanguages) {
+  for (const QString &locale : uiLanguages) {
     const QString baseName = "MonitoringSystem_" + QLocale(locale).name();
     if (translator.load(":/i18n/" + baseName)) {
       s21::App::installTranslator(&translator);
@@ -204,29 +203,26 @@ void App::InitGui() {
   core_->EnableMonitoring();
 }
 
-void App::InteractiveMain() {
-  ConsoleMain();
-}
+void App::InteractiveMain() { ConsoleMain(); }
 
 void App::ConsoleMain() {
-//  core_ = std::make_shared<monitor::Core>("../agents/", "../logs/");
-//  core_->EnableMonitoring();
-//  while (true) {
-//    std::this_thread::sleep_for(std::chrono::seconds(10));
-//  }
+  //  core_ = std::make_shared<monitor::Core>("../agents/", "../logs/");
+  //  core_->EnableMonitoring();
+  //  while (true) {
+  //    std::this_thread::sleep_for(std::chrono::seconds(10));
+  //  }
 }
 
-void
-App::printHelpMessage() {
+void App::printHelpMessage() {
   std::cout << "Usage: " << GetProjectInvocation() << " [options]" << std::endl;
   std::cout << "Options:" << std::endl;
   std::cout << "    --help                       Displays this help message."
             << std::endl;
   std::cout << "    --version                    Prints the program version."
             << std::endl;
-  std::cout
-      << "    --version-triplet            Prints the undecorated program version."
-      << std::endl;
+  std::cout << "    --version-triplet            Prints the undecorated "
+               "program version."
+            << std::endl;
   std::cout
       << "    --appid                      Prints the unique view identifier."
       << std::endl;
@@ -242,12 +238,12 @@ App::printHelpMessage() {
   std::cout
       << "    --loglevel <level>           Sets the current logging level."
       << std::endl;
-  std::cout
-      << "    --loglevel <analyzer>=<level>  Sets the logging level for the given analyzer."
-      << std::endl;
-  std::cout
-      << "    --gui                        Run in graphical user interface mode."
-      << std::endl;
+  std::cout << "    --loglevel <analyzer>=<level>  Sets the logging level for "
+               "the given analyzer."
+            << std::endl;
+  std::cout << "    --gui                        Run in graphical user "
+               "interface mode."
+            << std::endl;
   std::cout
       << "    --interactive                Run in interactive commandline mode."
       << std::endl;
@@ -274,49 +270,29 @@ void App::printApplicationIdentifier() {
   std::cout << GetProjectID() << std::endl;
 }
 
-std::string App::GetProjectName() {
-  return APPLICATION_NAME;
-}
+std::string App::GetProjectName() { return APPLICATION_NAME; }
 
-std::string App::GetProjectCodeName() {
-  return APPLICATION_CODENAME;
-}
+std::string App::GetProjectCodeName() { return APPLICATION_CODENAME; }
 
-std::string App::GetProjectVendorID() {
-  return APPLICATION_VENDOR_ID;
-}
+std::string App::GetProjectVendorID() { return APPLICATION_VENDOR_ID; }
 
-std::string App::GetProjectVendorName() {
-  return APPLICATION_VENDOR_NAME;
-}
+std::string App::GetProjectVendorName() { return APPLICATION_VENDOR_NAME; }
 
-std::string App::GetProjectID() {
-  return APPLICATION_ID;
-}
+std::string App::GetProjectID() { return APPLICATION_ID; }
 
-int App::GetProjectMinorVersion() {
-  return APPLICATION_VERSION_MINOR;
-}
+int App::GetProjectMinorVersion() { return APPLICATION_VERSION_MINOR; }
 
-int App::GetProjectMajorVersion() {
-  return APPLICATION_VERSION_MAJOR;
-}
+int App::GetProjectMajorVersion() { return APPLICATION_VERSION_MAJOR; }
 
-int App::GetProjectPatchVersion() {
-  return APPLICATION_VERSION_PATCH;
-}
+int App::GetProjectPatchVersion() { return APPLICATION_VERSION_PATCH; }
 
-std::string App::GetProjectVersion() {
-  return APPLICATION_VERSION_STRING;
-}
+std::string App::GetProjectVersion() { return APPLICATION_VERSION_STRING; }
 
 std::string App::GetProjectCopyrightYears() {
   return APPLICATION_COPYRIGHT_YEARS;
 }
 
-std::string App::GetProjectInvocation() {
-  return invocation_;
-}
+std::string App::GetProjectInvocation() { return invocation_; }
 
 std::string App::getKeyName(const std::string &key) const {
   std::string result(key);
@@ -338,8 +314,7 @@ std::string App::getKeyRepr(const std::string &key) const {
   return result;
 }
 
-void
-App::setLogLevel(const std::string &logger, const std::string &level) {
+void App::setLogLevel(const std::string &logger, const std::string &level) {
   diagnostic::LoggerPtr loggerptr =
       ((logger == "") ? (diagnostic::Logger::getRootLogger())
                       : (diagnostic::Logger::getLogger(logger)));
@@ -369,9 +344,9 @@ App::setLogLevel(const std::string &logger, const std::string &level) {
 App *App::s_instance_ = nullptr;
 
 diagnostic::LoggerPtr App::getLogger() {
-  static diagnostic::LoggerPtr
-      s_logger_ = diagnostic::Logger::getLogger("RootLogger");
+  static diagnostic::LoggerPtr s_logger_ =
+      diagnostic::Logger::getLogger("RootLogger");
   return s_logger_;
 }
 
-}
+}  // namespace s21

@@ -10,9 +10,7 @@
 namespace s21 {
 
 class CPUAgent : public Agent {
-
  public:
-
   CPUAgent();
   ~CPUAgent();
 
@@ -21,6 +19,6 @@ class CPUAgent : public Agent {
   std::string GetAgentType() override;
 };
 
-}
+}  // namespace s21
 
-#endif //MONITORINGSYSTEM_SRC_MODULES_DUMB_MODULE_DUMBAGENT_H_
+#endif

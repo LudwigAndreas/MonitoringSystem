@@ -5,15 +5,14 @@
 #ifndef MONITORINGSYSTEM_NOTIFICATIONCONTROLLER_H_
 #define MONITORINGSYSTEM_NOTIFICATIONCONTROLLER_H_
 
+#include "i_message_sender.h"
 #include "metric/i_metric_subscriber.h"
 #include "metric/metric_event.h"
-#include "i_message_sender.h"
 
 namespace s21 {
 
 class NotificationController : public IMetricSubscriber {
  public:
-
   NotificationController();
 
   virtual ~NotificationController();
@@ -31,6 +30,6 @@ class NotificationController : public IMetricSubscriber {
   std::vector<IMessageSenderPtr> senders_;
 };
 
-}
+}  // namespace s21
 
-#endif //MONITORINGSYSTEM_NOTIFICATIONCONTROLLER_H_
+#endif

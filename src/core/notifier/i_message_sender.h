@@ -1,7 +1,7 @@
 #pragma once
 
-#include <string>
 #include <memory>
+#include <string>
 
 #include "../../modules/include/pstream.h"
 #include "failed_metric.h"
@@ -15,15 +15,15 @@ namespace s21 {
 #endif
 
 class IMessageSender {
-protected:
-	std::string hostname;
+ protected:
+  std::string hostname;
 
-public:
-	IMessageSender();
+ public:
+  IMessageSender();
 
-	virtual void SendMessage(FailedMetric fm) = 0;
-	virtual void SetEnabled(bool enabled) = 0;
+  virtual void SendMessage(FailedMetric fm) = 0;
+  virtual void SetEnabled(bool enabled) = 0;
 };
 
 using IMessageSenderPtr = std::shared_ptr<IMessageSender>;
-}
+}  // namespace s21

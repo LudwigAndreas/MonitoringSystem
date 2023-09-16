@@ -4,22 +4,20 @@
 
 #include "properties.h"
 
-#include <utility>
+#include <filesystem>
 #include <fstream>
 #include <sstream>
-#include <filesystem>
+#include <utility>
 
 #include "logger.h"
 
 namespace s21 {
 
-Properties::Properties(std::string separator,
-                       std::string comment_symb,
+Properties::Properties(std::string separator, std::string comment_symb,
                        std::map<std::string, std::string> properties)
     : separator(std::move(separator)),
       comment_symb(std::move(comment_symb)),
       properties_(std::move(properties)) {}
-
 
 Properties::Properties() : separator("="), comment_symb("#") {}
 
@@ -38,9 +36,8 @@ void Properties::Load(const std::string& file_name) {
     size_t equalPos = line.find(separator, 0);
 
     size_t first_sym = line.find_first_not_of(' ');
-    if (equalPos != std::string::npos && equalPos != first_sym
-        && comment_pos > equalPos) {
-
+    if (equalPos != std::string::npos && equalPos != first_sym &&
+        comment_pos > equalPos) {
       std::string key = line.substr(0, equalPos);
       std::string value = line.substr(equalPos + separator.size());
 
@@ -59,20 +56,18 @@ void Properties::Load(const std::string& file_name) {
       key_value_map[key] = value;
     }
   }
-  if (reader && reader.is_open())
-    reader.close();
+  if (reader && reader.is_open()) reader.close();
   properties_ = key_value_map;
 }
 
-std::string Properties::Get(std::string key) {
-  return properties_[key];
-}
+std::string Properties::Get(std::string key) { return properties_[key]; }
 
 std::string Properties::GetProperty(std::string key) {
   return properties_[key];
 }
 
-std::string Properties::GetProperty(std::string key, std::string default_value) {
+std::string Properties::GetProperty(std::string key,
+                                    std::string default_value) {
   try {
     return properties_.at(key);
   } catch (std::out_of_range& e) {
@@ -90,21 +85,20 @@ void Properties::SetProperty(const std::string& key, const std::string& value) {
 
 void Properties::Save() {
   if (file_name_.empty() || !std::filesystem::exists(file_name_)) {
-    LOG_TRACE(diagnostic::Logger::getRootLogger(), "Properties loading error: File name is empty or file does not exist");
+    LOG_TRACE(
+        diagnostic::Logger::getRootLogger(),
+        "Properties loading error: File name is empty or file does not exist");
     return;
   }
   std::string file_name = file_name_ + ".tmp";
 
-
   std::map<std::string, std::string> properties = properties_;
-
 
   std::ifstream reader(file_name_, std::ios::binary);
   if (reader.bad()) {
     return;
   }
   std::stringstream ss_out;
-
 
   std::string line;
   while (std::getline(reader, line)) {
@@ -116,7 +110,8 @@ void Properties::Save() {
       key.erase(key.find_last_not_of(' ') + 1);
       try {
         std::string value = properties.at(key);
-        ss_out << key << " " << separator << " \"" << value << "\"" << std::endl;
+        ss_out << key << " " << separator << " \"" << value << "\""
+               << std::endl;
         properties.erase(key);
       } catch (std::out_of_range& e) {
         ss_out << line << std::endl;
@@ -125,8 +120,7 @@ void Properties::Save() {
       ss_out << line << std::endl;
     }
   }
-  if (reader && reader.is_open())
-      reader.close();
+  if (reader && reader.is_open()) reader.close();
 
   for (const auto& pair : properties) {
     ss_out << pair.first << " " << separator << " " << pair.second << std::endl;
@@ -150,7 +144,8 @@ void Properties::Save() {
 //   return properties_.at(key);
 // }
 
-// std::string Properties::GetProperty(const std::string& key, std::string default_value) {
+// std::string Properties::GetProperty(const std::string& key, std::string
+// default_value) {
 //   try {
 //     return properties_.at(key);
 //   } catch (std::out_of_range& e) {
@@ -168,4 +163,4 @@ std::set<std::string> Properties::StringPropertyNames() {
   return keys;
 }
 
-}
+}  // namespace s21

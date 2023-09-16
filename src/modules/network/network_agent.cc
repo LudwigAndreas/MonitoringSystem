@@ -15,12 +15,8 @@ std::vector<Metric> NetworkAgent::GetMetrics() {
   return metrics;
 }
 
-std::string NetworkAgent::GetAgentName() {
-  return "NetworkAgent";
-}
+std::string NetworkAgent::GetAgentName() { return "NetworkAgent"; }
 
-std::string NetworkAgent::GetAgentType() {
-  return "Network";
-}
+std::string NetworkAgent::GetAgentType() { return "Network"; }
 
-}
+}  // namespace s21

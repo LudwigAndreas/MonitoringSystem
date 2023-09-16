@@ -4,12 +4,13 @@
 
 #include "core.h"
 
-#include <utility>
 #include <fstream>
+#include <utility>
 
 namespace s21::monitor {
 
-Core::Core(const std::string &agents_dir, const std::string &metric_output_dir, size_t update_time)
+Core::Core(const std::string &agents_dir, const std::string &metric_output_dir,
+           size_t update_time)
     : log_dir_(metric_output_dir) {
   app_logger_ = diagnostic::Logger::getRootLogger();
   if (s_instance_) {
@@ -37,13 +38,9 @@ void Core::ConfigureMetricLogger() {
   metric_logger_->SetPatternLayout(diagnostic::PatternLayout("%m"));
 }
 
-void Core::EnableMonitoring() {
-  agent_manager_->StartMonitoring();
-}
+void Core::EnableMonitoring() { agent_manager_->StartMonitoring(); }
 
-void Core::DisableMonitoring() {
-  agent_manager_->StopMonitoring();
-}
+void Core::DisableMonitoring() { agent_manager_->StopMonitoring(); }
 
 void Core::SubscribeAgentEvents(IAgentSubscriber *subscriber) {
   agent_manager_->Subscribe(subscriber);
@@ -67,4 +64,4 @@ void Core::DeleteAgent(std::shared_ptr<AgentBundle> &agent) {
 
 Core *Core::s_instance_ = nullptr;
 
-}
+}  // namespace s21::monitor

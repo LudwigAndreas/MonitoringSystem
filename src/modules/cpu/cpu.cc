@@ -2,15 +2,15 @@
 
 #if __linux__
 double GetCPULoad() {
-  static size_t	working = 0;
-  static size_t	total = 0;
-  size_t			new_working = 0;
-  size_t			new_total = 0;
-  size_t			temp;
-  double			load = 0;
-  std::fstream	stat = std::fstream("/proc/stat", std::ios_base::in);
-  std::string		name;
-  
+  static size_t working = 0;
+  static size_t total = 0;
+  size_t new_working = 0;
+  size_t new_total = 0;
+  size_t temp;
+  double load = 0;
+  std::fstream stat = std::fstream("/proc/stat", std::ios_base::in);
+  std::string name;
+
   stat >> name;
   if (name == "cpu") {
     for (int i = 0; i < 3; ++i) {
@@ -42,15 +42,13 @@ double GetCPULoad() {
   host_cpu_load_info_data_t hostLoad;
 
   count = HOST_CPU_LOAD_INFO_COUNT;
-  kr = host_statistics64(mach_host_self(),
-                         HOST_CPU_LOAD_INFO,
-                         (host_info64_t) &hostLoad,
-                         &count);
+  kr = host_statistics64(mach_host_self(), HOST_CPU_LOAD_INFO,
+                         (host_info64_t)&hostLoad, &count);
 
   if (kr == KERN_SUCCESS) {
     idleTicks = hostLoad.cpu_ticks[CPU_STATE_IDLE];
-    totalTicks = idleTicks + hostLoad.cpu_ticks[CPU_STATE_USER]
-        + hostLoad.cpu_ticks[CPU_STATE_SYSTEM];
+    totalTicks = idleTicks + hostLoad.cpu_ticks[CPU_STATE_USER] +
+                 hostLoad.cpu_ticks[CPU_STATE_SYSTEM];
   }
 
   double percent = 0.0;
@@ -58,8 +56,8 @@ double GetCPULoad() {
     unsigned long long totalTicksSinceLastTime = totalTicks - lastTotalTicks;
     unsigned long long idleTicksSinceLastTime = idleTicks - lastIdleTicks;
     percent =
-        (1.0 - ((double) idleTicksSinceLastTime) / totalTicksSinceLastTime)
-            * 100.0;
+        (1.0 - ((double)idleTicksSinceLastTime) / totalTicksSinceLastTime) *
+        100.0;
   }
 
   lastTotalTicks = totalTicks;
@@ -69,23 +67,23 @@ double GetCPULoad() {
 }
 #else
 double GetCPULoad() {
- #error "Unsupported platform"
+#error "Unsupported platform"
 }
 #endif
 
 // Returns count of processes which we can get with ps aux.
 // I'm not sure if using ps aux is the correct way to get all working processes.
 int GetNumberOfProcesses() {
-	int nop;
-  #ifdef __linux__
-	redi::ipstream in("ps -e --format=\"pid cmd stat\" | wc -l");
-  #elif __APPLE__
-    redi::ipstream in("ps -e -o pid,command,state | wc -l");
-  #else
-    #error "Unsupported platform"
-  #endif
-	in >> nop;
-	return nop - 1;
+  int nop;
+#ifdef __linux__
+  redi::ipstream in("ps -e --format=\"pid cmd stat\" | wc -l");
+#elif __APPLE__
+  redi::ipstream in("ps -e -o pid,command,state | wc -l");
+#else
+#error "Unsupported platform"
+#endif
+  in >> nop;
+  return nop - 1;
 }
 
 std::string cpu() {
