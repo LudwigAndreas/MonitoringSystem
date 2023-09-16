@@ -22,10 +22,10 @@ MainWindow::MainWindow(std::string &agents_folder, QWidget *parent)
 
   log_timer_ = new QTimer(this);
   uptime_timer_ = new QTimer(this);
-  connect(log_timer_, SIGNAL(timeout()), this, SLOT(update_monitor_log_view()));
-  connect(uptime_timer_, SIGNAL(timeout()), this, SLOT(UpdateAgentUptime()));
   log_timer_->start(3000);
   uptime_timer_->start(1000);
+  connect(log_timer_, SIGNAL(timeout()), this, SLOT(update_monitor_log_view()));
+  connect(uptime_timer_, SIGNAL(timeout()), this, SLOT(UpdateAgentUptime()));
   last_read_pos_ = 0;
 
   ClearMetricDetails();
@@ -46,6 +46,7 @@ void MainWindow::update_monitor_log_view() {
     if (log_file_) delete log_file_;
     log_file_ = new QFile(log_file_path_);
     if (!log_file_->open(QIODevice::ReadOnly | QIODevice::Text)) {
+      delete log_file_;
       log_file_ = nullptr;
       return;
     }
@@ -140,10 +141,7 @@ void MainWindow::OnCriticalValueReached(s21::MetricEvent event) { (void)event; }
 void MainWindow::InsertLogLine(const std::string &line) { (void)line; }
 
 void MainWindow::SetLogFile(const std::string &log_file) {
-  QString app_dir = QCoreApplication::applicationDirPath();
-
-  log_file_path_ = QDir::toNativeSeparators(app_dir + QDir::separator() +
-                                            QString::fromStdString(log_file));
+  log_file_path_ = QDir::toNativeSeparators(QString::fromStdString(log_file));
   log_file_path_ = QDir::cleanPath(log_file_path_);
   if (log_file_)
     delete log_file_;
@@ -153,10 +151,7 @@ void MainWindow::SetLogFile(const std::string &log_file) {
 }
 
 void MainWindow::SetAgentsPath(const std::string &agents_path) {
-  QString app_dir = QCoreApplication::applicationDirPath();
-
-  agents_folder_ = QDir::toNativeSeparators(
-      app_dir + QDir::separator() + QString::fromStdString(agents_path));
+  agents_folder_ = QDir::toNativeSeparators(QString::fromStdString(agents_path));
   agents_folder_ = QDir::cleanPath(agents_folder_);
 }
 

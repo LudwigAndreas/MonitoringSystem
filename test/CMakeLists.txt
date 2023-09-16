@@ -57,7 +57,6 @@ set(PROJECT_SOURCES
 #    ../src/core/notifier/email/email.cc
 #    ../src/core/notifier/notification_controller.cc
 #    ../src/core/notifier/notification_controller.h
-    core/agent/agent_manager_test.cc
     mock/agent/mock_agent_subscriber.h
     mock/agent/mock_agent_manager.h
     core/agent/agent_bundle_test.cc

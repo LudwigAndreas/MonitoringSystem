@@ -14,6 +14,7 @@ std::vector<Metric> MemoryAgent::GetMetrics() {
   metrics.emplace_back("ram", ram);
   metrics.emplace_back("hard_volume", hard_volume);
   metrics.emplace_back("hard_ops", hard_ops);
+  metrics.emplace_back("hard_throughput", hard_throughput);
   return metrics;
 }
 
