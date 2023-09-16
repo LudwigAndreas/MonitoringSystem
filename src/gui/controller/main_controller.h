@@ -30,8 +30,8 @@ class MainController : public IAgentSubscriber, public IMetricSubscriber {
   void OnLineLogged(const std::string &line) override;
   void OnNewFileOpened(const std::string &log_file) override;
 
-  void SetTelegramSender(const std::string &sender);
-  void SetEmailSender(const std::string &sender);
+  void SetTelegram(const std::string &sender, bool is_enabled);
+  void SetEmail(const std::string &sender, bool is_enabled);
   std::string GetTelegramSender();
   std::string GetEmailSender();
   void DeleteAgent(std::shared_ptr<AgentBundle> &agent);

@@ -54,7 +54,7 @@ void MainController::SetTelegram(const TelegramSenderPtr &telegram) {
 
 void MainController::SetEmail(const EmailSenderPtr &email) { email_ = email; }
 
-void MainController::SetTelegramSender(const std::string &sender) {
+void MainController::SetTelegram(const std::string &sender, bool is_enabled) {
   std::set<std::string> recievers = telegram_->GetRecievers();
   if (recievers.empty()) {
     telegram_->AddReceiver(sender);
@@ -64,9 +64,10 @@ void MainController::SetTelegramSender(const std::string &sender) {
     telegram_->RemoveReceiver(reciever);
   }
   telegram_->AddReceiver(sender);
+  telegram_->SetEnabled(is_enabled);
 }
 
-void MainController::SetEmailSender(const std::string &sender) {
+void MainController::SetEmail(const std::string &sender, bool is_enabled) {
   std::set<std::string> recievers = email_->GetRecievers();
   if (recievers.empty()) {
     email_->AddReceiver(sender);
@@ -76,6 +77,7 @@ void MainController::SetEmailSender(const std::string &sender) {
     email_->RemoveReceiver(reciever);
   }
   email_->AddReceiver(sender);
+  email_->SetEnabled(is_enabled);
 }
 
 std::string MainController::GetTelegramSender() {
