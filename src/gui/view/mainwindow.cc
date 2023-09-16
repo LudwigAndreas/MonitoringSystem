@@ -43,6 +43,8 @@ MainWindow::~MainWindow() {
 void MainWindow::update_monitor_log_view() {
   if (!log_file_ || !log_file_->isOpen()) {
     if (log_file_path_.isEmpty()) return;
+    if (log_file_)
+      delete log_file_;
     log_file_ = new QFile(log_file_path_);
     if (!log_file_->open(QIODevice::ReadOnly | QIODevice::Text)) {
       log_file_ = nullptr;
@@ -144,6 +146,8 @@ void MainWindow::SetLogFile(const std::string &log_file) {
   log_file_path_ = QDir::toNativeSeparators(app_dir + QDir::separator() +
                                             QString::fromStdString(log_file));
   log_file_path_ = QDir::cleanPath(log_file_path_);
+  if (log_file_)
+    delete log_file_;
   log_file_ = new QFile(log_file_path_);
   if (!log_file_->open(QIODevice::ReadOnly | QIODevice::Text))
     log_file_ = nullptr;
