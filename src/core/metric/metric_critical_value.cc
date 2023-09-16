@@ -64,7 +64,7 @@ bool MetricCriticalValue::IsCritical(std::string value) const {
     try {
       return IsCritical(std::stod(value));
     } catch (std::exception &e) {
-      LOG_ERROR(diagnostic::Logger::getRootLogger(),
+      LOG_DEBUG(diagnostic::Logger::getRootLogger(),
                 "Critical value is not a number: " + value);
       return false;
     }
