@@ -264,9 +264,11 @@ void MainWindow::SetController(std::shared_ptr<s21::MainController> &controller)
 }
 
 void MainWindow::AddAgentAction() {
-  QString agent_folder_path = QFileDialog::getExistingDirectory(this,
-                                                                "Select Agent Folder",
-                                                                QDir::homePath());
+    QString agent_folder_path = QFileDialog::getExistingDirectory(this,
+                                                             tr("Select agent folder"),
+                                                             agents_folder_,
+                                                             QFileDialog::ShowDirsOnly
+                                                                 | QFileDialog::DontResolveSymlinks);
 
   if (!agent_folder_path.isEmpty()) {
     QString target_folder = agents_folder_;
