@@ -1,47 +1,89 @@
-# Compiler settings
-CXX = clang++
-CXXFLAGS = -std=c++17 -Wall -Wextra -Werror -Ofast -march=native -pedantic -fPIC
+# Makefile for CMake Project
 
-# Directories
-SRC_DIR = 
-INC_DIR = 
-BUILD_DIR = 
+# CMake configuration
+CURRENT_DIR := $(shell pwd)
+BUILD_DIR := build
+BIN_DIR := bin
+DIST_DIR := dist
+SOURCE_DIR := src
+TEST_DIR := test
+COVERAGE_DIR := coverage
+CMAKE := cmake
+CMAKE_FLAGS := -DCMAKE_BUILD_TYPE=Debug
+# CMAKE_FLAGS := -DCMAKE_BUILD_TYPE=Release
 
-# Source files
-SRCS_FILES = cpu.cc
+# Targets
+TARGET := MonitoringSystem
 
-SRCS = $(addprefix $(SRC_DIR)/,$(notdir $(SRCS_FILES)))
+# Documentation
+DOXYFILE = Doxyfile
+DOXYGEN := doxygen
 
-# Object files
-OBJS = $(patsubst $(SRC_DIR)/%.cc,$(BUILD_DIR)/%.o,$(SRCS))
+.PHONY: all build test install uninstall dvi dist clean fclean gcov re bonus
 
-# Library settings
-LIB_PREFIX = ms
-LIB_NAME = cpu
-LIB_DIR = ..
-LIB = $(LIB_DIR)/lib$(LIB_PREFIX)$(LIB_NAME).so
+# Build rules
+all: build
 
-all: $(LIB)
+build: $(BUILD_DIR)/CMakeCache.txt
+	@$(MAKE) -C $(BUILD_DIR) $(TARGET)
+	@echo "Build complete. Run './$(BIN_DIR)/$(TARGET)' to execute."
 
-$(LIB): $(OBJS)
-	@echo
-	@mkdir -p $(LIB_DIR)
-	@gcc -shared $(OBJS) -o $(LIB)
-	@echo "\033[1;33m""$(LIB) is up to date."'\033[0m'
-
-$(BUILD_DIR)/%.o: $(SRC_DIR)/%.cc
+$(BUILD_DIR)/CMakeCache.txt:
 	@mkdir -p $(BUILD_DIR)
-	@$(CXX) $(CXXFLAGS) -I$(INC_DIR) -c -o $@ $<
-	@printf "\033[1;36m/\033[0m"
+	@cd $(BUILD_DIR) && $(CMAKE) $(CMAKE_FLAGS) $(CURRENT_DIR)
+
+test: $(BUILD_DIR)/CMakeCache.txt
+	@$(MAKE) -C $(BUILD_DIR) $(TARGET)-unittests
+	@echo "Build complete. Run './$(BIN_DIR)/MonitoringSystem-unittests' to execute."
+
+install: $(BUILD_DIR)/CMakeCache.txt
+	@$(MAKE) -C $(BUILD_DIR) install
+
+uninstall: $(BUILD_DIR)/CMakeCache.txt
+	@$(MAKE) -C $(BUILD_DIR) uninstall
+
+dvi: $(BUILD_DIR)/CMakeCache.txt
+	@$(DOXYGEN) $(DOXYFILE)
+	@cd latex && $(MAKE) dvi
+	@cd latex && mv refman.dvi ../your_documentation.dvi
+	@echo "Build complete. Run 'xdvi $(BUILD_DIR)/doc/latex/refman.dvi' to execute."
+
+dist: clean $(BUILD_DIR)/CMakeCache.txt
+	@mkdir -p $(DIST_DIR)
+	@cp -r $(DIST_FILES) $(DIST_DIR)/
+	@tar -czvf $(BUILD_DIR)/$(TARGET)-$(shell date +%Y%m%d).tar.gz $(DIST_DIR)
+	@rm -rf $(DIST_DIR)
+	@echo "Build complete. Run 'tar -xvf $(BUILD_DIR)/$(TARGET)-$(shell date +%Y%m%d).tar.gz' to execute."
 
 clean:
-	@$(RM) $(OBJS)
-	@echo '\033[1;31m'"$(LIB) deleted."'\033[0m'
+	@$(MAKE) -C $(BUILD_DIR) clean
+	@#rm -rf $(BUILD_DIR)
 
-fclean: clean
-	@$(RM) $(LIB)
-	@echo '\033[1;31m'"$(LIB) objs deleted."'\033[0m'
+fclean:
+	@rm -rf $(BIN_DIR)
+	@rm -rf $(BIN_DIR)
+	@rm -rf $(BUILD_DIR)
+	@rm -rf latex
+	@rm -rf html
+	@rm -rf $(COVERAGE_DIR)
+	@rm -rf coverage.info
+
+gcov: test
+	./$(BIN_DIR)/$(TARGET)-unittests
+	lcov --directory . --capture --output-file coverage.info
+	lcov --remove coverage.info '/usr/*' \
+								'/Applications/Xcode.app/*' \
+								'v1/' \
+								"$(CURRENT_DIR)/third_party/*" \
+								 "$(CURRENT_DIR)/$(BUILD_DIR)/*" \
+								  "$(CURRENT_DIR)/$(BIN_DIR)/*" \
+								   "$(CURRENT_DIR)/code-samples/*" \
+								    "$(CURRENT_DIR)lib/*" \
+								     "$(CURRENT_DIR)materials/*" \
+								      --output-file coverage.info
+	genhtml coverage.info --output-directory $(COVERAGE_DIR)
+	open $(COVERAGE_DIR)/index.html
+
+leaks:
 
 re: fclean all
-
-.PHONY: all clean fclean re bonus

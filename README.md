@@ -17,7 +17,7 @@ The russian version of the task can be found in the repository.
 3. [Chapter IV](#chapter-iv) 
 
 
-## Chapter I  
+## Chapter I 
 
 ![Monitoring System](misc/images/Monitoring_System.JPG)
 
