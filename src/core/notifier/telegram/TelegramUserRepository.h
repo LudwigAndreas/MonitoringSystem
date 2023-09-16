@@ -1,21 +1,24 @@
 #pragma once
 
-#include <string>
 #include <stdexcept>
-#include <map>
+
+#include "IUserRepository.h"
+#include "config/Properties.h"
 
 namespace s21 {
 
-class TelegramUserRepository {
+#define EMPTY_CHAT_ID ""
+
+class TelegramUserRepository : public IUserRepository {
 private:
-	std::map<std::string, long> db;
+	Properties db;
 
 public:
-	TelegramUserRepository(std::map<std::string, long> users = {});
-	std::map<std::string, long> GetUsers();
-	void AddUser(std::string username, long chat_id);
-	int GetUser(std::string username);
-	void RemoveUser(std::string username);
+	TelegramUserRepository(const Properties& prop = {});
+	// std::map<std::string, std::string> GetUsers();
+	virtual void AddUser(std::string username, std::string chat_id) override;
+	virtual std::string GetUser(std::string username) override;
+	// void RemoveUser(std::string username);
 };
 
 }

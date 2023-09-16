@@ -71,6 +71,8 @@ class App : public QApplication {
   std::shared_ptr<monitor::Core> core_;
   std::shared_ptr<MainWindow> mainwindow_;
   std::shared_ptr<MainController> maincontroller_;
+  TelegramSenderPtr telegram_;
+  EmailSenderPtr email_;
   std::shared_ptr<NotificationController> notification_controller_;
 };
 

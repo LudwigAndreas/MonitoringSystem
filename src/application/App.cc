@@ -215,33 +215,37 @@ void App::ConfigureCore() {
   size_t update_time = std::stoll(properties_->GetProperty("app.monitor.update_interval_s", "30"));
   core_ = std::make_shared<monitor::Core>(agents_folder, logs_folder, update_time);
 
+  LOG_DEBUG(getLogger(), properties_->GetProperty("telegram.token") << " " 
+            << properties_->GetProperty("email.mail") << " "
+            << properties_->GetProperty("email.password") << " " 
+            << properties_->GetProperty("email.server") << " "
+  )
+
   auto telegram_users = Properties();
   telegram_users.Load("config/telegram.properties");
-  TelegramSenderPtr telegram = std::make_shared<TelegramSender>(
+  telegram_ = std::make_shared<TelegramSender>(
     std::make_shared<TelegramBot>(properties_->GetProperty("telegram.token")),
     std::make_shared<TelegramUserRepository>(telegram_users)
   );
-  telegram->AddReceiver("kdancy");
-  telegram->AddReceiver("Ludwig_Andreas");
-  EmailSenderPtr email = std::make_shared<EmailSender>(
+  email_ = std::make_shared<EmailSender>(
     properties_->GetProperty("email.mail"),
     properties_->GetProperty("email.password"),
     properties_->GetProperty("email.server")
   );
-  email->AddReceiver("kalininandrey727@gmail.com");
-  email->AddReceiver("andreyk2107@mail.ru");
-  email->AddReceiver("ev.sand.raw@gmail.com");
   notification_controller_ = std::make_shared<NotificationController>();
-  notification_controller_->AddNotifier(telegram);
-  notification_controller_->AddNotifier(email);
+  notification_controller_->AddNotifier(telegram_);
+  notification_controller_->AddNotifier(email_);
   core_->SubscribeMetricEvents(notification_controller_.get());
 }
 
 void App::InitGui() {
   ConfigureCore();
 
+
   maincontroller_ = std::make_shared<MainController>(mainwindow_, core_);
   mainwindow_->SetController(maincontroller_);
+  maincontroller_->SetTelegram(telegram_);
+  maincontroller_->SetEmail(email_);
 
   core_->SubscribeAgentEvents(maincontroller_.get());
   core_->SubscribeMetricEvents(maincontroller_.get());

@@ -9,6 +9,7 @@
 #include <curl/curl.h>
 
 #include "EmailAddress.h"
+#include "Logger.h"
 
 namespace s21 {
 

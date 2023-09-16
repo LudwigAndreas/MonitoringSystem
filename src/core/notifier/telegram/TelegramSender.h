@@ -12,14 +12,13 @@
 #include "TelegramUserRepository.h"
 #include "TelegramBot.h"
 
+#include "Logger.h"
 
 namespace s21 {
 
 class TelegramSender : public IMessageSender {
  private:
-  static const std::string      DEFAULT_USER;
-  Properties                    properties;
-  bool                          is_polling_running  = false;
+  bool                          is_polling_running = false;
   std::shared_ptr<ITelegramBot> bot;
   std::shared_ptr<IUserRepository>        users;
   std::shared_ptr<std::thread>  polling_thread;
@@ -34,8 +33,6 @@ class TelegramSender : public IMessageSender {
   void        PollingFunctionCheck();
   void        PollingFunction();
   
-  void        InitializeRepository();
-  void        UpdateRepository(const std::string &receiver);
   void        InitializeReceivers(std::string receivers);
   
   std::string PrepareMessage(FailedMetric fm);
@@ -52,8 +49,9 @@ class TelegramSender : public IMessageSender {
 
   std::set<std::string> GetRecievers();
   void AddReceiver(std::string username,
-                   std::string chat_id = "");
+                   std::string chat_id = EMPTY_CHAT_ID);
   void RemoveReceiver(std::string username);
+  void RemoveReceivers();
 };
 
 using TelegramSenderPtr = std::shared_ptr<TelegramSender>;

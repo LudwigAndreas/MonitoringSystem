@@ -128,7 +128,6 @@ std::string Email::SetPayloadText()
     oss << "Message-ID: <"  << GenerateMessageId() << "@" << from_.Domain()    << ">\r\n"
         << "Subject: "      << subject_                                         << "\r\n"
         << "\r\n"           << body_                                            << "\r\n\r\n";
-
     return oss.str();
 }
 

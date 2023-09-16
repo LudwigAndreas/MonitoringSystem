@@ -36,7 +36,7 @@ void EmailSender::SendMessage(FailedMetric fm) {
     if (!receivers.empty()) {
       Email email(
         EmailAddress(email_, "kdancybot"),
-        std::vector<EmailAddress>(std::next(receivers.begin()), receivers.end()),
+        std::vector<EmailAddress>(receivers.begin(), receivers.end()),
         PrepareSubject(fm),
         PrepareMessage(fm)
       );
