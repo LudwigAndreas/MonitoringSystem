@@ -48,6 +48,10 @@ test: $(BUILD_DIR)/CMakeCache.txt
 	@$(MAKE) -C $(BUILD_DIR) $(TARGET)-unittests
 	@echo "Build complete. Run './$(BIN_DIR)/MonitoringSystem-unittests' to execute."
 
+agents: $(BUILD_DIR)/CMakeCache.txt
+	@$(MAKE) -C $(BUILD_DIR) agents
+	@echo "Build complete. Agents added to $(BIN_DIR)/agents."
+
 install: $(BUILD_DIR)/CMakeCache.txt
 	@$(MAKE) -C $(BUILD_DIR) install
 
